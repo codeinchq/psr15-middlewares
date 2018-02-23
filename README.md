@@ -3,7 +3,6 @@
 This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-15/) middlewares. It is currently under active developpment and the collection should grow fast in the upcoming months.
 
 **The current collection includes:** 
-* `HttpCacheMiddleware` adds headers to allow the current request to be cached (under developpment)
 * `HttpVersionCheckMiddleware` insure the HTTP version of the response is the same of the version used for the request.
 * `PoweredByHeaderMiddleware` adds a `X-Powered-By` HTTP headers to the response
 * `RespExtraHttpHeadersMiddleware` add extra HTTP headers to the response
