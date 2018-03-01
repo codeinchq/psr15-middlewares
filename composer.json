@@ -1,12 +1,12 @@
 {
   "name": "codeinchq/lib-psr15middlewares",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A collection a PSR-15 middlewares",
   "homepage": "https://github.com/CodeIncHQ/lib-psr15middlewares",
   "type": "library",
   "license": "MIT",
   "require": {
-    "php": ">=7.2",
+    "php": ">=7.1",
     "psr/http-message": "^1.0",
     "psr/http-server-middleware": "^1.0",
     "psr/http-server-handler": "^1.0"
