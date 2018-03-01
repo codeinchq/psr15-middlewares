@@ -37,24 +37,24 @@ abstract class AbstractRecursiveMiddleware implements MiddlewareInterface {
 	/**
 	 * @var null|MiddlewareInterface
 	 */
-	private $previousMiddleware;
+	private $nextMiddleware;
 
 	/**
 	 * HttpVersionCheckMiddleware constructor.
 	 *
-	 * @param null|MiddlewareInterface $previousMiddleware
+	 * @param null|MiddlewareInterface $nextMiddleware
 	 */
-	public function __construct(?MiddlewareInterface $previousMiddleware = null)
+	public function __construct(?MiddlewareInterface $nextMiddleware = null)
 	{
-		$this->previousMiddleware = $previousMiddleware;
+		$this->nextMiddleware = $nextMiddleware;
 	}
 
 	/**
 	 * @return null|MiddlewareInterface
 	 */
-	public function getPreviousMiddleware():?MiddlewareInterface
+	public function getNextMiddleware():?MiddlewareInterface
 	{
-		return $this->previousMiddleware;
+		return $this->nextMiddleware;
 	}
 
 	/**
@@ -63,8 +63,8 @@ abstract class AbstractRecursiveMiddleware implements MiddlewareInterface {
 	 */
 	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
 	{
-		if ($previousMiddleware = $this->getPreviousMiddleware()) {
-			return $previousMiddleware->process($request, $handler);
+		if ($nextMiddleware = $this->getNextMiddleware()) {
+			return $nextMiddleware->process($request, $handler);
 		}
 		else {
 			return $handler->handle($request);
