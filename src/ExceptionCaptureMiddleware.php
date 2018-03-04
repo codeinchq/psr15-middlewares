@@ -16,79 +16,24 @@
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
 // Date:     04/03/2018
-// Time:     08:38
+// Time:     09:13
 // Project:  lib-psr15middlewares
 //
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares;
-use GuzzleHttp\Psr7\Response;
-use Micheh\Cache\CacheUtil;
+use CodeInc\Psr7Responses\ErrorResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class CacheMiddleware
+ * Class ExceptionCaptureMiddleware
  *
- * @uses CacheUtil
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class CacheMiddleware extends AbstractRecursiveMiddleware {
-	/**
-	 * @var \DateTime|null
-	 */
-	private $lastModified;
-
-	/**
-	 * @var string|null
-	 */
-	private $etag;
-
-	/**
-	 * CacheMiddleware constructor.
-	 *
-	 * @param null|MiddlewareInterface $nextMiddleware
-	 */
-	public function __construct(?MiddlewareInterface $nextMiddleware = null)
-	{
-		parent::__construct($nextMiddleware);
-	}
-
-	/**
-	 * @param \DateTime|null $lastModified
-	 */
-	public function setLastModified(?\DateTime $lastModified):void
-	{
-		$this->lastModified = $lastModified;
-	}
-
-	/**
-	 * @return \DateTime|null
-	 */
-	public function getLastModified():?\DateTime
-	{
-		return $this->lastModified;
-	}
-
-	/**
-	 * @param null|string $etag
-	 */
-	public function setEtag(?string $etag):void
-	{
-		$this->etag = $etag;
-	}
-
-	/**
-	 * @return null|string
-	 */
-	public function getEtag():?string
-	{
-		return $this->etag;
-	}
-
+class ExceptionCaptureMiddleware extends AbstractRecursiveMiddleware {
 	/**
 	 * @inheritdoc
 	 * @param ServerRequestInterface $request
@@ -97,25 +42,11 @@ class CacheMiddleware extends AbstractRecursiveMiddleware {
 	 */
 	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
 	{
-		$response = parent::process($request, $handler);
-
-		// adding cache headers
-		$cacheUtils = new CacheUtil();
-		$response = $cacheUtils->withCache($response);
-
-		// adding eTag
-		if ($this->etag) {
-			$response = $cacheUtils->withETag($response, $this->etag);
+		try {
+			return parent::process($request, $handler);
 		}
-
-		// adding last modified
-		if ($this->lastModified) {
-			$response = $cacheUtils->withLastModified($response, $this->lastModified);
-			if ($cacheUtils->isNotModified($request, $response)) {
-				return new Response(304);
-			}
+		catch (\Throwable $exception) {
+			return new ErrorResponse($exception);
 		}
-
-		return $response;
 	}
 }
