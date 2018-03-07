@@ -16,7 +16,7 @@
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
 // Date:     07/03/2018
-// Time:     01:47
+// Time:     02:05
 // Project:  lib-psr15middlewares
 //
 declare(strict_types = 1);
@@ -28,30 +28,29 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class XFrameOptionMiddleware
+ * Class ContentSecurityPolicyMiddleware
  *
- * @link https://developer.mozilla.org/fr/docs/HTTP/Headers/X-Frame-Options
+ * @link https://developer.mozilla.org/fr/docs/HTTP/Headers/Content-Security-Policy
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XFrameOptionMiddleware extends AbstractRecursiveMiddleware {
-	public const VALUE_DENY = 'DENY';
-	public const VALUE_SAMEORIGIN = 'SAMEORIGIN';
+class ContentSecurityPolicyMiddleware extends AbstractRecursiveMiddleware {
+	public const SRC_SELF  = "'self'";
 
 	/**
-	 * @var string
+	 * @var array
 	 */
-	private $frameOption;
+	private $sources;
 
 	/**
-	 * XFrameOptionMiddleware constructor.
+	 * ContentSecurityPolicyMiddleware constructor.
 	 *
-	 * @param string $frameOption
+	 * @param array $sources
 	 * @param null|MiddlewareInterface $nextMiddleware
 	 */
-	public function __construct(string $frameOption, ?MiddlewareInterface $nextMiddleware = null)
+	public function __construct(array $sources, ?MiddlewareInterface $nextMiddleware = null)
 	{
-		$this->frameOption = $frameOption;
+		$this->sources = $sources;
 		parent::__construct($nextMiddleware);
 	}
 
@@ -61,6 +60,20 @@ class XFrameOptionMiddleware extends AbstractRecursiveMiddleware {
 	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
 	{
 		return parent::process($request, $handler)
-			->withHeader('X-Frame-Options', $this->frameOption);
+			->withHeader('Content-Security-Policy', $this->getHeaderValue());
+	}
+
+	/**
+	 * Returns the Content-Security-Policy header value
+	 *
+	 * @return string
+	 */
+	public function getHeaderValue():string
+	{
+		$sources = [];
+		foreach ($this->sources as $source) {
+			$sources[] = implode(": ", $source);
+		}
+		return implode("; ", $sources);
 	}
 }

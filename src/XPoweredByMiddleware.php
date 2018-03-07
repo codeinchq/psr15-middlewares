@@ -16,7 +16,7 @@
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
 // Date:     07/03/2018
-// Time:     01:47
+// Time:     01:56
 // Project:  lib-psr15middlewares
 //
 declare(strict_types = 1);
@@ -28,30 +28,26 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class XFrameOptionMiddleware
+ * Class XPoweredByMiddleware
  *
- * @link https://developer.mozilla.org/fr/docs/HTTP/Headers/X-Frame-Options
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XFrameOptionMiddleware extends AbstractRecursiveMiddleware {
-	public const VALUE_DENY = 'DENY';
-	public const VALUE_SAMEORIGIN = 'SAMEORIGIN';
-
+class XPoweredByMiddleware extends AbstractRecursiveMiddleware {
 	/**
 	 * @var string
 	 */
-	private $frameOption;
+	private $poweredBy;
 
 	/**
-	 * XFrameOptionMiddleware constructor.
+	 * XPoweredByMiddleware constructor.
 	 *
-	 * @param string $frameOption
+	 * @param string $poweredBy
 	 * @param null|MiddlewareInterface $nextMiddleware
 	 */
-	public function __construct(string $frameOption, ?MiddlewareInterface $nextMiddleware = null)
+	public function __construct(string $poweredBy, ?MiddlewareInterface $nextMiddleware = null)
 	{
-		$this->frameOption = $frameOption;
+		$this->poweredBy = $poweredBy;
 		parent::__construct($nextMiddleware);
 	}
 
@@ -61,6 +57,6 @@ class XFrameOptionMiddleware extends AbstractRecursiveMiddleware {
 	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
 	{
 		return parent::process($request, $handler)
-			->withHeader('X-Frame-Options', $this->frameOption);
+			->withHeader('X-Powered-By', $this->poweredBy);
 	}
 }

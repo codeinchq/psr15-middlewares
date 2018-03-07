@@ -16,7 +16,7 @@
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
 // Date:     07/03/2018
-// Time:     01:47
+// Time:     01:58
 // Project:  lib-psr15middlewares
 //
 declare(strict_types = 1);
@@ -28,30 +28,38 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class XFrameOptionMiddleware
+ * Class HSTSMiddleware
  *
- * @link https://developer.mozilla.org/fr/docs/HTTP/Headers/X-Frame-Options
+ * @link https://developer.mozilla.org/fr/docs/S%C3%A9curit%C3%A9/HTTP_Strict_Transport_Security
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XFrameOptionMiddleware extends AbstractRecursiveMiddleware {
-	public const VALUE_DENY = 'DENY';
-	public const VALUE_SAMEORIGIN = 'SAMEORIGIN';
+class HSTSMiddleware extends AbstractRecursiveMiddleware {
+	const OPT_INCLUDE_SUBDOMAINS = 2;
+	const OPT_PRELOAD = 4;
+	const OPT_ALL = self::OPT_INCLUDE_SUBDOMAINS|self::OPT_PRELOAD;
 
 	/**
-	 * @var string
+	 * @var int
 	 */
-	private $frameOption;
+	private $expireTime;
 
 	/**
-	 * XFrameOptionMiddleware constructor.
+	 * @var int
+	 */
+	private $options;
+
+	/**
+	 * HSTSMiddleware constructor.
 	 *
-	 * @param string $frameOption
+	 * @param int $expireTime
+	 * @param int|null $options
 	 * @param null|MiddlewareInterface $nextMiddleware
 	 */
-	public function __construct(string $frameOption, ?MiddlewareInterface $nextMiddleware = null)
+	public function __construct(int $expireTime, ?int $options = null, ?MiddlewareInterface $nextMiddleware = null)
 	{
-		$this->frameOption = $frameOption;
+		$this->expireTime = $expireTime;
+		$this->options = $options ?? 0;
 		parent::__construct($nextMiddleware);
 	}
 
@@ -61,6 +69,23 @@ class XFrameOptionMiddleware extends AbstractRecursiveMiddleware {
 	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
 	{
 		return parent::process($request, $handler)
-			->withHeader('X-Frame-Options', $this->frameOption);
+			->withHeader('Strict-Transport-Security', $this->getHSTSValue());
+	}
+
+	/**
+	 * Returns the HSTS header value.
+	 *
+	 * @return string
+	 */
+	public function getHSTSValue():string
+	{
+		$value = 'max-age='.$this->expireTime;
+		if ($this->options & self::OPT_INCLUDE_SUBDOMAINS) {
+			$value .= '; includeSubDomains';
+		}
+		if ($this->options & self::OPT_PRELOAD) {
+			$value .= '; preload';
+		}
+		return $value;
 	}
 }
