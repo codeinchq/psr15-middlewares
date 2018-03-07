@@ -49,7 +49,7 @@ class XFrameOptionMiddleware extends AbstractRecursiveMiddleware {
 	 * @param string $value
 	 * @param null|MiddlewareInterface $nextMiddleware
 	 */
-	public function __construct(string $value = self::VALUE_DENY, ?MiddlewareInterface $nextMiddleware = null)
+	public function __construct(string $value, ?MiddlewareInterface $nextMiddleware = null)
 	{
 		$this->value = $value;
 		parent::__construct($nextMiddleware);
