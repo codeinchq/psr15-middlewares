@@ -1,6 +1,6 @@
 {
-  "name": "codeinchq/lib-psr15middlewares",
-  "version": "1.2.3",
+  "name": "codeinc/lib-psr15middlewares",
+  "version": "1.2.4",
   "description": "A collection a PSR-15 middlewares",
   "homepage": "https://github.com/CodeIncHQ/lib-psr15middlewares",
   "type": "library",
