@@ -46,7 +46,7 @@ class ExceptionCaptureMiddleware implements MiddlewareInterface
         RequestHandlerInterface $handler):ResponseInterface
 	{
 		try {
-		    $handler->handle($request);
+		    return $handler->handle($request);
 		}
 		catch (\Throwable $exception) {
 			return new ErrorResponse($exception);
