@@ -17,7 +17,7 @@
 // Author:   Joan Fabrégat <joan@codeinc.fr>
 // Date:     23/02/2018
 // Time:     18:58
-// Project:  lib-psr15middlewares
+// Project:  Psr15Middlewares
 //
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares;
