@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     23/02/2018
-// Time:     18:50
+// Date:     07/03/2018
+// Time:     01:58
 // Project:  lib-psr15middlewares
 //
 declare(strict_types = 1);
@@ -28,46 +28,65 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class AbstractMiddleware
+ * Class HttpStrictTransportSecurityMiddleware
  *
- * @package CodeInc\Psr7ResponseSender\Middlewares
+ * @link https://fr.wikipedia.org/wiki/HTTP_Strict_Transport_Security
+ * @link https://developer.mozilla.org/fr/docs/S%C3%A9curit%C3%A9/HTTP_Strict_Transport_Security
+ * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-abstract class AbstractRecursiveMiddleware implements MiddlewareInterface {
-	/**
-	 * @var null|MiddlewareInterface
-	 */
-	private $nextMiddleware;
+class HttpStrictTransportSecurityMiddleware implements MiddlewareInterface
+{
+	const OPT_INCLUDE_SUBDOMAINS = 2;
+	const OPT_PRELOAD = 4;
+	const OPT_ALL = self::OPT_INCLUDE_SUBDOMAINS|self::OPT_PRELOAD;
 
 	/**
-	 * HttpVersionCheckMiddleware constructor.
+	 * @var int
+	 */
+	private $expireTime;
+
+	/**
+	 * @var int
+	 */
+	private $options;
+
+	/**
+	 * HSTSMiddleware constructor.
 	 *
-	 * @param null|MiddlewareInterface $nextMiddleware
+	 * @param int $expireTime
+	 * @param int|null $options
 	 */
-	public function __construct(?MiddlewareInterface $nextMiddleware = null)
+	public function __construct(int $expireTime, ?int $options = null)
 	{
-		$this->nextMiddleware = $nextMiddleware;
-	}
-
-	/**
-	 * @return null|MiddlewareInterface
-	 */
-	public function getNextMiddleware():?MiddlewareInterface
-	{
-		return $this->nextMiddleware;
+		$this->expireTime = $expireTime;
+		$this->options = $options ?? 0;
 	}
 
 	/**
 	 * @inheritdoc
-	 * @return ResponseInterface
 	 */
-	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
+	public function process(ServerRequestInterface $request,
+        RequestHandlerInterface $handler):ResponseInterface
 	{
-		if ($nextMiddleware = $this->getNextMiddleware()) {
-			return $nextMiddleware->process($request, $handler);
+		return $handler->handle($request)
+			->withHeader('Strict-Transport-Security', $this->getHstsValue());
+	}
+
+	/**
+	 * Returns the HSTS header value.
+	 *
+	 * @return string
+	 */
+	public function getHstsValue():string
+	{
+		$value = 'max-age='.$this->expireTime;
+		if ($this->options & self::OPT_INCLUDE_SUBDOMAINS) {
+			$value .= '; includeSubDomains';
 		}
-		else {
-			return $handler->handle($request);
+		if ($this->options & self::OPT_PRELOAD) {
+			$value .= '; preload';
 		}
+		return $value;
 	}
 }

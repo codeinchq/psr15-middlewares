@@ -24,6 +24,7 @@ namespace CodeInc\Psr15Middlewares;
 use CodeInc\Psr7Responses\ErrorResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 
@@ -33,17 +34,19 @@ use Psr\Http\Server\RequestHandlerInterface;
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ExceptionCaptureMiddleware extends AbstractRecursiveMiddleware {
+class ExceptionCaptureMiddleware implements MiddlewareInterface
+{
 	/**
 	 * @inheritdoc
 	 * @param ServerRequestInterface $request
 	 * @param RequestHandlerInterface $handler
 	 * @return ResponseInterface
 	 */
-	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
+	public function process(ServerRequestInterface $request,
+        RequestHandlerInterface $handler):ResponseInterface
 	{
 		try {
-			return parent::process($request, $handler);
+		    $handler->handle($request);
 		}
 		catch (\Throwable $exception) {
 			return new ErrorResponse($exception);

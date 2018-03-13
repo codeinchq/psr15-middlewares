@@ -34,7 +34,8 @@ use Psr\Http\Server\RequestHandlerInterface;
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ContentSecurityPolicyMiddleware extends AbstractRecursiveMiddleware {
+class ContentSecurityPolicyMiddleware implements MiddlewareInterface
+{
 	public const SRC_SELF  = "'self'";
 
 	/**
@@ -46,21 +47,20 @@ class ContentSecurityPolicyMiddleware extends AbstractRecursiveMiddleware {
 	 * ContentSecurityPolicyMiddleware constructor.
 	 *
 	 * @param array $sources
-	 * @param null|MiddlewareInterface $nextMiddleware
 	 */
-	public function __construct(array $sources, ?MiddlewareInterface $nextMiddleware = null)
+	public function __construct(array $sources)
 	{
 		$this->sources = $sources;
-		parent::__construct($nextMiddleware);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
+	public function process(ServerRequestInterface $request,
+        RequestHandlerInterface $handler):ResponseInterface
 	{
-		return parent::process($request, $handler)
-			->withHeader('Content-Security-Policy', $this->getHeaderValue());
+	    return $handler->handle($request)
+            ->withHeader('Content-Security-Policy', $this->getHeaderValue());
 	}
 
 	/**

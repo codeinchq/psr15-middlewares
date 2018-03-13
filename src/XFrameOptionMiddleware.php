@@ -34,7 +34,8 @@ use Psr\Http\Server\RequestHandlerInterface;
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XFrameOptionMiddleware extends AbstractRecursiveMiddleware {
+class XFrameOptionMiddleware implements MiddlewareInterface
+{
 	public const VALUE_DENY = 'DENY';
 	public const VALUE_SAMEORIGIN = 'SAMEORIGIN';
 
@@ -47,20 +48,19 @@ class XFrameOptionMiddleware extends AbstractRecursiveMiddleware {
 	 * XFrameOptionMiddleware constructor.
 	 *
 	 * @param string $frameOption
-	 * @param null|MiddlewareInterface $nextMiddleware
 	 */
-	public function __construct(string $frameOption, ?MiddlewareInterface $nextMiddleware = null)
+	public function __construct(string $frameOption)
 	{
 		$this->frameOption = $frameOption;
-		parent::__construct($nextMiddleware);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
+	public function process(ServerRequestInterface $request,
+        RequestHandlerInterface $handler):ResponseInterface
 	{
-		return parent::process($request, $handler)
+		return $handler->handle($request)
 			->withHeader('X-Frame-Options', $this->frameOption);
 	}
 }

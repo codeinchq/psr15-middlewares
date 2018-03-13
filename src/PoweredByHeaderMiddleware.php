@@ -33,7 +33,8 @@ use Psr\Http\Server\RequestHandlerInterface;
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class PoweredByHeaderMiddleware extends AbstractRecursiveMiddleware {
+class PoweredByHeaderMiddleware implements MiddlewareInterface
+{
 	/**
 	 * @var string
 	 */
@@ -43,11 +44,9 @@ class PoweredByHeaderMiddleware extends AbstractRecursiveMiddleware {
 	 * PoweredByHeaderMiddleware constructor.
 	 *
 	 * @param string $poweredBy
-	 * @param null|MiddlewareInterface $previousMiddleware
 	 */
-	public function __construct(string $poweredBy, ?MiddlewareInterface $previousMiddleware = null)
+	public function __construct(string $poweredBy)
 	{
-		parent::__construct($previousMiddleware);
 		$this->poweredBy = $poweredBy;
 	}
 
@@ -55,9 +54,10 @@ class PoweredByHeaderMiddleware extends AbstractRecursiveMiddleware {
 	 * @inheritdoc
 	 * @return ResponseInterface
 	 */
-	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
+	public function process(ServerRequestInterface $request,
+        RequestHandlerInterface $handler):ResponseInterface
 	{
-		$response = parent::process($request, $handler);
-		return $response->withHeader("X-Powered-By", $this->poweredBy);
+		return $handler->handle($request)
+            ->withHeader("X-Powered-By", $this->poweredBy);
 	}
 }

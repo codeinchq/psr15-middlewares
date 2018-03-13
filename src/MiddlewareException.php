@@ -31,7 +31,8 @@ use Throwable;
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class MiddlewareException extends \Exception {
+class MiddlewareException extends \Exception
+{
 	/**
 	 * @var  MiddlewareInterface
 	 */
@@ -45,8 +46,8 @@ class MiddlewareException extends \Exception {
 	 * @param int $code
 	 * @param Throwable|null $previous
 	 */
-	public function __construct(MiddlewareInterface $middleware, string $message = '', int $code = 0,
-		Throwable $previous = null)
+	public function __construct(MiddlewareInterface $middleware,
+        string $message = '', int $code = 0, Throwable $previous = null)
 	{
 		$this->middleware = $middleware;
 		parent::__construct($message, $code, $previous);

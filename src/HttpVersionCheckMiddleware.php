@@ -23,6 +23,7 @@ declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 
@@ -32,14 +33,16 @@ use Psr\Http\Server\RequestHandlerInterface;
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class HttpVersionCheckMiddleware extends AbstractRecursiveMiddleware {
+class HttpVersionCheckMiddleware implements MiddlewareInterface
+{
 	/**
 	 * @inheritdoc
 	 * @return ResponseInterface
 	 */
-	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
+	public function process(ServerRequestInterface $request,
+        RequestHandlerInterface $handler):ResponseInterface
 	{
-		$response = parent::process($request, $handler);
+		$response = $handler->handle($request);
 
 		// checks the HTTP version
 		if ($request->getProtocolVersion() != $response->getProtocolVersion()) {

@@ -36,7 +36,8 @@ use Psr\Http\Server\RequestHandlerInterface;
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class CacheMiddleware extends AbstractRecursiveMiddleware {
+class CacheMiddleware implements MiddlewareInterface
+{
 	/**
 	 * @var \DateTime|null
 	 */
@@ -46,16 +47,6 @@ class CacheMiddleware extends AbstractRecursiveMiddleware {
 	 * @var string|null
 	 */
 	private $etag;
-
-	/**
-	 * CacheMiddleware constructor.
-	 *
-	 * @param null|MiddlewareInterface $nextMiddleware
-	 */
-	public function __construct(?MiddlewareInterface $nextMiddleware = null)
-	{
-		parent::__construct($nextMiddleware);
-	}
 
 	/**
 	 * @param \DateTime|null $lastModified
@@ -95,9 +86,11 @@ class CacheMiddleware extends AbstractRecursiveMiddleware {
 	 * @param RequestHandlerInterface $handler
 	 * @return ResponseInterface
 	 */
-	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
+	public function process(ServerRequestInterface $request,
+        RequestHandlerInterface $handler):ResponseInterface
 	{
-		$response = parent::process($request, $handler);
+	    // processing
+		$response = $handler->handle($request);
 
 		// adding cache headers
 		$cacheUtils = new CacheUtil();
