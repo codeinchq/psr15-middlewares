@@ -20,12 +20,14 @@ composer require codeinc/lib-psr15middlewares
 ## Dependencies 
 
 * [PHP 7.2](http://php.net/releases/7_2_0.php)
-* [`psr/http-message`](https://packagist.org/packages/psr/http-message) for the standard PSR-7 objects interfaces ;
-* [`psr/http-server-middleware`](https://packagist.org/packages/psr/http-server-middleware) for the PSR-15 middleware interface ;
-* [`psr/http-server-handler`](https://packagist.org/packages/psr/http-server-handler) for the PSR-15 request handler interface ;
+* [psr/http-message](https://packagist.org/packages/psr/http-message) -> PSR-7 objects interfaces ;
+* [psr/http-server-middleware](https://packagist.org/packages/psr/http-server-middleware) -> the PSR-15 middleware interface ;
+* [psr/http-server-handler](https://packagist.org/packages/psr/http-server-handler) -> the PSR-15 request handler interface ;
 
+## Recomended libraries
 
+* [relay/relay](https://github.com/relayphp/Relay.Relay) -> A PSR-15 request handler.
 
-# License
+## License
 
 The library is published under the MIT license (see [`LICENSE`](LICENSE) file).
