@@ -32,6 +32,8 @@ namespace CodeInc\Psr15Middlewares;
  */
 class XContentTypeOptionsMiddleware extends HeaderMiddleware
 {
+    public const VALUE_NOSNIFF = 'nosniff';
+
     /**
      * XContentTypeOptionsMiddleware constructor.
      *
