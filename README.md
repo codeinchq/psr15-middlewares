@@ -6,7 +6,7 @@ This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-1
 * [`CacheMiddleware`](src/CacheMiddleware.php)
 * [`ContentSecurityPolicyMiddleware`](src/ContentSecurityPolicyMiddleware.php)
 * [`ExceptionCaptureMiddleware`](src/ExceptionCaptureMiddleware.php)
-* [`HttpStrictTransportSecurityMiddleware`](src/HttpStrictTransportSecurityMiddleware.php)
+* [`HttpStrictTransportSecurityMiddleware`](src/StrictTransportSecurityMiddleware.php)
 * [`HttpVersionCheckMiddleware`](src/HttpVersionCheckMiddleware.php) insure the HTTP version of the response is the same of the version used for the request.
 * [`PoweredByHeaderMiddleware`](src/PoweredByHeaderMiddleware.php) adds a `X-Powered-By` HTTP headers to the response
 * [`RespExtraHttpHeadersMiddleware`](src/RespExtraHttpHeadersMiddleware.php) add extra HTTP headers to the response
