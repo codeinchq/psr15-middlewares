@@ -15,44 +15,66 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     07/03/2018
-// Time:     02:05
+// Date:     14/03/2018
+// Time:     11:09
 // Project:  Psr15Middlewares
 //
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class ContentSecurityPolicyMiddleware
+ * Class HeaderMiddleware
  *
- * @link https://developer.mozilla.org/fr/docs/HTTP/Headers/Content-Security-Policy
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ContentSecurityPolicyMiddleware extends HeaderMiddleware
+class HeaderMiddleware implements MiddlewareInterface
 {
-	public const SRC_SELF  = "'self'";
+    /**
+     * @var string
+     */
+    private $headerName;
 
     /**
-     * ContentSecurityPolicyMiddleware constructor.
+     * @var string
+     */
+    private $headerValue;
+
+    /**
+     * @var bool
+     */
+    private $replace;
+
+    /**
+     * AbstractHeaderMiddleware constructor.
      *
-     * @param array $sources
+     * @param string $headerName
+     * @param string $headerValue
      * @param bool $replace
      */
-	public function __construct(array $sources, bool $replace = true)
-	{
-	    // preparing the value
-        $value = [];
-        foreach ($sources as $source) {
-            $value[] = implode(": ", $source);
-        }
-        $value = implode("; ", $value);
+    public function __construct(string $headerName, string $headerValue,
+        bool $replace = true)
+    {
+        $this->headerName = $headerName;
+        $this->headerValue = $headerValue;
+        $this->replace = $replace;
+    }
 
-        parent::__construct(
-            'Content-Security-Policy',
-            $value,
-            $replace
-        );
-	}
+    /**
+     * @inheritdoc
+     */
+    public function process(ServerRequestInterface $request,
+        RequestHandlerInterface $handler):ResponseInterface
+    {
+        $response = $handler->handle($request);
+        if ($this->replace || !$response->hasHeader($this->headerName)) {
+            $response = $response->withHeader($this->headerName, $this->headerValue);
+        }
+        return $response;
+    }
 }

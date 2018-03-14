@@ -21,72 +21,45 @@
 //
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class HttpStrictTransportSecurityMiddleware
+ * Class StrictTransportSecurityMiddleware
  *
  * @link https://fr.wikipedia.org/wiki/HTTP_Strict_Transport_Security
  * @link https://developer.mozilla.org/fr/docs/S%C3%A9curit%C3%A9/HTTP_Strict_Transport_Security
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class HttpStrictTransportSecurityMiddleware implements MiddlewareInterface
+class StrictTransportSecurityMiddleware extends HeaderMiddleware
 {
 	const OPT_INCLUDE_SUBDOMAINS = 2;
 	const OPT_PRELOAD = 4;
 	const OPT_ALL = self::OPT_INCLUDE_SUBDOMAINS|self::OPT_PRELOAD;
 
-	/**
-	 * @var int
-	 */
-	private $expireTime;
-
-	/**
-	 * @var int
-	 */
-	private $options;
-
-	/**
-	 * HSTSMiddleware constructor.
-	 *
-	 * @param int $expireTime
-	 * @param int|null $options
-	 */
-	public function __construct(int $expireTime, ?int $options = null)
+    /**
+     * StrictTransportSecurityMiddleware constructor.
+     *
+     * @param int $expireTime
+     * @param int|null $options
+     * @param bool $replace
+     */
+	public function __construct(int $expireTime, ?int $options = null,
+        bool $replace = true)
 	{
-		$this->expireTime = $expireTime;
-		$this->options = $options ?? 0;
-	}
+	    // preparing the value
+        $value = 'max-age='.$expireTime;
+        if ($options & self::OPT_INCLUDE_SUBDOMAINS) {
+            $value .= '; includeSubDomains';
+        }
+        if ($options & self::OPT_PRELOAD) {
+            $value .= '; preload';
+        }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function process(ServerRequestInterface $request,
-        RequestHandlerInterface $handler):ResponseInterface
-	{
-		return $handler->handle($request)
-			->withHeader('Strict-Transport-Security', $this->getHstsValue());
-	}
-
-	/**
-	 * Returns the HSTS header value.
-	 *
-	 * @return string
-	 */
-	public function getHstsValue():string
-	{
-		$value = 'max-age='.$this->expireTime;
-		if ($this->options & self::OPT_INCLUDE_SUBDOMAINS) {
-			$value .= '; includeSubDomains';
-		}
-		if ($this->options & self::OPT_PRELOAD) {
-			$value .= '; preload';
-		}
-		return $value;
+        parent::__construct(
+            'Strict-Transport-Security',
+            $value,
+            $replace
+        );
 	}
 }

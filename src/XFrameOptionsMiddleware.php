@@ -15,49 +15,38 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     23/02/2018
-// Time:     18:58
+// Date:     07/03/2018
+// Time:     01:47
 // Project:  Psr15Middlewares
 //
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class PoweredByHeaderMiddleware
+ * Class XFrameOptionsMiddleware
  *
+ * @link https://developer.mozilla.org/fr/docs/HTTP/Headers/X-Frame-Options
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class PoweredByHeaderMiddleware implements MiddlewareInterface
+class XFrameOptionsMiddleware extends HeaderMiddleware
 {
-	/**
-	 * @var string
-	 */
-	private $poweredBy;
+	public const VALUE_DENY = 'DENY';
+	public const VALUE_SAMEORIGIN = 'SAMEORIGIN';
 
-	/**
-	 * PoweredByHeaderMiddleware constructor.
-	 *
-	 * @param string $poweredBy
-	 */
-	public function __construct(string $poweredBy)
-	{
-		$this->poweredBy = $poweredBy;
-	}
-
-	/**
-	 * @inheritdoc
-	 * @return ResponseInterface
-	 */
-	public function process(ServerRequestInterface $request,
-        RequestHandlerInterface $handler):ResponseInterface
-	{
-		return $handler->handle($request)
-            ->withHeader("X-Powered-By", $this->poweredBy);
-	}
+    /**
+     * XFrameOptionsMiddleware constructor.
+     *
+     * @param string $frameOptions
+     * @param bool $replace
+     */
+	public function __construct(string $frameOptions, bool $replace = true)
+    {
+        parent::__construct(
+            'X-Frame-Options',
+            $frameOptions,
+            $replace
+        );
+    }
 }

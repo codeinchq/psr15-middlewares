@@ -15,8 +15,8 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     07/03/2018
-// Time:     02:05
+// Date:     14/03/2018
+// Time:     11:08
 // Project:  Psr15Middlewares
 //
 declare(strict_types = 1);
@@ -24,35 +24,26 @@ namespace CodeInc\Psr15Middlewares;
 
 
 /**
- * Class ContentSecurityPolicyMiddleware
+ * Class XContentTypeOptionsMiddleware
  *
- * @link https://developer.mozilla.org/fr/docs/HTTP/Headers/Content-Security-Policy
+ * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ContentSecurityPolicyMiddleware extends HeaderMiddleware
+class XContentTypeOptionsMiddleware extends HeaderMiddleware
 {
-	public const SRC_SELF  = "'self'";
-
     /**
-     * ContentSecurityPolicyMiddleware constructor.
+     * XContentTypeOptionsMiddleware constructor.
      *
-     * @param array $sources
+     * @param string $contentTypeOptions
      * @param bool $replace
      */
-	public function __construct(array $sources, bool $replace = true)
-	{
-	    // preparing the value
-        $value = [];
-        foreach ($sources as $source) {
-            $value[] = implode(": ", $source);
-        }
-        $value = implode("; ", $value);
-
+    public function __construct(string $contentTypeOptions, bool $replace = true)
+    {
         parent::__construct(
-            'Content-Security-Policy',
-            $value,
+            'X-Content-Type-Options',
+            $contentTypeOptions,
             $replace
         );
-	}
+    }
 }
