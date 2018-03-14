@@ -26,7 +26,7 @@ namespace CodeInc\Psr15Middlewares;
 /**
  * Class XFrameOptionsMiddleware
  *
- * @link https://developer.mozilla.org/fr/docs/HTTP/Headers/X-Frame-Options
+ * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */

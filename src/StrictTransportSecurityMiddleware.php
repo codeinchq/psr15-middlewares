@@ -26,8 +26,8 @@ namespace CodeInc\Psr15Middlewares;
 /**
  * Class StrictTransportSecurityMiddleware
  *
- * @link https://fr.wikipedia.org/wiki/HTTP_Strict_Transport_Security
- * @link https://developer.mozilla.org/fr/docs/S%C3%A9curit%C3%A9/HTTP_Strict_Transport_Security
+ * @link https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security
+ * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */

@@ -26,7 +26,7 @@ namespace CodeInc\Psr15Middlewares;
 /**
  * Class ContentSecurityPolicyMiddleware
  *
- * @link https://developer.mozilla.org/fr/docs/HTTP/Headers/Content-Security-Policy
+ * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
