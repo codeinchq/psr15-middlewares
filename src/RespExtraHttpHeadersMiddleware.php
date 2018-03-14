@@ -40,19 +40,19 @@ class RespExtraHttpHeadersMiddleware implements MiddlewareInterface
 	 */
 	private $headers = [];
 
-	/**
-	 * @param string $header
-	 * @param string $value
-	 */
-	public function addHeader(string $header, string $value):void
+    /**
+     * @param string $header
+     * @param string $value
+     * @param bool $replace
+     */
+	public function addHeader(string $header, string $value,
+        bool $replace = true):void
 	{
-		$this->headers[$header] = $value;
+		$this->headers[] = [$header, $value, $replace];
 	}
 
 	/**
-	 * @param ServerRequestInterface $request
-	 * @param RequestHandlerInterface $handler
-	 * @return ResponseInterface
+	 * @inheritdoc
 	 */
 	public function process(ServerRequestInterface $request,
         RequestHandlerInterface $handler):ResponseInterface
@@ -60,8 +60,10 @@ class RespExtraHttpHeadersMiddleware implements MiddlewareInterface
 		$response = $handler->handle($request);
 
 		// adding headers
-		foreach ($this->headers as $header => $value) {
-			$response = $response->withHeader($header, $value);
+		foreach ($this->headers as [$header, $value, $replace]) {
+		    if ($replace || !$response->hasHeader($header)) {
+                $response = $response->withHeader($header, $value);
+            }
 		}
 
 		return $response;
