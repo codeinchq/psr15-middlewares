@@ -21,10 +21,6 @@
 //
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
@@ -34,46 +30,29 @@ use Psr\Http\Server\RequestHandlerInterface;
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ContentSecurityPolicyMiddleware implements MiddlewareInterface
+class ContentSecurityPolicyMiddleware extends HeaderMiddleware
 {
 	public const SRC_SELF  = "'self'";
 
-	/**
-	 * @var array
-	 */
-	private $sources;
-
-	/**
-	 * ContentSecurityPolicyMiddleware constructor.
-	 *
-	 * @param array $sources
-	 */
-	public function __construct(array $sources)
+    /**
+     * ContentSecurityPolicyMiddleware constructor.
+     *
+     * @param array $sources
+     * @param bool $replace
+     */
+	public function __construct(array $sources, bool $replace = true)
 	{
-		$this->sources = $sources;
-	}
+	    // preparing the value
+        $value = [];
+        foreach ($sources as $source) {
+            $value[] = implode(": ", $source);
+        }
+        $value = implode("; ", $value);
 
-	/**
-	 * @inheritdoc
-	 */
-	public function process(ServerRequestInterface $request,
-        RequestHandlerInterface $handler):ResponseInterface
-	{
-	    return $handler->handle($request)
-            ->withHeader('Content-Security-Policy', $this->getHeaderValue());
-	}
-
-	/**
-	 * Returns the Content-Security-Policy header value
-	 *
-	 * @return string
-	 */
-	public function getHeaderValue():string
-	{
-		$sources = [];
-		foreach ($this->sources as $source) {
-			$sources[] = implode(": ", $source);
-		}
-		return implode("; ", $sources);
+        parent::__construct(
+            'Content-Security-Policy',
+            $value,
+            $replace
+        );
 	}
 }
