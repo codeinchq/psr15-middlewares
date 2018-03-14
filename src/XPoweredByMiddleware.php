@@ -21,10 +21,6 @@
 //
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
@@ -33,29 +29,20 @@ use Psr\Http\Server\RequestHandlerInterface;
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XPoweredByMiddleware implements MiddlewareInterface{
-	/**
-	 * @var string
-	 */
-	private $poweredBy;
-
-	/**
-	 * XPoweredByMiddleware constructor.
-	 *
-	 * @param string $poweredBy
-	 */
-	public function __construct(string $poweredBy)
-	{
-		$this->poweredBy = $poweredBy;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function process(ServerRequestInterface $request,
-        RequestHandlerInterface $handler):ResponseInterface
-	{
-		return $handler->handle($request)
-			->withHeader('X-Powered-By', $this->poweredBy);
-	}
+class XPoweredByMiddleware extends HeaderMiddleware
+{
+    /**
+     * XPoweredByMiddleware constructor.
+     *
+     * @param string $poweredBy
+     * @param bool $replace
+     */
+	public function __construct(string $poweredBy, bool $replace = true)
+    {
+        parent::__construct(
+            'X-Powered-By',
+            $poweredBy,
+            $replace
+        );
+    }
 }
