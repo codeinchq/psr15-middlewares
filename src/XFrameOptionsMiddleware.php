@@ -21,46 +21,32 @@
 //
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class XFrameOptionMiddleware
+ * Class XFrameOptionsMiddleware
  *
  * @link https://developer.mozilla.org/fr/docs/HTTP/Headers/X-Frame-Options
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XFrameOptionMiddleware implements MiddlewareInterface
+class XFrameOptionsMiddleware extends HeaderMiddleware
 {
 	public const VALUE_DENY = 'DENY';
 	public const VALUE_SAMEORIGIN = 'SAMEORIGIN';
 
-	/**
-	 * @var string
-	 */
-	private $frameOption;
-
-	/**
-	 * XFrameOptionMiddleware constructor.
-	 *
-	 * @param string $frameOption
-	 */
-	public function __construct(string $frameOption)
-	{
-		$this->frameOption = $frameOption;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function process(ServerRequestInterface $request,
-        RequestHandlerInterface $handler):ResponseInterface
-	{
-		return $handler->handle($request)
-			->withHeader('X-Frame-Options', $this->frameOption);
-	}
+    /**
+     * XFrameOptionsMiddleware constructor.
+     *
+     * @param string $frameOptions
+     * @param bool $replace
+     */
+	public function __construct(string $frameOptions, bool $replace = true)
+    {
+        parent::__construct(
+            'X-Frame-Options',
+            $frameOptions,
+            $replace
+        );
+    }
 }
