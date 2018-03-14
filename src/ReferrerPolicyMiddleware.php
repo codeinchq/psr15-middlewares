@@ -26,6 +26,7 @@ namespace CodeInc\Psr15Middlewares;
 /**
  * Class ReferrerPolicyMiddleware
  *
+ * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
