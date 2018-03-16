@@ -33,7 +33,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class CallableMiddleware implements MiddlewareInterface
+class `` implements MiddlewareInterface
 {
     /**
      * @var callable
@@ -67,7 +67,7 @@ class CallableMiddleware implements MiddlewareInterface
         if (!$response instanceof ResponseInterface) {
             throw new MiddlewareException($this,
                 sprintf("The callable response must be an object implementing %s",
-                    ResponseInterface::class)):
+                    ResponseInterface::class));
         }
         return $response;
     }
