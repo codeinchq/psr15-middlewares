@@ -15,37 +15,60 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     14/03/2018
-// Time:     11:08
+// Date:     16/03/2018
+// Time:     19:47
 // Project:  Psr15Middlewares
 //
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class XContentTypeOptionsMiddleware
+ * Class CallableMiddleware
  *
- * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XContentTypeOptionsMiddleware extends HeaderMiddleware
+class CallableMiddleware implements MiddlewareInterface
 {
-    public const VALUE_NOSNIFF = 'nosniff';
+    /**
+     * @var callable
+     */
+    private $callable;
 
     /**
-     * XContentTypeOptionsMiddleware constructor.
+     * CallableMiddleware constructor.
      *
-     * @param string $contentTypeOptions
-     * @param bool $replace
+     * @param callable $callable
      */
-    public function __construct(string $contentTypeOptions, bool $replace = true)
+    public function __construct(callable $callable)
     {
-        parent::__construct(
-            'X-Content-Type-Options',
-            $contentTypeOptions,
-            $replace
-        );
+        $this->callable = $callable;
+    }
+
+    /**
+     * @inheritdoc
+     * @throws MiddlewareException
+     */
+    public function process(ServerRequestInterface $request,
+        RequestHandlerInterface $handler):ResponseInterface
+    {
+        try {
+            $response = call_user_func($this->callable, $request);
+        }
+        catch (\Throwable $exception) {
+            throw new MiddlewareException($this,
+                "Error while executing the callable");
+        }
+        if (!$response instanceof ResponseInterface) {
+            throw new MiddlewareException($this,
+                sprintf("The callable response must be an object implementing %s",
+                    ResponseInterface::class)):
+        }
+        return $response;
     }
 }
