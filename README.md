@@ -10,6 +10,7 @@ This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-1
 * [`HeaderMiddleware`](src/HeaderMiddleware.php) Add a HTTP header to the response
 * [`HttpVersionCheckMiddleware`](src/HttpVersionCheckMiddleware.php) Insure that the HTTP version of the response is the same of the version used for the request.
 * [`ReferrerPolicyMiddleware`](src/ReferrerPolicyMiddleware.php) Add a [`Referrer-Policy`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy) HTTP headers to the response
+* [`PhpGpcVarsMiddleware`](src/PhpGpcVarsMiddleware.php) Extract PSR-7 request data to PHP GPC variables `$_GET`, `$_POST` and `$_COOKIE`
 * [`PhpSessionMiddleware`](src/PhpSessionMiddleware.php) Read sesion cookie from PSR-7 requests and add session cookie to PSR-7 responses
 * [`RespExtraHttpHeadersMiddleware`](src/RespExtraHttpHeadersMiddleware.php) Add multiple HTTP headers to the response
 * [`StrictTransportSecurityMiddleware`](src/StrictTransportSecurityMiddleware.php) Add a [`Strict-Transport-Security`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security) HTTP headers to the response
