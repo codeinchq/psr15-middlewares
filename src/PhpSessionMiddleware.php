@@ -38,15 +38,16 @@ class PhpSessionMiddleware implements MiddlewareInterface
 {
     /**
      * @inheritdoc
+     * @throws \HansOtt\PSR7Cookies\InvalidArgumentException
      */
     public function process(ServerRequestInterface $request,
                             RequestHandlerInterface $handler):ResponseInterface
     {
         // reads the session id from the request and starts the session
         if (session_status() != PHP_SESSION_ACTIVE) {
-            if ($request->getCookieParams()[session_name()]) {
+            if (isset($request->getCookieParams()[session_name()])) {
                 session_id($request->getCookieParams()[session_name()]);
-            }@
+            }
             session_start();
         }
 
