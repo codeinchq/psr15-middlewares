@@ -22,6 +22,8 @@
 declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares;
 use HansOtt\PSR7Cookies\SetCookie;
+use Micheh\Cache\CacheUtil;
+use Micheh\Cache\Header\ResponseCacheControl;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -54,7 +56,24 @@ class PhpSessionMiddleware implements MiddlewareInterface
         // processes the request
         $response = $handler->handle($request);
 
-        // adds the session cookie to the response
+        // if the response is HTML, adding cache limiter and session cookie
+        if (preg_match("#^text/html#ui", $response->getHeaderLine("Content-Type"))) {
+            $response = $this->addSessionCookie($response);
+            $response = $this->addCacheLimiterHeaders($response);
+        }
+
+        return $response;
+    }
+
+    /**
+     * Adds the cache limiter cookie
+     *
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \HansOtt\PSR7Cookies\InvalidArgumentException
+     */
+    private function addSessionCookie(ResponseInterface $response):ResponseInterface
+    {
         $params = session_get_cookie_params();
         $cookie = new SetCookie(
             session_name(),
@@ -65,8 +84,55 @@ class PhpSessionMiddleware implements MiddlewareInterface
             $params["secure"],
             $params["httponly"]
         );
-
-        // returns the response
         return $cookie->addToResponse($response);
+    }
+
+    /**
+     * Adds cache limiter headers.
+     *
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     */
+    private function addCacheLimiterHeaders(ResponseInterface $response):ResponseInterface
+    {
+        $cache = new CacheUtil();
+        switch (session_cache_limiter()) {
+            case 'public':
+                $response = $cache->withExpires($response, time() + session_cache_limiter() * 60);
+                $response = $cache->withCacheControl($response,
+                    (new ResponseCacheControl())
+                        ->withPublic()
+                        ->withMaxAge(session_cache_limiter() * 60)
+                );
+                break;
+
+            case 'private_no_expire':
+                $response = $cache->withCacheControl($response,
+                    (new ResponseCacheControl())
+                        ->withPrivate()
+                        ->withMaxAge(session_cache_limiter() * 60)
+                );
+                break;
+
+            case 'private':
+                $response = $cache->withExpires($response, 'Thu, 19 Nov 1981 08:52:00 GMT');
+                $response = $cache->withCacheControl($response,
+                    (new ResponseCacheControl())
+                        ->withPrivate()
+                        ->withMaxAge(session_cache_limiter() * 60)
+                );
+                break;
+
+            case 'nocache':
+                $response = $cache->withExpires($response, 'Thu, 19 Nov 1981 08:52:00 GMT');
+                $response = $cache->withCacheControl($response,
+                    (new ResponseCacheControl())
+                        ->withPrivate()
+                        ->withCachePrevention()
+                );
+                $response = $response->withHeader("Program", "no-cache");
+                break;
+        }
+        return $response;
     }
 }
