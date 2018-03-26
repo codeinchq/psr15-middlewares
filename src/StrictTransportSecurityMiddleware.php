@@ -43,15 +43,15 @@ class StrictTransportSecurityMiddleware extends HeaderMiddleware
     /**
      * StrictTransportSecurityMiddleware constructor.
      *
-     * @param int $expireTime
+     * @param int $maxAge
      * @param int|null $options
      * @param bool $replace
      */
-	public function __construct(int $expireTime, ?int $options = null,
+	public function __construct(int $maxAge, ?int $options = null,
         bool $replace = true)
 	{
 	    // preparing the value
-        $value = 'max-age='.$expireTime;
+        $value = 'max-age='.$maxAge;
         if ($options & self::OPT_INCLUDE_SUBDOMAINS) {
             $value .= '; includeSubDomains';
         }
