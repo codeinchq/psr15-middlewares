@@ -57,7 +57,10 @@ class PhpSessionMiddleware implements MiddlewareInterface
         $response = $handler->handle($request);
 
         // if the response is HTML, adding cache limiter and session cookie
-        if (preg_match("#^text/html#ui", $response->getHeaderLine("Content-Type"))) {
+        $statusCode = $response->getStatusCode();
+        $contentType = $response->getHeaderLine("Content-Type");
+        if ($statusCode >= 200 && $statusCode < 400
+            && (empty($contentType) || preg_match("#^text/html#ui", $contentType))) {
             $response = $this->addSessionCookie($response);
             $response = $this->addCacheLimiterHeaders($response);
         }
@@ -130,7 +133,7 @@ class PhpSessionMiddleware implements MiddlewareInterface
                         ->withPrivate()
                         ->withCachePrevention()
                 );
-                $response = $response->withHeader("Program", "no-cache");
+                $response = $response->withHeader("Pragma", "no-cache");
                 break;
         }
         return $response;
