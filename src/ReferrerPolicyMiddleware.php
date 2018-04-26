@@ -26,12 +26,21 @@ namespace CodeInc\Psr15Middlewares;
 /**
  * Class ReferrerPolicyMiddleware
  *
- * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
+ * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Referrer-Policy
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
 class ReferrerPolicyMiddleware extends HttpHeaderMiddleware
 {
+    const VALUE_NO_REFERRER = 'no-referrer'; 
+    const VALUE_NO_REFERRER_WHEN_DOWNGRADE = 'no-referrer-when-downgrade'; 
+    const VALUE_ORIGIN = 'origin'; 
+    const VALUE_ORIGIN_WHEN_CROSS_ORIGIN = 'origin-when-cross-origin'; 
+    const VALUE_SAME_ORIGIN = 'same-origin'; 
+    const VALUE_STRICT_ORIGIN = 'strict-origin'; 
+    const VALUE_STRICT_ORIGIN_WHEN_CROSS_ORIGIN = 'strict-origin-when-cross-origin'; 
+    const VALUE_UNSAFE_URL = 'unsafe-url'; 
+    
     /**
      * ReferrerPolicyMiddleware constructor.
      *
