@@ -258,7 +258,7 @@ class ContentSecurityPolicyMiddleware extends AbstractHeaderMiddleware
     /**
      * Adds a 'base-uri' to the CSP.
      *
-     * @link https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Content-Security-Policy/base-uri
+     * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/base-uri
      * @param string $source
      * @return bool
      */
@@ -274,7 +274,7 @@ class ContentSecurityPolicyMiddleware extends AbstractHeaderMiddleware
     /**
      * Adds a 'child-src' source to the CSP.
      *
-     * @link https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Content-Security-Policy
+     * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy
      * @param string $source
      * @return bool
      */
@@ -290,7 +290,7 @@ class ContentSecurityPolicyMiddleware extends AbstractHeaderMiddleware
     /**
      * Adds a 'font-src' source to the CSP.
      *
-     * @link https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Content-Security-Policy/font-src
+     * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/font-src
      * @param string $source
      * @return bool
      */
@@ -306,7 +306,7 @@ class ContentSecurityPolicyMiddleware extends AbstractHeaderMiddleware
     /**
      * Adds a 'form-action' to the CSP.
      *
-     * @link https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Content-Security-Policy/form-action
+     * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/form-action
      * @param string $source
      * @return bool
      */
@@ -322,7 +322,7 @@ class ContentSecurityPolicyMiddleware extends AbstractHeaderMiddleware
     /**
      * Adds a 'frame-ancestors' to the CSP.
      *
-     * @link https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors
+     * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors
      * @param string $source
      * @return bool
      */
@@ -338,7 +338,7 @@ class ContentSecurityPolicyMiddleware extends AbstractHeaderMiddleware
     /**
      * Adds a 'frame-src' source to the CSP.
      *
-     * @link https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Content-Security-Policy/frame-src
+     * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/frame-src
      * @param string $source
      * @return bool
      */
@@ -354,7 +354,7 @@ class ContentSecurityPolicyMiddleware extends AbstractHeaderMiddleware
     /**
      * Adds a 'img-src' source to the CSP.
      *
-     * @link https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Content-Security-Policy/img-src
+     * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/img-src
      * @param string $source
      * @return bool
      */
@@ -370,7 +370,7 @@ class ContentSecurityPolicyMiddleware extends AbstractHeaderMiddleware
     /**
      * Adds a 'manifest-src' source to the CSP.
      *
-     * @link https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Content-Security-Policy/manifest-src
+     * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/manifest-src
      * @param string $source
      * @return bool
      */
@@ -386,7 +386,7 @@ class ContentSecurityPolicyMiddleware extends AbstractHeaderMiddleware
     /**
      * Adds a 'media-src' source to the CSP.
      *
-     * @link https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Content-Security-Policy/media-src
+     * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/media-src
      * @param string $source
      * @return bool
      */
@@ -402,7 +402,7 @@ class ContentSecurityPolicyMiddleware extends AbstractHeaderMiddleware
     /**
      * Adds a 'object-src' source to the CSP.
      *
-     * @link https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Content-Security-Policy/object-src
+     * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/object-src
      * @param string $source
      * @return bool
      */
@@ -418,7 +418,7 @@ class ContentSecurityPolicyMiddleware extends AbstractHeaderMiddleware
     /**
      * Adds a 'script-src' source to the CSP.
      *
-     * @link https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Content-Security-Policy/script-src
+     * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/script-src
      * @param string $source
      * @return bool
      */
@@ -434,7 +434,7 @@ class ContentSecurityPolicyMiddleware extends AbstractHeaderMiddleware
     /**
      * Adds a 'style-src' source to the CSP.
      *
-     * @link https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Content-Security-Policy/style-src
+     * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/style-src
      * @param string $source
      * @return bool
      */
@@ -450,7 +450,7 @@ class ContentSecurityPolicyMiddleware extends AbstractHeaderMiddleware
     /**
      * Adds a 'worker-src' source to the CSP.
      *
-     * @link https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Content-Security-Policy/worker-src
+     * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/worker-src
      * @param string $source
      * @return bool
      */
