@@ -38,14 +38,9 @@ class XContentTypeOptionsMiddleware extends HeaderMiddleware
      * XContentTypeOptionsMiddleware constructor.
      *
      * @param string $contentTypeOptions
-     * @param bool $replace
      */
-    public function __construct(string $contentTypeOptions, bool $replace = true)
+    public function __construct(string $contentTypeOptions)
     {
-        parent::__construct(
-            'X-Content-Type-Options',
-            $contentTypeOptions,
-            $replace
-        );
+        parent::__construct('X-Content-Type-Options', $contentTypeOptions);
     }
 }

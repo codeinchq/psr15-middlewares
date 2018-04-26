@@ -36,14 +36,9 @@ class ReferrerPolicyMiddleware extends HeaderMiddleware
      * ReferrerPolicyMiddleware constructor.
      *
      * @param string $referrerPolicy
-     * @param bool $replace
      */
-    public function __construct(string $referrerPolicy, bool $replace = true)
+    public function __construct(string $referrerPolicy)
     {
-        parent::__construct(
-            'Referrer-Policy',
-            $referrerPolicy,
-            $replace
-        );
+        parent::__construct('Referrer-Policy', $referrerPolicy);
     }
 }

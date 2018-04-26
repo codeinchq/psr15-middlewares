@@ -21,60 +21,44 @@
 //
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class HeaderMiddleware
+* Class HeaderMiddleware
  *
  * @package CodeInc\Psr15Middlewares
- * @author Joan Fabrégat <joan@codeinc.fr>
+* @author Joan Fabrégat <joan@codeinc.fr>
  */
-class HeaderMiddleware implements MiddlewareInterface
+class HeaderMiddleware extends AbstractHeaderMiddleware
 {
     /**
-     * @var string
+     * @var array|null
      */
-    private $headerName;
-
-    /**
-     * @var string
-     */
-    private $headerValue;
-
-    /**
-     * @var bool
-     */
-    private $replace;
+    private $headerValues;
 
     /**
      * AbstractHeaderMiddleware constructor.
      *
      * @param string $headerName
-     * @param string $headerValue
-     * @param bool $replace
+     * @param string|array|null $headerValues
      */
-    public function __construct(string $headerName, string $headerValue,
-        bool $replace = true)
+    public function __construct(string $headerName, $headerValues = null)
     {
-        $this->headerName = $headerName;
-        $this->headerValue = $headerValue;
-        $this->replace = $replace;
+        parent::__construct($headerName);
+        if (is_array($headerValues)) {
+            $this->headerValues = $headerValues;
+        }
+        elseif (!is_null($headerValues)) {
+            $this->headerValues = [(string)$headerValues];
+        }
     }
 
     /**
      * @inheritdoc
+     * @return array|null
      */
-    public function process(ServerRequestInterface $request,
-        RequestHandlerInterface $handler):ResponseInterface
+    protected function getHeaderValues():?array
     {
-        $response = $handler->handle($request);
-        if ($this->replace || !$response->hasHeader($this->headerName)) {
-            $response = $response->withHeader($this->headerName, $this->headerValue);
-        }
-        return $response;
+        return $this->headerValues;
     }
 }

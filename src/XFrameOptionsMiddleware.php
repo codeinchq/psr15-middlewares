@@ -39,14 +39,9 @@ class XFrameOptionsMiddleware extends HeaderMiddleware
      * XFrameOptionsMiddleware constructor.
      *
      * @param string $frameOptions
-     * @param bool $replace
      */
-	public function __construct(string $frameOptions, bool $replace = true)
+	public function __construct(string $frameOptions)
     {
-        parent::__construct(
-            'X-Frame-Options',
-            $frameOptions,
-            $replace
-        );
+        parent::__construct('X-Frame-Options', $frameOptions);
     }
 }

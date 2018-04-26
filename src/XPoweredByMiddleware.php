@@ -35,14 +35,9 @@ class XPoweredByMiddleware extends HeaderMiddleware
      * XPoweredByMiddleware constructor.
      *
      * @param string $poweredBy
-     * @param bool $replace
      */
-	public function __construct(string $poweredBy, bool $replace = true)
+	public function __construct(string $poweredBy)
     {
-        parent::__construct(
-            'X-Powered-By',
-            $poweredBy,
-            $replace
-        );
+        parent::__construct('X-Powered-By', $poweredBy);
     }
 }

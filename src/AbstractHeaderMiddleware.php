@@ -15,63 +15,64 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     07/03/2018
-// Time:     01:58
+// Date:     26/04/2018
+// Time:     12:58
 // Project:  Psr15Middlewares
 //
-declare(strict_types = 1);
+declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class StrictTransportSecurityMiddleware
+ * Class AbstractHeaderMiddleware
  *
- * @link https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security
- * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class StrictTransportSecurityMiddleware extends HeaderMiddleware
+abstract class AbstractHeaderMiddleware implements MiddlewareInterface
 {
-	const OPT_INCLUDE_SUBDOMAINS = 2;
-	const OPT_PRELOAD = 4;
-	const OPT_ALL = self::OPT_INCLUDE_SUBDOMAINS|self::OPT_PRELOAD;
+    /**
+     * @var string
+     */
+    private $headerName;
 
     /**
-     * StrictTransportSecurityMiddleware constructor.
+     * AbstractHeaderMiddleware constructor.
      *
-     * @param int $maxAge
-     * @param int|null $options
+     * @param string $headerName
+     * @param bool|null $replace
      */
-	public function __construct(int $maxAge, ?int $options = null)
-	{
-	    // preparing the value
-        $value = 'max-age='.$maxAge;
-        if ($options & self::OPT_INCLUDE_SUBDOMAINS) {
-            $value .= '; includeSubDomains';
-        }
-        if ($options & self::OPT_PRELOAD) {
-            $value .= '; preload';
-        }
+    public function __construct(string $headerName, ?bool $replace = null)
+    {
+        $this->headerName = $headerName;
+    }
 
-        parent::__construct('Strict-Transport-Security', $value);
-	}
+    /**
+     * Retuns the header value(s) in an array or NULL if no value is set.
+     *
+     * @return array|null
+     */
+    abstract protected function getHeaderValues():?array;
 
     /**
      * @inheritdoc
      */
-	public function process(ServerRequestInterface $request,
-        RequestHandlerInterface $handler):ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
     {
-        // adding the header only if the request has been made through HTTPS
-        if ($request->getUri()->getScheme() == "https") {
-            return parent::process($request, $handler);
+        // processes the request
+        $response = $handler->handle($request);
+
+        // adds the headers value(s)
+        if ($values = $this->getHeaderValues()) {
+            foreach ($values as $value) {
+                $response = $response->withHeader($this->headerName, $value);
+            }
         }
-        else {
-            return $handler->handle($request);
-        }
+
+        return $response;
     }
 }
