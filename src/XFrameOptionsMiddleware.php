@@ -26,22 +26,57 @@ namespace CodeInc\Psr15Middlewares;
 /**
  * Class XFrameOptionsMiddleware
  *
- * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
+ * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Frame-Options
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XFrameOptionsMiddleware extends HttpHeaderMiddleware
+class XFrameOptionsMiddleware extends AbstractHeaderMiddleware
 {
-	public const VALUE_DENY = 'DENY';
-	public const VALUE_SAMEORIGIN = 'SAMEORIGIN';
+    /**
+     * @var string|null
+     */
+	private $value;
 
     /**
      * XFrameOptionsMiddleware constructor.
-     *
-     * @param string $frameOptions
      */
-	public function __construct(string $frameOptions)
+	public function __construct()
     {
-        parent::__construct('X-Frame-Options', $frameOptions);
+        parent::__construct('X-Frame-Options');
+    }
+
+    /**
+     * Deny frames.
+     */
+    public function denyFrames():void
+    {
+        $this->value = 'DENY';
+    }
+
+    /**
+     * Allow frames from the same origin.
+     */
+    public function allowFromSameOrigin():void
+    {
+        $this->value = 'SAMEORIGIN';
+    }
+
+    /**
+     * Allow frame from a given URL.
+     *
+     * @param string $url
+     */
+    public function allowFrom(string $url):void
+    {
+        $this->value = 'ALLOW-FROM '.$url;
+    }
+
+    /**
+     * @inheritdoc
+     * @return null|string
+     */
+    public function getHeaderValues():?array
+    {
+        return $this->value ? [$this->value] : null;
     }
 }
