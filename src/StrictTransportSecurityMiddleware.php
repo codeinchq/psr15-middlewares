@@ -30,35 +30,74 @@ use Psr\Http\Server\RequestHandlerInterface;
  * Class StrictTransportSecurityMiddleware
  *
  * @link https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security
- * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
+ * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Strict-Transport-Security
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class StrictTransportSecurityMiddleware extends HttpHeaderMiddleware
+class StrictTransportSecurityMiddleware extends AbstractHeaderMiddleware
 {
-	const OPT_INCLUDE_SUBDOMAINS = 2;
-	const OPT_PRELOAD = 4;
-	const OPT_ALL = self::OPT_INCLUDE_SUBDOMAINS|self::OPT_PRELOAD;
+    /**
+     * @var int
+     */
+	private $maxAge;
+
+    /**
+     * @var bool
+     */
+	private $includeSubDomains = null;
+
+    /**
+     * @var bool
+     */
+	private $preload = null;
 
     /**
      * StrictTransportSecurityMiddleware constructor.
      *
      * @param int $maxAge
-     * @param int|null $options
+     * @param bool|null $includeSubDomains
+     * @param bool|null $preload
      */
-	public function __construct(int $maxAge, ?int $options = null)
+	public function __construct(int $maxAge, ?bool $includeSubDomains = null, ?bool $preload = null)
 	{
-	    // preparing the value
-        $value = 'max-age='.$maxAge;
-        if ($options & self::OPT_INCLUDE_SUBDOMAINS) {
+	    $this->maxAge = $maxAge;
+	    $this->includeSubDomains = $includeSubDomains ?? false;
+	    $this->preload = $preload ?? false;
+
+        parent::__construct('Strict-Transport-Security');
+	}
+
+    /**
+     * Includes the sub domaines.
+     */
+	public function includeSubDomains():void
+    {
+        $this->includeSubDomains = true;
+    }
+
+    /**
+     * Enabled the preload.
+     */
+    public function enablePreload():void
+    {
+        $this->preload = true;
+    }
+
+    /**
+     * @inheritdoc
+     * @return array
+     */
+	protected function getHeaderValues():array
+    {
+        $value = 'max-age='.$this->maxAge;
+        if ($this->includeSubDomains) {
             $value .= '; includeSubDomains';
         }
-        if ($options & self::OPT_PRELOAD) {
+        if ($this->preload) {
             $value .= '; preload';
         }
-
-        parent::__construct('Strict-Transport-Security', $value);
-	}
+        return [$value];
+    }
 
     /**
      * @inheritdoc
