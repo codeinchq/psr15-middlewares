@@ -26,21 +26,34 @@ namespace CodeInc\Psr15Middlewares;
 /**
  * Class XContentTypeOptionsMiddleware
  *
- * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
+ * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Content-Type-Options
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XContentTypeOptionsMiddleware extends HttpHeaderMiddleware
+class XContentTypeOptionsMiddleware extends AbstractHeaderMiddleware
 {
-    public const VALUE_NOSNIFF = 'nosniff';
+    /**
+     * @var bool
+     */
+    private $enable;
 
     /**
      * XContentTypeOptionsMiddleware constructor.
      *
-     * @param string $contentTypeOptions
+     * @param bool $enable
      */
-    public function __construct(string $contentTypeOptions)
+    public function __construct(bool $enable)
     {
-        parent::__construct('X-Content-Type-Options', $contentTypeOptions);
+        $this->enable = $enable;
+        parent::__construct('X-Content-Type-Options');
+    }
+
+    /**
+     * @inheritdoc
+     * @return array|null
+     */
+    protected function getHeaderValues():?array
+    {
+        return $this->enable ? ['nosniff'] : null;
     }
 }
