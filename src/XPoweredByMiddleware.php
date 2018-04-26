@@ -29,7 +29,7 @@ namespace CodeInc\Psr15Middlewares;
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XPoweredByMiddleware extends HeaderMiddleware
+class XPoweredByMiddleware extends HttpHeaderMiddleware
 {
     /**
      * XPoweredByMiddleware constructor.

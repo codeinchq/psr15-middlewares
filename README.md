@@ -7,7 +7,7 @@ This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-1
 * [`CallableMiddleware`](src/CallableMiddleware.php) Uses a callable as a middleware 
 * [`ContentSecurityPolicyMiddleware`](src/ContentSecurityPolicyMiddleware.php) Add a [`Content-Security-Policy`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy) header to the response
 * [`ExceptionCaptureMiddleware`](src/ExceptionCaptureMiddleware.php) Capture exceptions during the `handle()` call
-* [`HeaderMiddleware`](src/HeaderMiddleware.php) Add a HTTP header to the response
+* [`HeaderMiddleware`](src/HttpHeaderMiddleware.php) Add a HTTP header to the response
 * [`HttpVersionCheckMiddleware`](src/HttpVersionCheckMiddleware.php) Insure that the HTTP version of the response is the same of the version used for the request.
 * [`ReferrerPolicyMiddleware`](src/ReferrerPolicyMiddleware.php) Add a [`Referrer-Policy`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy) HTTP headers to the response
 * [`PhpGpcVarsMiddleware`](src/PhpGpcVarsMiddleware.php) Extract PSR-7 request data to PHP GPC variables `$_GET`, `$_POST` and `$_COOKIE`

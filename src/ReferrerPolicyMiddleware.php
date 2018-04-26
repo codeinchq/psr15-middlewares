@@ -30,7 +30,7 @@ namespace CodeInc\Psr15Middlewares;
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ReferrerPolicyMiddleware extends HeaderMiddleware
+class ReferrerPolicyMiddleware extends HttpHeaderMiddleware
 {
     /**
      * ReferrerPolicyMiddleware constructor.

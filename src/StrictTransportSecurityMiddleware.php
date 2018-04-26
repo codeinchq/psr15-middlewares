@@ -34,7 +34,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class StrictTransportSecurityMiddleware extends HeaderMiddleware
+class StrictTransportSecurityMiddleware extends HttpHeaderMiddleware
 {
 	const OPT_INCLUDE_SUBDOMAINS = 2;
 	const OPT_PRELOAD = 4;

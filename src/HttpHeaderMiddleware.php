@@ -22,14 +22,13 @@
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares;
 
-
 /**
-* Class HeaderMiddleware
+ * Class HttpHeaderMiddleware
  *
  * @package CodeInc\Psr15Middlewares
-* @author Joan Fabrégat <joan@codeinc.fr>
+ * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class HeaderMiddleware extends AbstractHeaderMiddleware
+class HttpHeaderMiddleware extends AbstractHeaderMiddleware
 {
     /**
      * @var array|null
@@ -57,7 +56,7 @@ class HeaderMiddleware extends AbstractHeaderMiddleware
      * @inheritdoc
      * @return array|null
      */
-    protected function getHeaderValues():?array
+    public function getHeaderValues():?array
     {
         return $this->headerValues;
     }

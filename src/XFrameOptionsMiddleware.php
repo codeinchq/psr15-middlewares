@@ -30,7 +30,7 @@ namespace CodeInc\Psr15Middlewares;
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XFrameOptionsMiddleware extends HeaderMiddleware
+class XFrameOptionsMiddleware extends HttpHeaderMiddleware
 {
 	public const VALUE_DENY = 'DENY';
 	public const VALUE_SAMEORIGIN = 'SAMEORIGIN';

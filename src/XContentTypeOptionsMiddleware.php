@@ -30,7 +30,7 @@ namespace CodeInc\Psr15Middlewares;
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XContentTypeOptionsMiddleware extends HeaderMiddleware
+class XContentTypeOptionsMiddleware extends HttpHeaderMiddleware
 {
     public const VALUE_NOSNIFF = 'nosniff';
 
