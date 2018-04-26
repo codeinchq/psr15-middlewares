@@ -25,6 +25,7 @@ namespace CodeInc\Psr15Middlewares;
 /**
  * Class XXssProtectionMiddleware
  *
+ * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/X-XSS-Protection
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
@@ -38,19 +39,61 @@ class XXssProtectionMiddleware extends AbstractHeaderMiddleware
     /**
      * @var bool
      */
-    private $blockMode;
+    private $blockMode = false;
+
+    /**
+     * @var string|null
+     */
+    private $reportUri;
 
     /**
      * XXssProtectionMiddleware constructor.
      *
      * @param bool $enableProtection
-     * @param bool|null $blockMode
      */
-    public function __construct(bool $enableProtection, ?bool $blockMode = null)
+    public function __construct(bool $enableProtection)
     {
         $this->enableProtection = $enableProtection;
-        $this->blockMode = $blockMode ?? false;
         parent::__construct('X-Xss-Protection');
+    }
+
+    /**
+     * Enables the report mode.
+     *
+     * @throws MiddlewareException
+     */
+    public function enableBlockMode():void
+    {
+        if ($this->reportUri) {
+            throw new MiddlewareException(
+                $this,
+                sprintf(
+                    "You can't enable the block mode because the report mode is already enabled (see %s)",
+                    'https://developer.mozilla.org/docs/Web/HTTP/Headers/X-XSS-Protection'
+                )
+            );
+        }
+        $this->blockMode = true;
+    }
+
+    /**
+     * Enables the report mode and sets the report URI.
+     *
+     * @param string $reportUri
+     * @throws MiddlewareException
+     */
+    public function setReportUri(string $reportUri):void
+    {
+        if ($this->blockMode) {
+            throw new MiddlewareException(
+                $this,
+                sprintf(
+                    "You can't enable the report mode because the block mode is already enabled (see %s)",
+                    'https://developer.mozilla.org/docs/Web/HTTP/Headers/X-XSS-Protection'
+                )
+            );
+        }
+        $this->reportUri = $reportUri;
     }
 
     /**
@@ -62,6 +105,9 @@ class XXssProtectionMiddleware extends AbstractHeaderMiddleware
         $value = $this->enableProtection ? '1' : '0';
         if ($this->blockMode) {
             $value .= '; mode=block';
+        }
+        if ($this->reportUri) {
+            $value .= '; report='.$this->reportUri;
         }
         return [$value];
     }
