@@ -36,7 +36,7 @@ class XssProtectionMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
     private const FAKE_REPORT_URI = 'https://example.com/report-uri';
 
-    
+
     public function testMiddleware():void
     {
         // enabled
