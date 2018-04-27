@@ -37,8 +37,6 @@ class ContentTypeOptionsMiddleware extends AbstractHttpHeaderMiddleware
 {
     /**
      * XContentTypeOptionsMiddleware constructor.
-     *
-     * @param bool $enable
      */
     public function __construct()
     {
