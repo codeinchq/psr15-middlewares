@@ -8,6 +8,7 @@ This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-1
 
 ### HTTP headers
 * [`AddHttpHeadersMiddleware`](src/HttpHeaders/AddHttpHeadersMiddleware.php) Adds HTTP headers to the response
+* [`NoCacheMiddleware`](src/HttpHeaders/NoCacheMiddleware.php) Adds cache prevention headers to the response (using [micheh/psr7-cache](https://packagist.org/packages/micheh/psr7-cache))
 * [`PoweredByMiddleware`](src/HttpHeaders/PoweredByMiddleware.php) Adds a `X-Powered-By` HTTP headers to the response
 
 ### Security HTTP headers
