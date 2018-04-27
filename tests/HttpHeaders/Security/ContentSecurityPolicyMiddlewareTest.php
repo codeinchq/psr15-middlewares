@@ -46,6 +46,7 @@ final class ContentSecurityPolicyMiddlewareTest extends AbstractHttpHeaderMiddle
         'default-src' => 'addDefaultSrc',
         'base-uri' => 'addBaseUri',
         'child-src' => 'addChildSrc',
+        'connect-src' => 'addConnectSrc',
         'font-src' => 'addFontSrc',
         'form-action' => 'addFormAction',
         'frame-ancestors' => 'addFrameAncestors',

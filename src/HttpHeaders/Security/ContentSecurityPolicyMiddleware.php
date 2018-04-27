@@ -79,8 +79,9 @@ class ContentSecurityPolicyMiddleware extends AbstractHttpHeaderMiddleware
 	private $tags = [
         'default-src' => [],
 	    'base-uri' => [],
-	    'child-src' => [],
-	    'font-src' => [],
+        'child-src' => [],
+        'connect-src' => [],
+        'font-src' => [],
 	    'form-action' => [],
 	    'frame-ancestors' => [],
 	    'frame-src' => [],
@@ -97,7 +98,9 @@ class ContentSecurityPolicyMiddleware extends AbstractHttpHeaderMiddleware
         'require-sri-for' => [],
         'sandbox' => null,
         'upgrade-insecure-requests' => false,
-        'block-all-mixed-content' => false
+        'block-all-mixed-content' => false,
+
+
     ];
 
     /**
@@ -278,7 +281,7 @@ class ContentSecurityPolicyMiddleware extends AbstractHttpHeaderMiddleware
     /**
      * Adds a 'child-src' source to the CSP.
      *
-     * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy
+     * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/child-src
      * @param string $source
      * @return bool
      */
@@ -286,6 +289,22 @@ class ContentSecurityPolicyMiddleware extends AbstractHttpHeaderMiddleware
     {
         if (!in_array($source, $this->tags['child-src'])) {
             $this->tags['child-src'][] = $source;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Adds a 'connect-src' source to the CSP.
+     *
+     * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/connect-src
+     * @param string $source
+     * @return bool
+     */
+    public function addConnectSrc(string $source):bool
+    {
+        if (!in_array($source, $this->tags['connect-src'])) {
+            $this->tags['connect-src'][] = $source;
             return true;
         }
         return false;
