@@ -31,7 +31,7 @@ use CodeInc\Psr15Middlewares\Tests\HttpHeaders\PoweredByMiddlewareTest;
  * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class PoweredByMiddleware extends AbstractSingleValueHttpHeaderMiddleware
+class PoweredByMiddleware extends AbstractHttpHeaderMiddleware
 {
     /**
      * @var string|null

@@ -23,8 +23,8 @@ declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security;
 use CodeInc\Psr15Middlewares\HttpHeaders\Security\ContentSecurityPolicyMiddleware;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
 use CodeInc\Psr15Middlewares\Tests\HttpHeaders\AbstractHttpHeaderMiddlewareTestCase;
-use GuzzleHttp\Psr7\ServerRequest;
 
 
 /**
@@ -66,7 +66,7 @@ final class ContentSecurityPolicyMiddlewareTest extends AbstractHttpHeaderMiddle
         $csp = new ContentSecurityPolicyMiddleware();
         self::assertNull($csp->getHeaderValue());
         self::assertResponseNotHasHeader(
-            $csp->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $csp->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Content-Security-Policy'
         );
     }
@@ -191,7 +191,7 @@ final class ContentSecurityPolicyMiddlewareTest extends AbstractHttpHeaderMiddle
         ;
         self::assertEquals($cspMiddleware->getHeaderValue(), $expectedValue);
         self::assertResponseHasHeaderValue(
-            $cspMiddleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $cspMiddleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Content-Security-Policy',
             [$expectedValue]
         );

@@ -23,10 +23,10 @@ declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\Tests;
 use CodeInc\Psr15Middlewares\CallableMiddleware;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
 use CodeInc\Psr15Middlewares\Tests\HttpHeaders\AbstractHttpHeaderMiddlewareTestCase;
 use CodeInc\Psr7Responses\HtmlResponse;
 use CodeInc\Psr7Responses\TextResponse;
-use GuzzleHttp\Psr7\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -52,7 +52,7 @@ final class CallableMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
         });
 
         $response = $middleware->process(
-            ServerRequest::fromGlobals(),
+            FakeServerRequest::getSecureServerRequest(),
             new FakeRequestHandler()
         );
         self::assertEquals($response->getBody()->__toString(), self::TEST_BODY);
@@ -69,7 +69,7 @@ final class CallableMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
         });
 
         $response = $middleware->process(
-            ServerRequest::fromGlobals(),
+            FakeServerRequest::getSecureServerRequest(),
             new FakeRequestHandler()
         );
         self::assertEquals($response->getBody()->__toString(), self::TEST_BODY);
@@ -85,7 +85,7 @@ final class CallableMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
             return $request->getAttribute('foo');
         });
         $response = $middleware->process(
-            ServerRequest::fromGlobals()->withAttribute('foo', 'bar'),
+            FakeServerRequest::getSecureServerRequest()->withAttribute('foo', 'bar'),
             new FakeRequestHandler()
         );
         self::assertEquals($response->getBody()->__toString(), 'bar');
@@ -101,7 +101,7 @@ final class CallableMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
             return $response->withHeader('X-Test', 'Test');
         });
         $response = $middleware->process(
-            ServerRequest::fromGlobals()->withAttribute('foo', 'bar'),
+            FakeServerRequest::getSecureServerRequest()->withAttribute('foo', 'bar'),
             new FakeRequestHandler()
         );
         self::assertEquals($response->getBody()->__toString(), 'bar');
@@ -119,7 +119,7 @@ final class CallableMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
             throw new \Exception();
         });
         $middleware->process(
-            ServerRequest::fromGlobals()->withAttribute('foo', 'bar'),
+            FakeServerRequest::getSecureServerRequest()->withAttribute('foo', 'bar'),
             new FakeRequestHandler()
         );
     }

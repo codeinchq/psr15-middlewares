@@ -16,37 +16,37 @@
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
 // Date:     27/04/2018
-// Time:     12:05
+// Time:     18:07
 // Project:  Psr15Middlewares
 //
 declare(strict_types=1);
-namespace CodeInc\Psr15Middlewares\HttpHeaders;
+namespace CodeInc\Psr15Middlewares\Tests\Assets;
+use GuzzleHttp\Psr7\ServerRequest;
+use Psr\Http\Message\ServerRequestInterface;
+
 
 /**
- * Class AbstractSingleValueHttpHeaderMiddleware
+ * Class FakeServerRequest
  *
- * @package CodeInc\Psr15Middlewares\HttpHeaders
+ * @package CodeInc\Psr15Middlewares\Tests\Assets
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-abstract class AbstractSingleValueHttpHeaderMiddleware extends AbstractHttpHeaderMiddleware
+class FakeServerRequest
 {
     /**
-     * Returns the header value of null is no value is set.
-     *
-     * @return null|string
+     * @return ServerRequestInterface
      */
-    abstract public function getHeaderValue():?string;
+    public static function getSecureServerRequest():ServerRequestInterface
+    {
+        return ServerRequest::fromGlobals()->withUri(ServerRequest::getUriFromGlobals()->withScheme('https'));
+    }
 
 
     /**
-     * @inheritdoc
-     * @return array|null
+     * @return ServerRequestInterface
      */
-    public function getHeaderValues():?array
+    public static function getUnsecureServerRequest():ServerRequestInterface
     {
-        if (($headerValue = $this->getHeaderValue()) !== null) {
-            return [$headerValue];
-        }
-        return null;
+        return ServerRequest::fromGlobals()->withUri(ServerRequest::getUriFromGlobals()->withScheme('http'));
     }
 }

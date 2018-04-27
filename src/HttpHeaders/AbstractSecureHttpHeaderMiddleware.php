@@ -16,38 +16,35 @@
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
 // Date:     27/04/2018
-// Time:     13:43
+// Time:     18:22
 // Project:  Psr15Middlewares
 //
 declare(strict_types=1);
-namespace CodeInc\Psr15Middlewares\Tests;
-use CodeInc\Psr15Middlewares\HttpVersionCheckMiddleware;
-use CodeInc\Psr15Middlewares\Tests\Assets\BlankResponse;
-use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
-use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
-use PHPUnit\Framework\TestCase;
+namespace CodeInc\Psr15Middlewares\HttpHeaders;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class HttpVersionCheckMiddlewareTest
+ * Class AbstractSecureHttpHeaderMiddleware
  *
- * @uses HttpVersionCheckMiddleware
- * @package CodeInc\Psr15Middlewares\Tests
+ * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-final class HttpVersionCheckMiddlewareTest extends TestCase
+abstract class AbstractSecureHttpHeaderMiddleware extends AbstractHttpHeaderMiddleware
 {
-    public function testMiddleware():void
+    /**
+     * @inheritdoc
+     */
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
     {
-        $testResponse = (new BlankResponse())->withProtocolVersion('1.1');
-
-        $middleware = new HttpVersionCheckMiddleware();
-        $response = $middleware->process(
-            FakeServerRequest::getSecureServerRequest()->withProtocolVersion('2.0'),
-            new FakeRequestHandler($testResponse)
-        );
-
-        self::assertEquals($testResponse->getProtocolVersion(), '1.1');
-        self::assertEquals($response->getProtocolVersion(), '2.0');
+        // adding the header only if the request has been made through HTTPS
+        if ($request->getUri()->getScheme() == 'https') {
+            return parent::process($request, $handler);
+        }
+        else {
+            return $handler->handle($request);
+        }
     }
 }

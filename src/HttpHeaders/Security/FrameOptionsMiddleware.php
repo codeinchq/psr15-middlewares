@@ -21,7 +21,7 @@
 //
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares\HttpHeaders\Security;
-use CodeInc\Psr15Middlewares\HttpHeaders\AbstractSingleValueHttpHeaderMiddleware;
+use CodeInc\Psr15Middlewares\HttpHeaders\AbstractHttpHeaderMiddleware;
 use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\FrameOptionsMiddlewareTest;
 
 
@@ -33,7 +33,7 @@ use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\FrameOptionsMiddlewareTe
  * @package CodeInc\Psr15Middlewares\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class FrameOptionsMiddleware extends AbstractSingleValueHttpHeaderMiddleware
+class FrameOptionsMiddleware extends AbstractHttpHeaderMiddleware
 {
     /**
      * @var string|null

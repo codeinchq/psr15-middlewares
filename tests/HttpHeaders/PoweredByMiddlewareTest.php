@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders;
 use CodeInc\Psr15Middlewares\HttpHeaders\PoweredByMiddleware;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
-use GuzzleHttp\Psr7\ServerRequest;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
 
 
 /**
@@ -39,7 +39,7 @@ final class PoweredByMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
     {
         $middleware = new PoweredByMiddleware();
         self::assertResponseNotHasHeader(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'X-Powered-By'
         );
     }
@@ -49,7 +49,7 @@ final class PoweredByMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
         $middleware = new PoweredByMiddleware('Test');
         $middleware->setPoweredBy(null);
         self::assertResponseNotHasHeader(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'X-Powered-By'
         );
     }
@@ -59,14 +59,14 @@ final class PoweredByMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
         $middleware = new PoweredByMiddleware();
         $middleware->setPoweredBy('Test');
         self::assertResponseHasHeaderValue(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'X-Powered-By',
             ['Test']
         );
 
         $middleware = new PoweredByMiddleware('Test');
         self::assertResponseHasHeaderValue(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'X-Powered-By',
             ['Test']
         );
@@ -77,7 +77,7 @@ final class PoweredByMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
         $middleware = new PoweredByMiddleware('Test');
         $middleware->setPoweredBy('Test2');
         self::assertResponseHasHeaderValue(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'X-Powered-By',
             ['Test2']
         );

@@ -16,42 +16,48 @@
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
 // Date:     27/04/2018
-// Time:     12:26
+// Time:     17:57
 // Project:  Psr15Middlewares
 //
 declare(strict_types=1);
-namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security;
-use CodeInc\Psr15Middlewares\HttpHeaders\Security\ContentTypeOptionsMiddleware;
-use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
-use CodeInc\Psr15Middlewares\Tests\HttpHeaders\AbstractHttpHeaderMiddlewareTestCase;
+namespace CodeInc\Psr15Middlewares\Tests;
+use CodeInc\Psr15Middlewares\BlockUnsecureRequestsMiddleware;
+use CodeInc\Psr15Middlewares\Tests\Assets\BlankResponse;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
+use CodeInc\Psr7Responses\ForbiddenResponse;
+use PHPUnit\Framework\TestCase;
 
 
 /**
- * Class ContentTypeOptionsMiddlewareTest
+ * Class BlockUnsecureRequestsMiddlewareTest
  *
- * @uses ContentTypeOptionsMiddleware
- * @package CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security
+ * @uses BlockUnsecureRequestsMiddleware
+ * @package CodeInc\Psr15Middlewares\Tests
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-final class ContentTypeOptionsMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
+class BlockUnsecureRequestsMiddlewareTest extends TestCase
 {
-    public function testEnabled():void
+    public function testSecureRequest():void
     {
-        $middleware = new ContentTypeOptionsMiddleware(true);
-        self::assertResponseHasHeaderValue(
-            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
-            'X-Content-Type-Options',
-            ['nosniff']
+        $middleware = new BlockUnsecureRequestsMiddleware(new ForbiddenResponse());
+        $response = $middleware->process(
+            FakeServerRequest::getSecureServerRequest(),
+            new FakeRequestHandler(new BlankResponse())
         );
+
+        $this->assertInstanceOf(BlankResponse::class, $response);
     }
 
-    public function testDisabled():void
+
+    public function testUnsecureRequest():void
     {
-        $middleware = new ContentTypeOptionsMiddleware(false);
-        self::assertResponseNotHasHeader(
-            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
-            'X-Content-Type-Options'
+        $middleware = new BlockUnsecureRequestsMiddleware(new ForbiddenResponse());
+        $response = $middleware->process(
+            FakeServerRequest::getUnsecureServerRequest(),
+            new FakeRequestHandler(new BlankResponse())
         );
+
+        $this->assertInstanceOf(ForbiddenResponse::class, $response);
     }
 }

@@ -23,10 +23,8 @@ declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security;
 use CodeInc\Psr15Middlewares\HttpHeaders\Security\ReferrerPolicyMiddleware;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
 use CodeInc\Psr15Middlewares\Tests\HttpHeaders\AbstractHttpHeaderMiddlewareTestCase;
-use GuzzleHttp\Psr7\ServerRequest;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
@@ -50,37 +48,12 @@ final class ReferrerPolicyMiddlewareTest extends AbstractHttpHeaderMiddlewareTes
         'setUnsafeUrl' => ReferrerPolicyMiddleware::VALUE_UNSAFE_URL,
     ];
 
-    /**
-     * @var RequestHandlerInterface
-     */
-    private $fakeRequestHandler;
-
-    /**
-     * @var ServerRequestInterface
-     */
-    private $serverRequest;
-
-
-    /**
-     * ReferrerPolicyMiddlewareTest constructor.
-     *
-     * @param null|string $name
-     * @param array $data
-     * @param string $dataName
-     */
-    public function __construct(?string $name = null, array $data = [], string $dataName = '')
-    {
-        parent::__construct($name, $data, $dataName);
-        $this->fakeRequestHandler = new FakeRequestHandler();
-        $this->serverRequest = ServerRequest::fromGlobals();
-    }
-
 
     public function testMiddlewareConsructor():void
     {
         foreach (self::MIDDLEWARE_VALUES as $value) {
             $middleware = new ReferrerPolicyMiddleware($value);
-            $response = $middleware->process($this->serverRequest, $this->fakeRequestHandler);
+            $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
             self::assertResponseHasHeaderValue($response, 'Referrer-Policy', [$value]);
         }
     }
@@ -91,7 +64,7 @@ final class ReferrerPolicyMiddlewareTest extends AbstractHttpHeaderMiddlewareTes
         foreach (self::MIDDLEWARE_METHODS as $method => $value) {
             $middleware = new ReferrerPolicyMiddleware();
             call_user_func([$middleware, $method]);
-            $response = $middleware->process($this->serverRequest, $this->fakeRequestHandler);
+            $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
             self::assertResponseHasHeaderValue($response, 'Referrer-Policy', [$value]);
         }
     }

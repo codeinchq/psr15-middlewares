@@ -8,6 +8,8 @@ This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-1
 
 ### HTTP headers
 * [`AddHttpHeadersMiddleware`](src/HttpHeaders/AddHttpHeadersMiddleware.php) Adds HTTP headers to the response
+* [`CacheMiddleware`](src/HttpHeaders/CacheMiddleware.php) Adds cache headers to the response (using [micheh/psr7-cache](https://packagist.org/packages/micheh/psr7-cache))
+* [`NoCacheMiddleware`](src/HttpHeaders/NoCacheMiddleware.php) Adds cache prevention headers to the response (using [micheh/psr7-cache](https://packagist.org/packages/micheh/psr7-cache))
 * [`PoweredByMiddleware`](src/HttpHeaders/PoweredByMiddleware.php) Adds a `X-Powered-By` HTTP headers to the response
 
 ### Security HTTP headers
@@ -21,11 +23,11 @@ This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-1
 
 
 ### Other middleware
-* [`CacheMiddleware`](src/CacheMiddleware.php) Adds cache headers to the response (via [micheh/psr7-cache](https://packagist.org/packages/micheh/psr7-cache))
+* [`BlockUnsecureRequestsMiddleware`](src/BlockUnsecureRequestsMiddleware.php) Blocks unsecure (other than `HTTPS`) requests responses
 * [`CallableMiddleware`](src/CallableMiddleware.php) Uses a callable as a middleware 
 * [`ExceptionCaptureMiddleware`](src/ExceptionCaptureMiddleware.php) Captures exceptions thrown during the handling of the request 
 * [`HttpVersionCheckMiddleware`](src/HttpVersionCheckMiddleware.php) Insure that the HTTP version of the response is the same of the version used for the request.
-* [`PhpGpcVarsMiddleware`](src/PhpGpcVarsMiddleware.php) Extract PSR-7 request data to PHP GPC variables `$_GET`, `$_POST` and `$_COOKIE`
+* [`PhpGpcVarsMiddleware`](src/PhpGpcVarsMiddleware.php) Extract PSR-7 request data to PHP GPC variables `$_GET`, `$_POST`, `$_COOKIE` and `$_SERVER`
 * [`PhpSessionMiddleware`](src/PhpSessionMiddleware.php) Read sesion cookie from PSR-7 requests and add session cookie to PSR-7 responses
 
 

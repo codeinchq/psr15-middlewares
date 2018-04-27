@@ -21,7 +21,7 @@
 //
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares\HttpHeaders\Security;
-use CodeInc\Psr15Middlewares\HttpHeaders\AbstractSingleValueHttpHeaderMiddleware;
+use CodeInc\Psr15Middlewares\HttpHeaders\AbstractHttpHeaderMiddleware;
 use CodeInc\Psr15Middlewares\MiddlewareException;
 use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\ContentSecurityPolicyMiddlewareTest;
 
@@ -34,7 +34,7 @@ use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\ContentSecurityPolicyMid
  * @package CodeInc\Psr15Middlewares\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ContentSecurityPolicyMiddleware extends AbstractSingleValueHttpHeaderMiddleware
+class ContentSecurityPolicyMiddleware extends AbstractHttpHeaderMiddleware
 {
 	public const SRC_SELF  = '\'self\'';
 	public const SRC_NONE  = '\'none\'';

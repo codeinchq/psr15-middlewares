@@ -22,10 +22,9 @@
 declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security;
 use CodeInc\Psr15Middlewares\HttpHeaders\Security\StrictTransportSecurityMiddleware;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
 use CodeInc\Psr15Middlewares\Tests\HttpHeaders\AbstractHttpHeaderMiddlewareTestCase;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
-use GuzzleHttp\Psr7\ServerRequest;
-use Psr\Http\Message\ServerRequestInterface;
 
 
 /**
@@ -37,38 +36,18 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 final class StrictTransportSecurityMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
-    /**
-     * @return ServerRequestInterface
-     */
-    private function getHttpsRequest():ServerRequestInterface
-    {
-        $request = ServerRequest::fromGlobals();
-        return $request->withUri($request->getUri()->withScheme('https'));
-    }
-
-
-    /**
-     * @return ServerRequestInterface
-     */
-    private function getHttpRequest():ServerRequestInterface
-    {
-        $request = ServerRequest::fromGlobals();
-        return $request->withUri($request->getUri()->withScheme('http'));
-    }
-
-
     public function testDisabled():void
     {
         $middleware = new StrictTransportSecurityMiddleware();
         self::assertResponseNotHasHeader(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Strict-Transport-Security'
         );
 
         $middleware = new StrictTransportSecurityMiddleware(3600);
         $middleware->setMaxAge(null);
         self::assertResponseNotHasHeader(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Strict-Transport-Security'
         );
     }
@@ -79,7 +58,7 @@ final class StrictTransportSecurityMiddlewareTest extends AbstractHttpHeaderMidd
         // the header should only be added to responses for HTTPS requests
         $middleware = new StrictTransportSecurityMiddleware(3600);
         self::assertResponseNotHasHeader(
-            $middleware->process($this->getHttpRequest(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getUnsecureServerRequest(), new FakeRequestHandler()),
             'Strict-Transport-Security'
         );
     }
@@ -90,7 +69,7 @@ final class StrictTransportSecurityMiddlewareTest extends AbstractHttpHeaderMidd
         // with max age
         $middleware = new StrictTransportSecurityMiddleware(3600);
         self::assertResponseHasHeaderValue(
-            $middleware->process($this->getHttpsRequest(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Strict-Transport-Security',
             ['max-age=3600']
         );
@@ -98,7 +77,7 @@ final class StrictTransportSecurityMiddlewareTest extends AbstractHttpHeaderMidd
         // with max age change
         $middleware->setMaxAge(7200);
         self::assertResponseHasHeaderValue(
-            $middleware->process($this->getHttpsRequest(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Strict-Transport-Security',
             ['max-age=7200']
         );
@@ -111,7 +90,7 @@ final class StrictTransportSecurityMiddlewareTest extends AbstractHttpHeaderMidd
         $middleware = new StrictTransportSecurityMiddleware(3600);
         $middleware->includeSubDomains();
         self::assertResponseHasHeaderValue(
-            $middleware->process($this->getHttpsRequest(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Strict-Transport-Security',
             ['max-age=3600; includeSubDomains']
         );
@@ -119,7 +98,7 @@ final class StrictTransportSecurityMiddlewareTest extends AbstractHttpHeaderMidd
         // with max age change + include subdomains
         $middleware->setMaxAge(7200);
         self::assertResponseHasHeaderValue(
-            $middleware->process($this->getHttpsRequest(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Strict-Transport-Security',
             ['max-age=7200; includeSubDomains']
         );
@@ -132,7 +111,7 @@ final class StrictTransportSecurityMiddlewareTest extends AbstractHttpHeaderMidd
         $middleware = new StrictTransportSecurityMiddleware(3600);
         $middleware->enablePreload();
         self::assertResponseHasHeaderValue(
-            $middleware->process($this->getHttpsRequest(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Strict-Transport-Security',
             ['max-age=3600; preload']
         );
@@ -140,7 +119,7 @@ final class StrictTransportSecurityMiddlewareTest extends AbstractHttpHeaderMidd
         // with max age change + preload
         $middleware->setMaxAge(7200);
         self::assertResponseHasHeaderValue(
-            $middleware->process($this->getHttpsRequest(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Strict-Transport-Security',
             ['max-age=7200; preload']
         );
@@ -154,7 +133,7 @@ final class StrictTransportSecurityMiddlewareTest extends AbstractHttpHeaderMidd
         $middleware->enablePreload();
         $middleware->includeSubDomains();
         self::assertResponseHasHeaderValue(
-            $middleware->process($this->getHttpsRequest(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Strict-Transport-Security',
             ['max-age=3600; includeSubDomains; preload']
         );
@@ -162,7 +141,7 @@ final class StrictTransportSecurityMiddlewareTest extends AbstractHttpHeaderMidd
         // with max age change + include subdomaines + preload
         $middleware->setMaxAge(7200);
         self::assertResponseHasHeaderValue(
-            $middleware->process($this->getHttpsRequest(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Strict-Transport-Security',
             ['max-age=7200; includeSubDomains; preload']
         );

@@ -1,6 +1,6 @@
 {
   "name": "codeinc/psr15-middlewares",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "A collection a PSR-15 middlewares",
   "homepage": "https://github.com/CodeIncHQ/Psr15Middlewares",
   "type": "library",

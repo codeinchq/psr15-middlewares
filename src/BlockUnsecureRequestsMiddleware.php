@@ -16,11 +16,13 @@
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
 // Date:     27/04/2018
-// Time:     12:05
+// Time:     17:54
 // Project:  Psr15Middlewares
 //
 declare(strict_types=1);
-namespace CodeInc\Psr15Middlewares\HttpHeaders;
+namespace CodeInc\Psr15Middlewares;
+use CodeInc\Psr15Middlewares\Tests\BlockUnsecureRequestsMiddlewareTest;
+use CodeInc\Psr7Responses\ForbiddenResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -28,61 +30,62 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class AbstractSingleValueHttpHeaderMiddleware
+ * Class BlockUnsecureRequestsMiddleware
  *
- * @package CodeInc\Psr15Middlewares\HttpHeaders
+ * @see BlockUnsecureRequestsMiddlewareTest
+ * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-abstract class AbstractHttpHeaderMiddleware implements MiddlewareInterface
+class BlockUnsecureRequestsMiddleware implements MiddlewareInterface
 {
     /**
-     * @var string
+     * @var ResponseInterface
      */
-    private $headerName;
+    private $unsecureResponse;
+
 
     /**
-     * AbstractHeaderMiddleware constructor.
+     * BlockHttpRequestsMiddleware constructor.
      *
-     * @param string $headerName
+     * @param null|ResponseInterface $blockedResponse
      */
-    public function __construct(string $headerName)
+    public function __construct(?ResponseInterface $blockedResponse = null)
     {
-        $this->headerName = $headerName;
+        $this->unsecureResponse  = $blockedResponse ?? new ForbiddenResponse();
     }
 
 
     /**
-     * Returns the header name.
-     *
-     * @return string
+     * @return ForbiddenResponse|null|ResponseInterface
      */
-    public function getHeaderName():string
+    public function getUnsecureResponse()
     {
-        return $this->headerName;
+        return $this->unsecureResponse;
     }
 
 
     /**
-     * Returns the header value of null is no value is set.
-     *
-     * @return null|string
+     * @param ResponseInterface $unsecureResponse
      */
-    abstract public function getHeaderValue():?string;
+    public function setUnsecureResponse($unsecureResponse):void
+    {
+        $this->unsecureResponse = $unsecureResponse;
+    }
 
 
     /**
      * @inheritdoc
+     * @param ServerRequestInterface $request
+     * @param RequestHandlerInterface $handler
+     * @return ResponseInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
     {
-        // processes the request
-        $response = $handler->handle($request);
-
-        // adds the headers value(s)
-        if (($value = $this->getHeaderValue()) !== null) {
-            $response = $response->withHeader($this->headerName, $value);
+        // blocks HTTP requests
+        if ($request->getUri()->getScheme() != 'https') {
+            return $this->unsecureResponse;
         }
 
-        return $response;
+        return $handler->handle($request);
     }
 }

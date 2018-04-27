@@ -23,8 +23,8 @@ declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security;
 use CodeInc\Psr15Middlewares\HttpHeaders\Security\ExpectCtMiddleware;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
 use CodeInc\Psr15Middlewares\Tests\HttpHeaders\AbstractHttpHeaderMiddlewareTestCase;
-use GuzzleHttp\Psr7\ServerRequest;
 
 
 /**
@@ -39,12 +39,22 @@ final class ExpectCtMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
     private const TEST_MAX_AGE = 3600;
     private const TEST_REPORT_URI = 'https://example.org/enfcore/ct';
 
-
     public function testDisabled():void
     {
         $middleware = new ExpectCtMiddleware();
         self::assertResponseNotHasHeader(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
+            'Expect-CT'
+        );
+    }
+
+
+    public function testUnsecureRequest():void
+    {
+        $middleware = new ExpectCtMiddleware();
+        $middleware->setEnforce(true);
+        self::assertResponseNotHasHeader(
+            $middleware->process(FakeServerRequest::getUnsecureServerRequest(), new FakeRequestHandler()),
             'Expect-CT'
         );
     }
@@ -55,14 +65,14 @@ final class ExpectCtMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
         $middleware = new ExpectCtMiddleware();
         $middleware->setEnforce(true);
         self::assertResponseHasHeaderValue(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Expect-CT',
             ['enforce']
         );
 
         $middleware = new ExpectCtMiddleware(null, true);
         self::assertResponseHasHeaderValue(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Expect-CT',
             ['enforce']
         );
@@ -74,14 +84,14 @@ final class ExpectCtMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
         $middleware = new ExpectCtMiddleware();
         $middleware->setMaxAge(self::TEST_MAX_AGE);
         self::assertResponseHasHeaderValue(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Expect-CT',
             ['max-age='.self::TEST_MAX_AGE]
         );
 
         $middleware = new ExpectCtMiddleware(self::TEST_MAX_AGE);
         self::assertResponseHasHeaderValue(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Expect-CT',
             ['max-age='.self::TEST_MAX_AGE]
         );
@@ -93,14 +103,14 @@ final class ExpectCtMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
         $middleware = new ExpectCtMiddleware();
         $middleware->setReportUri(self::TEST_REPORT_URI);
         self::assertResponseHasHeaderValue(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Expect-CT',
             ['report-uri="'.self::TEST_REPORT_URI.'"']
         );
 
         $middleware = new ExpectCtMiddleware(null, null, self::TEST_REPORT_URI);
         self::assertResponseHasHeaderValue(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Expect-CT',
             ['report-uri="'.self::TEST_REPORT_URI.'"']
         );
@@ -114,14 +124,14 @@ final class ExpectCtMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
         $middleware->setMaxAge(self::TEST_MAX_AGE);
         $middleware->setEnforce(true);
         self::assertResponseHasHeaderValue(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Expect-CT',
             ['report-uri="'.self::TEST_REPORT_URI.'", enforce, max-age='.self::TEST_MAX_AGE]
         );
 
         $middleware = new ExpectCtMiddleware(self::TEST_MAX_AGE, true, self::TEST_REPORT_URI);
         self::assertResponseHasHeaderValue(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Expect-CT',
             ['report-uri="'.self::TEST_REPORT_URI.'", enforce, max-age='.self::TEST_MAX_AGE]
         );
@@ -135,14 +145,14 @@ final class ExpectCtMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
         $middleware->setMaxAge(null);
         $middleware->setEnforce(false);
         self::assertResponseNotHasHeader(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Expect-CT'
         );
 
         $middleware = new ExpectCtMiddleware(self::TEST_MAX_AGE, true, self::TEST_REPORT_URI);
         $middleware->setMaxAge(null);
         self::assertResponseHasHeaderValue(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Expect-CT',
             ['report-uri="'.self::TEST_REPORT_URI.'", enforce']
         );

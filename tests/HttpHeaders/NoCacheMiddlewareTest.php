@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders;
 use CodeInc\Psr15Middlewares\HttpHeaders\NoCacheMiddleware;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
-use GuzzleHttp\Psr7\ServerRequest;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
 
 
 /**
@@ -39,7 +39,7 @@ final class NoCacheMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
     {
         $middleware = new NoCacheMiddleware();
         self::assertResponseHasHeaderValue(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Cache-Control',
             ['no-cache, no-store, must-revalidate']
         );

@@ -38,10 +38,13 @@ abstract class AbstractHttpHeaderMiddlewareTestCase extends TestCase
      * @param string $headerName
      * @param array $headerValues
      */
-    protected static function assertResponseHasHeaderValue(ResponseInterface $response, string $headerName, array $headerValues):void
+    protected static function assertResponseHasHeaderValue(ResponseInterface $response, string $headerName,
+        array $headerValues):void
     {
         self::assertResponseHasHeader($response, $headerName);
-        self::assertArraySubset($headerValues, $response->getHeaders()[$headerName]);
+        self::assertArraySubset($headerValues, $response->getHeaders()[$headerName], false,
+           sprintf('The header values (%s) are missing for the header %s',
+               implode(', ', $headerValues), $headerName));
     }
 
 
@@ -51,8 +54,10 @@ abstract class AbstractHttpHeaderMiddlewareTestCase extends TestCase
      */
     protected static function assertResponseHasHeader(ResponseInterface $response, string $headerName):void
     {
-        self::assertArrayHasKey($headerName, $response->getHeaders());
-        self::assertNotEmpty($response->getHeaders()[$headerName]);
+        self::assertArrayHasKey($headerName, $response->getHeaders(),
+            sprintf('The header %s is missing', $headerName));
+        self::assertNotEmpty($response->getHeaders()[$headerName],
+            sprintf('The header %s value is empty', $headerName));
     }
 
 
@@ -62,7 +67,8 @@ abstract class AbstractHttpHeaderMiddlewareTestCase extends TestCase
      */
     protected static function assertResponseNotHasHeader(ResponseInterface $response, string $headerName):void
     {
-        self::assertArrayNotHasKey($headerName, $response->getHeaders());
+        self::assertArrayNotHasKey($headerName, $response->getHeaders(),
+            sprintf('The header %s is missing in the response', $headerName));
     }
 
 
