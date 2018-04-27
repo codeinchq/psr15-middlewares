@@ -25,6 +25,7 @@ namespace CodeInc\Psr15Middlewares;
 /**
  * Class XssProtectionMiddleware
  *
+ * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/X-XSS-Protection
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
