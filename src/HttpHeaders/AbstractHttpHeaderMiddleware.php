@@ -44,9 +44,8 @@ abstract class AbstractHttpHeaderMiddleware implements MiddlewareInterface
      * AbstractHeaderMiddleware constructor.
      *
      * @param string $headerName
-     * @param bool|null $replace
      */
-    public function __construct(string $headerName, ?bool $replace = null)
+    public function __construct(string $headerName)
     {
         $this->headerName = $headerName;
     }
