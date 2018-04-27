@@ -48,6 +48,68 @@ class CacheMiddleware implements MiddlewareInterface
 	 */
 	private $etag;
 
+    /**
+     * @var bool
+     */
+	private $public;
+
+    /**
+     * @var int
+     */
+	private $maxAge;
+
+
+    /**
+     * CacheMiddleware constructor.
+     *
+     * @param bool $public
+     * @param int $maxAge
+     */
+	public function __construct(bool $public = false, int $maxAge = 600)
+    {
+        $this->public = $public;
+        $this->maxAge = $maxAge;
+    }
+
+
+    /**
+     * Defines if the cache is public
+     *
+     * @param bool $isPublic
+     */
+	public function setPublic(bool $isPublic):void
+    {
+        $this->public = $isPublic;
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function isPublic():bool
+    {
+        return $this->public;
+    }
+
+
+    /**
+     * @param int $maxAge
+     */
+    public function setMaxAge(int $maxAge):void
+    {
+        $this->maxAge = $maxAge;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getMaxAge():int
+    {
+        return $this->maxAge;
+    }
+
+
 	/**
 	 * @param \DateTime|null $lastModified
 	 */
@@ -55,6 +117,7 @@ class CacheMiddleware implements MiddlewareInterface
 	{
 		$this->lastModified = $lastModified;
 	}
+
 
 	/**
 	 * @return \DateTime|null
@@ -64,6 +127,7 @@ class CacheMiddleware implements MiddlewareInterface
 		return $this->lastModified;
 	}
 
+
 	/**
 	 * @param null|string $etag
 	 */
@@ -71,6 +135,7 @@ class CacheMiddleware implements MiddlewareInterface
 	{
 		$this->etag = $etag;
 	}
+
 
 	/**
 	 * @return null|string
@@ -94,7 +159,7 @@ class CacheMiddleware implements MiddlewareInterface
 
 		// adding cache headers
 		$cacheUtils = new CacheUtil();
-		$response = $cacheUtils->withCache($response);
+		$response = $cacheUtils->withCache($response, $this->public, $this->maxAge);
 
 		// adding eTag
 		if ($this->etag) {
