@@ -40,14 +40,29 @@ class PhpGpcVarsMiddleware implements MiddlewareInterface
      * @param RequestHandlerInterface $handler
      * @return ResponseInterface
      */
-    public function process(ServerRequestInterface $request,
-                            RequestHandlerInterface $handler):ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
     {
+        // saving previous global variables value
+        $prevPOST = $_POST;
+        $prevCOOKIE = $_COOKIE;
+        $prevGET = $_GET;
+        $prevSERVER = $_SERVER;
+
         // extracting to global variables
         $_POST = $request->getParsedBody();
         $_COOKIE = $request->getCookieParams();
         $_GET = $request->getQueryParams();
+        $_SERVER = $request->getServerParams();
 
-        return $handler->handle($request);
+        // processing
+        $response = $handler->handle($request);
+
+        // restoring global variables value
+        $_POST =& $prevPOST;
+        $_COOKIE =& $prevCOOKIE;
+        $_GET =& $prevGET;
+        $_SERVER =& $prevSERVER;
+
+        return $response;
     }
 }
