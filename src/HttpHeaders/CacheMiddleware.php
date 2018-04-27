@@ -21,6 +21,7 @@
 //
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares\HttpHeaders;
+use CodeInc\Psr15Middlewares\Tests\HttpHeaders\CacheMiddlewareTest;
 use GuzzleHttp\Psr7\Response;
 use Micheh\Cache\CacheUtil;
 use Psr\Http\Message\ResponseInterface;
@@ -33,6 +34,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  * Class CacheMiddleware
  *
  * @uses CacheUtil
+ * @see CacheMiddlewareTest
  * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
