@@ -21,6 +21,7 @@
 //
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares\HttpHeaders;
+use CodeInc\Psr15Middlewares\Tests\HttpHeaders\AddHttpHeadersMiddlewareTest;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -30,6 +31,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 /**
  * Class AddHttpHeadersMiddleware
  *
+ * @see AddHttpHeadersMiddlewareTest
  * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
