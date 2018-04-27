@@ -20,7 +20,7 @@
 // Project:  Psr15Middlewares
 //
 declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
+namespace CodeInc\Psr15Middlewares\HttpHeaders;
 use GuzzleHttp\Psr7\Response;
 use Micheh\Cache\CacheUtil;
 use Psr\Http\Message\ResponseInterface;
@@ -33,7 +33,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  * Class CacheMiddleware
  *
  * @uses CacheUtil
- * @package CodeInc\Psr15Middlewares
+ * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
 class CacheMiddleware implements MiddlewareInterface
