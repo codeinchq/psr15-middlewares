@@ -108,4 +108,19 @@ class CallableMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
         self::assertInstanceOf(TextResponse::class, $response);
         self::assertResponseHasHeaderValue($response, 'X-Test', ['Test']);
     }
+
+    /**
+     * @expectedException \Exception
+     * @throws \CodeInc\Psr15Middlewares\MiddlewareException
+     */
+    public function testCallableException():void
+    {
+        $middleware = new CallableMiddleware(function(ServerRequestInterface $request):ResponseInterface {
+            throw new \Exception();
+        });
+        $middleware->process(
+            ServerRequest::fromGlobals()->withAttribute('foo', 'bar'),
+            new FakeRequestHandler()
+        );
+    }
 }
