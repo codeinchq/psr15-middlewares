@@ -22,12 +22,14 @@
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares\HttpHeaders\Security;
 use CodeInc\Psr15Middlewares\HttpHeaders\AbstractSingleValueHttpHeaderMiddleware;
+use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\ContentTypeOptionsMiddlewareTest;
 
 
 /**
  * Class ContentTypeOptionsMiddleware
  *
  * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Content-Type-Options
+ * @see ContentTypeOptionsMiddlewareTest
  * @package CodeInc\Psr15Middlewares\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
