@@ -34,7 +34,7 @@ use GuzzleHttp\Psr7\ServerRequest;
  * @package CodeInc\Psr15Middlewares\Tests
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ContentSecurityPolicyMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
+final class ContentSecurityPolicyMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
     private const URI_1 = 'https://example.com';
     private const URI_2 = 'https://example.org';

@@ -37,7 +37,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  * @package CodeInc\Psr15Middlewares\Tests
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class PhpGpcVarsMiddlewareTest extends TestCase
+final class PhpGpcVarsMiddlewareTest extends TestCase
 {
     public function testMiddleware():void
     {

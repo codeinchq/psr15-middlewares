@@ -38,7 +38,7 @@ use Psr\Http\Message\ServerRequestInterface;
  * @package CodeInc\Psr15Middlewares\Tests
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class CallableMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
+final class CallableMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
     private const TEST_BODY = 'It\'s a test!';
 

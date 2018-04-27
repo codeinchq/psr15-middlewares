@@ -35,7 +35,7 @@ use Psr\Http\Message\ServerRequestInterface;
  * @package CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class StrictTransportSecurityMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
+final class StrictTransportSecurityMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
     /**
      * @return ServerRequestInterface

@@ -33,7 +33,7 @@ use GuzzleHttp\Psr7\ServerRequest;
  * @package CodeInc\Psr15Middlewares\Tests\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class AddHttpHeadersMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
+final class AddHttpHeadersMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
     public function testDisabled():void
     {

@@ -35,7 +35,7 @@ use PHPUnit\Framework\TestCase;
  * @package CodeInc\Psr15Middlewares\Tests
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class HttpVersionCheckMiddlewareTest extends TestCase
+final class HttpVersionCheckMiddlewareTest extends TestCase
 {
     public function testMiddleware():void
     {
