@@ -22,6 +22,7 @@
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares\HttpHeaders\Security;
 use CodeInc\Psr15Middlewares\HttpHeaders\AbstractSingleValueHttpHeaderMiddleware;
+use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\StrictTransportSecurityMiddlewareTest;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -32,13 +33,14 @@ use Psr\Http\Server\RequestHandlerInterface;
  *
  * @link https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security
  * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Strict-Transport-Security
+ * @see StrictTransportSecurityMiddlewareTest
  * @package CodeInc\Psr15Middlewares\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
 class StrictTransportSecurityMiddleware extends AbstractSingleValueHttpHeaderMiddleware
 {
     /**
-     * @var int
+     * @var int|null
      */
 	private $maxAge;
 
@@ -52,6 +54,7 @@ class StrictTransportSecurityMiddleware extends AbstractSingleValueHttpHeaderMid
      */
 	private $preload = null;
 
+
     /**
      * StrictTransportSecurityMiddleware constructor.
      *
@@ -59,7 +62,7 @@ class StrictTransportSecurityMiddleware extends AbstractSingleValueHttpHeaderMid
      * @param bool|null $includeSubDomains
      * @param bool|null $preload
      */
-	public function __construct(int $maxAge, ?bool $includeSubDomains = null, ?bool $preload = null)
+	public function __construct(?int $maxAge = null, ?bool $includeSubDomains = null, ?bool $preload = null)
 	{
 	    $this->maxAge = $maxAge;
 	    $this->includeSubDomains = $includeSubDomains ?? false;
@@ -67,6 +70,25 @@ class StrictTransportSecurityMiddleware extends AbstractSingleValueHttpHeaderMid
 
         parent::__construct('Strict-Transport-Security');
 	}
+
+
+    /**
+     * @param int|null $maxAge
+     */
+    public function setMaxAge(?int $maxAge):void
+    {
+        $this->maxAge = $maxAge;
+    }
+
+
+    /**
+     * @return int|null
+     */
+    public function getMaxAge():?int
+    {
+        return $this->maxAge;
+    }
+
 
     /**
      * Includes the sub domaines.
@@ -76,6 +98,7 @@ class StrictTransportSecurityMiddleware extends AbstractSingleValueHttpHeaderMid
         $this->includeSubDomains = true;
     }
 
+
     /**
      * Enabled the preload.
      */
@@ -84,21 +107,26 @@ class StrictTransportSecurityMiddleware extends AbstractSingleValueHttpHeaderMid
         $this->preload = true;
     }
 
+
     /**
      * @inheritdoc
-     * @return string
+     * @return string|null
      */
-	public function getHeaderValue():string
+	public function getHeaderValue():?string
     {
-        $value = 'max-age='.$this->maxAge;
-        if ($this->includeSubDomains) {
-            $value .= '; includeSubDomains';
+        if ($this->maxAge !== null) {
+            $value = 'max-age=' . $this->maxAge;
+            if ($this->includeSubDomains) {
+                $value .= '; includeSubDomains';
+            }
+            if ($this->preload) {
+                $value .= '; preload';
+            }
+            return $value;
         }
-        if ($this->preload) {
-            $value .= '; preload';
-        }
-        return $value;
+        return null;
     }
+
 
     /**
      * @inheritdoc
