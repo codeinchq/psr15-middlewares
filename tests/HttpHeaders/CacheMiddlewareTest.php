@@ -75,8 +75,15 @@ final class CacheMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 
     public function testEtag():void
     {
+        // via setEtag()
         $middleware = new CacheMiddleware();
         $middleware->setEtag(self::TEST_ETAG);
+        $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
+        self::assertResponseHasHeader($response, 'Cache-Control');
+        self::assertResponseHasHeaderValue($response, 'ETag', ['"'.self::TEST_ETAG.'"']);
+
+        // via the constructor
+        $middleware = new CacheMiddleware(false, 600, null,self::TEST_ETAG);
         $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
         self::assertResponseHasHeader($response, 'Cache-Control');
         self::assertResponseHasHeaderValue($response, 'ETag', ['"'.self::TEST_ETAG.'"']);
@@ -85,8 +92,15 @@ final class CacheMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 
     public function testLastModified():void
     {
+        // via setLastModified()
         $middleware = new CacheMiddleware();
         $middleware->setLastModified(new \DateTime(self::TEST_LAST_MODIFIED));
+        $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
+        self::assertResponseHasHeader($response, 'Cache-Control');
+        self::assertResponseHasHeaderValue($response, 'Last-Modified', [self::TEST_LAST_MODIFIED]);
+
+        // via the constructor
+        $middleware = new CacheMiddleware(false, 600, new \DateTime(self::TEST_LAST_MODIFIED));
         $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
         self::assertResponseHasHeader($response, 'Cache-Control');
         self::assertResponseHasHeaderValue($response, 'Last-Modified', [self::TEST_LAST_MODIFIED]);
@@ -95,9 +109,22 @@ final class CacheMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 
     public function testLastModifiedAndEtag():void
     {
+        // via setEtag() and setLastModified()
         $middleware = new CacheMiddleware();
         $middleware->setEtag(self::TEST_ETAG);
         $middleware->setLastModified(new \DateTime(self::TEST_LAST_MODIFIED));
+        $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
+        self::assertResponseHasHeader($response, 'Cache-Control');
+        self::assertResponseHasHeaderValue($response, 'Last-Modified', [self::TEST_LAST_MODIFIED]);
+        self::assertResponseHasHeaderValue($response, 'ETag', ['"'.self::TEST_ETAG.'"']);
+
+        // via the constructor
+        $middleware = new CacheMiddleware(
+            false,
+            600,
+            new \DateTime(self::TEST_LAST_MODIFIED),
+            self::TEST_ETAG
+        );
         $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
         self::assertResponseHasHeader($response, 'Cache-Control');
         self::assertResponseHasHeaderValue($response, 'Last-Modified', [self::TEST_LAST_MODIFIED]);
