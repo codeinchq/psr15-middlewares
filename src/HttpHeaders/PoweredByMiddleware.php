@@ -21,11 +21,13 @@
 //
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares\HttpHeaders;
+use CodeInc\Psr15Middlewares\Tests\HttpHeaders\PoweredByMiddlewareTest;
 
 
 /**
  * Class PoweredByMiddleware
  *
+ * @see PoweredByMiddlewareTest
  * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
@@ -44,7 +46,7 @@ class PoweredByMiddleware extends AbstractSingleValueHttpHeaderMiddleware
      */
 	public function __construct(?string $poweredBy = null)
     {
-
+        $this->poweredBy = $poweredBy;
         parent::__construct('X-Powered-By');
     }
 
