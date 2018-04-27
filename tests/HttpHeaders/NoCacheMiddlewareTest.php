@@ -15,40 +15,33 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     04/03/2018
-// Time:     08:38
+// Date:     27/04/2018
+// Time:     13:24
 // Project:  Psr15Middlewares
 //
-declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares\HttpHeaders;
-use CodeInc\Psr15Middlewares\Tests\HttpHeaders\NoCacheMiddlewareTest;
-use Micheh\Cache\CacheUtil;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
+declare(strict_types=1);
+namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders;
+use CodeInc\Psr15Middlewares\HttpHeaders\NoCacheMiddleware;
+use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Assets\FakeRequestHandler;
+use GuzzleHttp\Psr7\ServerRequest;
 
 
 /**
- * Class NoCacheMiddleware
+ * Class NoCacheMiddlewareTest
  *
- * @uses CacheUtil
- * @see NoCacheMiddlewareTest
- * @package CodeInc\Psr15Middlewares\HttpHeaders
+ * @uses NoCacheMiddleware
+ * @package CodeInc\Psr15Middlewares\Tests\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class NoCacheMiddleware implements MiddlewareInterface
+class NoCacheMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
-	/**
-	 * @inheritdoc
-	 * @param ServerRequestInterface $request
-	 * @param RequestHandlerInterface $handler
-	 * @return ResponseInterface
-	 */
-	public function process(ServerRequestInterface $request,
-        RequestHandlerInterface $handler):ResponseInterface
-	{
-		// returns the response with the cache prevention headers
-		return (new CacheUtil())->withCachePrevention($handler->handle($request));
-	}
+    public function testMiddleware():void
+    {
+        $middleware = new NoCacheMiddleware();
+        self::assertResponseHasHeaderValue(
+            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            'Cache-Control',
+            ['no-cache, no-store, must-revalidate']
+        );
+    }
 }
