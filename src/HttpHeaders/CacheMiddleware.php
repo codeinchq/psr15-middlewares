@@ -66,11 +66,20 @@ class CacheMiddleware implements MiddlewareInterface
      *
      * @param bool $public
      * @param int $maxAge
+     * @param \DateTime|null $lastModified
+     * @param null|string $etag
      */
-	public function __construct(bool $public = false, int $maxAge = 600)
+	public function __construct(bool $public = false, int $maxAge = 600, ?\DateTime $lastModified = null,
+        ?string $etag = null)
     {
         $this->public = $public;
         $this->maxAge = $maxAge;
+        if ($lastModified) {
+            $this->setLastModified($lastModified);
+        }
+        if ($etag) {
+            $this->setEtag($etag);
+        }
     }
 
 

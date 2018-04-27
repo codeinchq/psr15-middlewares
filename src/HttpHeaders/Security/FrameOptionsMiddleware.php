@@ -22,6 +22,7 @@
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares\HttpHeaders\Security;
 use CodeInc\Psr15Middlewares\HttpHeaders\AbstractHttpHeaderMiddleware;
+use CodeInc\Psr15Middlewares\MiddlewareException;
 use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\FrameOptionsMiddlewareTest;
 
 
@@ -35,50 +36,95 @@ use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\FrameOptionsMiddlewareTe
  */
 class FrameOptionsMiddleware extends AbstractHttpHeaderMiddleware
 {
+    public const VALUE_DENY = 'DENY';
+    public const VALUE_SAMEORIGIN = 'SAMEORIGIN';
+    public const VALUE_ALLOW_FROM= 'ALLOW-FROM %s';
+
     /**
-     * @var string|null
+     * @var string
      */
 	private $value;
 
+
     /**
-     * XFrameOptionsMiddleware constructor.
+     * FrameOptionsMiddleware constructor.
+     *
+     * @param string $value
      */
-	public function __construct()
+	public function __construct(string $value)
     {
         parent::__construct('X-Frame-Options');
+        $this->value = $value;
     }
+
+
+    /**
+     * @return string
+     */
+    public function getValue():string
+    {
+        return $this->value;
+    }
+
+
+    /**
+     * @param string $value
+     */
+    public function setValue(string $value):void
+    {
+        $this->value = $value;
+    }
+
 
     /**
      * Deny frames.
+     *
+     * @return self
      */
-    public function denyFrames():void
+    public static function denyFrames():self
     {
-        $this->value = 'DENY';
+        return new self(self::VALUE_DENY);
     }
+
 
     /**
      * Allow frames from the same origin.
+     *
+     * @return self
      */
-    public function allowFromSameOrigin():void
+    public static function allowFromSameOrigin():self
     {
-        $this->value = 'SAMEORIGIN';
+        return new self(self::VALUE_SAMEORIGIN);
     }
+
 
     /**
      * Allow frame from a given URL.
      *
-     * @param string $url
+     * @param string $allowFromUrl
+     * @return self
+     * @throws MiddlewareException
      */
-    public function allowFrom(string $url):void
+    public static function allowFrom(string $allowFromUrl):self
     {
-        $this->value = 'ALLOW-FROM '.$url;
+        $middleware = new self(sprintf(self::VALUE_ALLOW_FROM, $allowFromUrl));
+
+        if (!filter_var($allowFromUrl, FILTER_VALIDATE_URL)) {
+            throw new MiddlewareException(
+                $middleware,
+                sprintf("'%s' is not a valid URL", $allowFromUrl)
+            );
+        }
+
+        return $middleware;
     }
+
 
     /**
      * @inheritdoc
-     * @return null|string
+     * @return string
      */
-    public function getHeaderValue():?string
+    public function getHeaderValue():string
     {
         return $this->value;
     }

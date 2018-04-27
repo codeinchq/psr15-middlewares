@@ -53,6 +53,25 @@ class CallableMiddleware implements MiddlewareInterface
         $this->callable = $callable;
     }
 
+
+    /**
+     * @param callable $callable
+     */
+    public function setCallable(callable $callable):void
+    {
+        $this->callable = $callable;
+    }
+
+
+    /**
+     * @return callable
+     */
+    public function getCallable():callable
+    {
+        return $this->callable;
+    }
+
+
     /**
      * @inheritdoc
      * @throws MiddlewareException

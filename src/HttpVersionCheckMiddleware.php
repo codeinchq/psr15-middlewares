@@ -41,8 +41,7 @@ class HttpVersionCheckMiddleware implements MiddlewareInterface
 	 * @inheritdoc
 	 * @return ResponseInterface
 	 */
-	public function process(ServerRequestInterface $request,
-        RequestHandlerInterface $handler):ResponseInterface
+	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
 	{
 		$response = $handler->handle($request);
 

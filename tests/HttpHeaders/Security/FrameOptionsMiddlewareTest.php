@@ -39,20 +39,16 @@ final class FrameOptionsMiddlewareTest extends AbstractHttpHeaderMiddlewareTestC
     private const TEST_URL = 'https://www.example.org';
 
 
-    public function testDisabled():void
-    {
-        $middleware = new FrameOptionsMiddleware();
-        self::assertResponseNotHasHeader(
-            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
-            'X-Frame-Options'
-        );
-    }
-
-
     public function testDeny():void
     {
-        $middleware = new FrameOptionsMiddleware();
-        $middleware->denyFrames();
+        $middleware = new FrameOptionsMiddleware(FrameOptionsMiddleware::VALUE_DENY);
+        self::assertResponseHasHeaderValue(
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
+            'X-Frame-Options',
+            ['DENY']
+        );
+
+        $middleware = FrameOptionsMiddleware::denyFrames();
         self::assertResponseHasHeaderValue(
             $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'X-Frame-Options',
@@ -63,7 +59,15 @@ final class FrameOptionsMiddlewareTest extends AbstractHttpHeaderMiddlewareTestC
 
     public function testAllowFromSameOrigin():void
     {
-        $middleware = new FrameOptionsMiddleware();
+        $middleware = new FrameOptionsMiddleware(FrameOptionsMiddleware::VALUE_SAMEORIGIN);
+        $middleware->allowFromSameOrigin();
+        self::assertResponseHasHeaderValue(
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
+            'X-Frame-Options',
+            ['SAMEORIGIN']
+        );
+
+        $middleware = FrameOptionsMiddleware::allowFromSameOrigin();
         $middleware->allowFromSameOrigin();
         self::assertResponseHasHeaderValue(
             $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
@@ -73,10 +77,21 @@ final class FrameOptionsMiddlewareTest extends AbstractHttpHeaderMiddlewareTestC
     }
 
 
+    /**
+     * @throws \CodeInc\Psr15Middlewares\MiddlewareException
+     */
     public function testAllowFrom():void
     {
-        $middleware = new FrameOptionsMiddleware();
-        $middleware->allowFrom(self::TEST_URL);
+        $middleware = new FrameOptionsMiddleware(
+            sprintf(FrameOptionsMiddleware::VALUE_ALLOW_FROM, self::TEST_URL)
+        );
+        self::assertResponseHasHeaderValue(
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
+            'X-Frame-Options',
+            ['ALLOW-FROM '.self::TEST_URL]
+        );
+
+        $middleware = FrameOptionsMiddleware::allowFrom(self::TEST_URL);
         self::assertResponseHasHeaderValue(
             $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'X-Frame-Options',
@@ -87,9 +102,16 @@ final class FrameOptionsMiddlewareTest extends AbstractHttpHeaderMiddlewareTestC
 
     public function testValueChange():void
     {
-        $middleware = new FrameOptionsMiddleware();
-        $middleware->denyFrames();
-        $middleware->allowFromSameOrigin();
+        $middleware = new FrameOptionsMiddleware(FrameOptionsMiddleware::VALUE_DENY);
+        $middleware->setValue(FrameOptionsMiddleware::VALUE_SAMEORIGIN);
+        self::assertResponseHasHeaderValue(
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
+            'X-Frame-Options',
+            ['SAMEORIGIN']
+        );
+
+        $middleware = FrameOptionsMiddleware::denyFrames();
+        $middleware->setValue(FrameOptionsMiddleware::VALUE_SAMEORIGIN);
         self::assertResponseHasHeaderValue(
             $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'X-Frame-Options',

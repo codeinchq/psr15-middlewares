@@ -36,22 +36,13 @@ use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
  */
 final class ContentTypeOptionsMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
-    public function testEnabled():void
+    public function testMiddleware():void
     {
-        $middleware = new ContentTypeOptionsMiddleware(true);
+        $middleware = new ContentTypeOptionsMiddleware();
         self::assertResponseHasHeaderValue(
             $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'X-Content-Type-Options',
             ['nosniff']
-        );
-    }
-
-    public function testDisabled():void
-    {
-        $middleware = new ContentTypeOptionsMiddleware(false);
-        self::assertResponseNotHasHeader(
-            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
-            'X-Content-Type-Options'
         );
     }
 }
