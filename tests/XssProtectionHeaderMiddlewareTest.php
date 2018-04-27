@@ -23,16 +23,18 @@ declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\Tests;
 use CodeInc\Psr15Middlewares\MiddlewareException;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
-use CodeInc\Psr15Middlewares\XssProtectionMiddleware;
+use CodeInc\Psr15Middlewares\XssProtectionHeaderMiddleware;
 use GuzzleHttp\Psr7\ServerRequest;
 
+
 /**
- * Class XssProtectionMiddlewareTest
+ * Class XssProtectionHeaderMiddlewareTest
  *
+ * @see XssProtectionHeaderMiddleware
  * @package CodeInc\Psr15Middlewares\Tests
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XssProtectionMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
+class XssProtectionHeaderMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
     private const FAKE_REPORT_URI = 'https://example.com/report-uri';
 
@@ -40,7 +42,7 @@ class XssProtectionMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
     public function testMiddleware():void
     {
         // enabled
-        $middleware = new XssProtectionMiddleware(true);
+        $middleware = new XssProtectionHeaderMiddleware(true);
         self::assertResponseHasHeaderValue(
             $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
             'X-Xss-Protection',
@@ -48,7 +50,7 @@ class XssProtectionMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
         );
 
         // disabled
-        $middleware = new XssProtectionMiddleware(false);
+        $middleware = new XssProtectionHeaderMiddleware(false);
         self::assertResponseHasHeaderValue(
             $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
             'X-Xss-Protection',
@@ -62,7 +64,7 @@ class XssProtectionMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
      */
     public function testBlockMode():void
     {
-        $middleware = new XssProtectionMiddleware(true);
+        $middleware = new XssProtectionHeaderMiddleware(true);
         $middleware->enableBlockMode();
         self::assertResponseHasHeaderValue(
             $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
@@ -77,7 +79,7 @@ class XssProtectionMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
      */
     public function testReportUri():void
     {
-        $middleware = new XssProtectionMiddleware(true);
+        $middleware = new XssProtectionHeaderMiddleware(true);
         $middleware->setReportUri(self::FAKE_REPORT_URI);
         self::assertResponseHasHeaderValue(
             $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
@@ -92,7 +94,7 @@ class XssProtectionMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
      */
     public function testExceptions():void
     {
-        $middleware = new XssProtectionMiddleware(true);
+        $middleware = new XssProtectionHeaderMiddleware(true);
         $middleware->enableBlockMode();
         $middleware->setReportUri(self::FAKE_REPORT_URI);
     }

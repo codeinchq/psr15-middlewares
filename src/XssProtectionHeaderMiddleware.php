@@ -21,15 +21,18 @@
 //
 declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares;
+use CodeInc\Psr15Middlewares\Tests\XssProtectionHeaderMiddlewareTest;
+
 
 /**
- * Class XssProtectionMiddleware
+ * Class XssProtectionHeaderMiddleware
  *
  * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/X-XSS-Protection
+ * @see XssProtectionHeaderMiddlewareTest
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XssProtectionMiddleware extends AbstractHeaderMiddleware
+class XssProtectionHeaderMiddleware extends AbstractHeaderMiddleware
 {
     /**
      * @var bool
