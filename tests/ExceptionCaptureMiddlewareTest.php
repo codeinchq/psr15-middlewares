@@ -24,8 +24,8 @@ namespace CodeInc\Psr15Middlewares\Tests;
 use CodeInc\Psr15Middlewares\ExceptionCaptureMiddleware;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeBuggyRequestHandler;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
 use CodeInc\Psr7Responses\ErrorResponse;
-use GuzzleHttp\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
 
 
@@ -42,17 +42,18 @@ final class ExceptionCaptureMiddlewareTest extends TestCase
     {
         $middleware = new ExceptionCaptureMiddleware();
         $response = $middleware->process(
-            ServerRequest::fromGlobals(),
+            FakeServerRequest::getSecureServerRequest(),
             new FakeRequestHandler()
         );
         self::assertNotInstanceOf(ErrorResponse::class, $response);
     }
 
+    
     public function testWithException():void
     {
         $middleware = new ExceptionCaptureMiddleware();
         $response = $middleware->process(
-            ServerRequest::fromGlobals(),
+            FakeServerRequest::getSecureServerRequest(),
             new FakeBuggyRequestHandler()
         );
         /** @var ErrorResponse $response */

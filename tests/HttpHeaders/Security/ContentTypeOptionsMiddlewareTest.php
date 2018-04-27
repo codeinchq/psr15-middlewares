@@ -22,9 +22,9 @@
 declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security;
 use CodeInc\Psr15Middlewares\HttpHeaders\Security\ContentTypeOptionsMiddleware;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
 use CodeInc\Psr15Middlewares\Tests\HttpHeaders\AbstractHttpHeaderMiddlewareTestCase;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
-use GuzzleHttp\Psr7\ServerRequest;
 
 
 /**
@@ -40,7 +40,7 @@ final class ContentTypeOptionsMiddlewareTest extends AbstractHttpHeaderMiddlewar
     {
         $middleware = new ContentTypeOptionsMiddleware(true);
         self::assertResponseHasHeaderValue(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'X-Content-Type-Options',
             ['nosniff']
         );
@@ -50,7 +50,7 @@ final class ContentTypeOptionsMiddlewareTest extends AbstractHttpHeaderMiddlewar
     {
         $middleware = new ContentTypeOptionsMiddleware(false);
         self::assertResponseNotHasHeader(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'X-Content-Type-Options'
         );
     }

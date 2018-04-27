@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\Tests;
 use CodeInc\Psr15Middlewares\PhpSessionMiddleware;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
-use GuzzleHttp\Psr7\ServerRequest;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -50,7 +50,7 @@ final class PhpSessionMiddlewareTest extends TestCase
     {
         $middleware = new PhpSessionMiddleware();
         $response = $middleware->process(
-            ServerRequest::fromGlobals(),
+            FakeServerRequest::getSecureServerRequest(),
             new FakeRequestHandler()
         );
 
@@ -74,13 +74,13 @@ final class PhpSessionMiddlewareTest extends TestCase
 
         $middleware = new PhpSessionMiddleware();
         $middleware->process(
-            ServerRequest::fromGlobals(),
+            FakeServerRequest::getSecureServerRequest(),
             new PhpSessionMiddlewareTestRequestHandler()
         );
         self::assertEquals($_SESSION['count'], 1);
 
         $middleware->process(
-            ServerRequest::fromGlobals(),
+            FakeServerRequest::getSecureServerRequest(),
             new PhpSessionMiddlewareTestRequestHandler()
         );
         self::assertEquals($_SESSION['count'], 2);

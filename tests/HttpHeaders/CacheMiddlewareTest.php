@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders;
 use CodeInc\Psr15Middlewares\HttpHeaders\CacheMiddleware;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
-use GuzzleHttp\Psr7\ServerRequest;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
 
 
 /**
@@ -42,7 +42,7 @@ final class CacheMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
     {
         $middleware = new CacheMiddleware(true, 3600);
         self::assertResponseHasHeaderValue(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Cache-Control',
             ['public, max-age=3600']
         );
@@ -53,7 +53,7 @@ final class CacheMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
     {
         $middleware = new CacheMiddleware(false, 3600);
         self::assertResponseHasHeaderValue(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Cache-Control',
             ['private, max-age=3600']
         );
@@ -66,7 +66,7 @@ final class CacheMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
         $middleware->setPublic(true);
         $middleware->setMaxAge(1800);
         self::assertResponseHasHeaderValue(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             'Cache-Control',
             ['public, max-age=1800']
         );
@@ -77,7 +77,7 @@ final class CacheMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
     {
         $middleware = new CacheMiddleware();
         $middleware->setEtag(self::TEST_ETAG);
-        $response = $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler());
+        $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
         self::assertResponseHasHeader($response, 'Cache-Control');
         self::assertResponseHasHeaderValue($response, 'ETag', ['"'.self::TEST_ETAG.'"']);
     }
@@ -87,7 +87,7 @@ final class CacheMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
     {
         $middleware = new CacheMiddleware();
         $middleware->setLastModified(new \DateTime(self::TEST_LAST_MODIFIED));
-        $response = $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler());
+        $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
         self::assertResponseHasHeader($response, 'Cache-Control');
         self::assertResponseHasHeaderValue($response, 'Last-Modified', [self::TEST_LAST_MODIFIED]);
     }
@@ -98,7 +98,7 @@ final class CacheMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
         $middleware = new CacheMiddleware();
         $middleware->setEtag(self::TEST_ETAG);
         $middleware->setLastModified(new \DateTime(self::TEST_LAST_MODIFIED));
-        $response = $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler());
+        $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
         self::assertResponseHasHeader($response, 'Cache-Control');
         self::assertResponseHasHeaderValue($response, 'Last-Modified', [self::TEST_LAST_MODIFIED]);
         self::assertResponseHasHeaderValue($response, 'ETag', ['"'.self::TEST_ETAG.'"']);

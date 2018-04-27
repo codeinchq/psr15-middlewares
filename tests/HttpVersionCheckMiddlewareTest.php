@@ -24,7 +24,7 @@ namespace CodeInc\Psr15Middlewares\Tests;
 use CodeInc\Psr15Middlewares\HttpVersionCheckMiddleware;
 use CodeInc\Psr15Middlewares\Tests\Assets\BlankResponse;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
-use GuzzleHttp\Psr7\ServerRequest;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
 use PHPUnit\Framework\TestCase;
 
 
@@ -43,7 +43,7 @@ final class HttpVersionCheckMiddlewareTest extends TestCase
 
         $middleware = new HttpVersionCheckMiddleware();
         $response = $middleware->process(
-            ServerRequest::fromGlobals()->withProtocolVersion('2.0'),
+            FakeServerRequest::getSecureServerRequest()->withProtocolVersion('2.0'),
             new FakeRequestHandler($testResponse)
         );
 

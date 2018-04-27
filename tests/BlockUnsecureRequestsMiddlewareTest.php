@@ -24,8 +24,8 @@ namespace CodeInc\Psr15Middlewares\Tests;
 use CodeInc\Psr15Middlewares\BlockUnsecureRequestsMiddleware;
 use CodeInc\Psr15Middlewares\Tests\Assets\BlankResponse;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
 use CodeInc\Psr7Responses\ForbiddenResponse;
-use GuzzleHttp\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
 
 
@@ -40,12 +40,9 @@ class BlockUnsecureRequestsMiddlewareTest extends TestCase
 {
     public function testSecureRequest():void
     {
-        $secureRequest = ServerRequest::fromGlobals();
-        $secureRequest = $secureRequest->withUri($secureRequest->getUri()->withScheme('https'));
-
         $middleware = new BlockUnsecureRequestsMiddleware(new ForbiddenResponse());
         $response = $middleware->process(
-            $secureRequest,
+            FakeServerRequest::getSecureServerRequest(),
             new FakeRequestHandler(new BlankResponse())
         );
 
@@ -55,12 +52,9 @@ class BlockUnsecureRequestsMiddlewareTest extends TestCase
 
     public function testUnsecureRequest():void
     {
-        $unsecureRequest = ServerRequest::fromGlobals();
-        $unsecureRequest = $unsecureRequest->withUri($unsecureRequest->getUri()->withScheme('http'));
-
         $middleware = new BlockUnsecureRequestsMiddleware(new ForbiddenResponse());
         $response = $middleware->process(
-            $unsecureRequest,
+            FakeServerRequest::getUnsecureServerRequest(),
             new FakeRequestHandler(new BlankResponse())
         );
 

@@ -22,8 +22,8 @@
 declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\Tests;
 use CodeInc\Psr15Middlewares\PhpGpcVarsMiddleware;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
 use CodeInc\Psr7Responses\TextResponse;
-use GuzzleHttp\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -43,7 +43,7 @@ final class PhpGpcVarsMiddlewareTest extends TestCase
     {
         $middleware = new PhpGpcVarsMiddleware();
         $response = $middleware->process(
-            ServerRequest::fromGlobals()->withQueryParams(['foo' => 'bar']),
+            FakeServerRequest::getSecureServerRequest()->withQueryParams(['foo' => 'bar']),
             new PhpGpcVarsMiddlewareTestRequestHandler()
         );
         self::assertEquals($response->getBody()->__toString(), 'bar');

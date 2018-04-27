@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders;
 use CodeInc\Psr15Middlewares\HttpHeaders\AddHttpHeadersMiddleware;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
-use GuzzleHttp\Psr7\ServerRequest;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
 
 
 /**
@@ -39,7 +39,7 @@ final class AddHttpHeadersMiddlewareTest extends AbstractHttpHeaderMiddlewareTes
     {
         $middleware = new AddHttpHeadersMiddleware();
         self::assertResponseHeadersCount(
-            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
             1
         );
     }
@@ -49,7 +49,7 @@ final class AddHttpHeadersMiddlewareTest extends AbstractHttpHeaderMiddlewareTes
     {
         $middleware = new AddHttpHeadersMiddleware();
         $middleware->addHeader('X-Test', 'foo');
-        $response = $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler());
+        $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
         self::assertResponseHeadersCount($response, 2);
         self::assertResponseHasHeaderValue($response, 'X-Test', ['foo']);
     }
@@ -58,7 +58,7 @@ final class AddHttpHeadersMiddlewareTest extends AbstractHttpHeaderMiddlewareTes
     {
         $middleware = new AddHttpHeadersMiddleware();
         $middleware->addHeader('X-Test', 1);
-        $response = $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler());
+        $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
         self::assertResponseHeadersCount($response, 2);
         self::assertResponseHasHeaderValue($response, 'X-Test', ['1']);
     }
@@ -68,7 +68,7 @@ final class AddHttpHeadersMiddlewareTest extends AbstractHttpHeaderMiddlewareTes
     {
         $middleware = new AddHttpHeadersMiddleware();
         $middleware->addHeader('X-Test', ['foo', 'bar']);
-        $response = $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler());
+        $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
         self::assertResponseHeadersCount($response, 2);
         self::assertResponseHasHeaderValue($response, 'X-Test', ['foo', 'bar']);
     }
@@ -80,7 +80,7 @@ final class AddHttpHeadersMiddlewareTest extends AbstractHttpHeaderMiddlewareTes
         $middleware->addHeader('X-Test-1', 'foo1');
         $middleware->addHeader('X-Test-2', 'foo2');
         $middleware->addHeader('X-Test-3', 'foo3');
-        $response = $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler());
+        $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
         self::assertResponseHeadersCount($response, 4);
         self::assertResponseHasHeaderValue($response, 'X-Test-1', ['foo1']);
         self::assertResponseHasHeaderValue($response, 'X-Test-2', ['foo2']);
@@ -94,7 +94,7 @@ final class AddHttpHeadersMiddlewareTest extends AbstractHttpHeaderMiddlewareTes
         $middleware->addHeader('X-Test-1', ['foo1', 'bar']);
         $middleware->addHeader('X-Test-2', ['foo2', 'bar']);
         $middleware->addHeader('X-Test-3', ['foo3', 'bar']);
-        $response = $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler());
+        $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
         self::assertResponseHeadersCount($response, 4);
         self::assertResponseHasHeaderValue($response, 'X-Test-1', ['foo1', 'bar']);
         self::assertResponseHasHeaderValue($response, 'X-Test-2', ['foo2', 'bar']);
@@ -106,7 +106,7 @@ final class AddHttpHeadersMiddlewareTest extends AbstractHttpHeaderMiddlewareTes
     {
         $middleware = new AddHttpHeadersMiddleware();
         $middleware->addHeader('X-Test', new \ArrayIterator(['foo', 'bar']));
-        $response = $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler());
+        $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
         self::assertResponseHeadersCount($response, 2);
         self::assertResponseHasHeaderValue($response, 'X-Test', ['foo', 'bar']);
     }
