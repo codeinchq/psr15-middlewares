@@ -51,12 +51,25 @@ abstract class AbstractHeaderMiddleware implements MiddlewareInterface
         $this->headerName = $headerName;
     }
 
+
+    /**
+     * Returns the header name.
+     *
+     * @return string
+     */
+    public function getHeaderName():string
+    {
+        return $this->headerName;
+    }
+
+
     /**
      * Retuns the header value(s) in an array or NULL if no value is set.
      *
      * @return array|null
      */
     abstract protected function getHeaderValues():?array;
+
 
     /**
      * @inheritdoc
