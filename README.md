@@ -23,6 +23,7 @@ This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-1
 
 
 ### Other middleware
+* [`BlockUnsecureRequestsMiddleware`](src/BlockUnsecureRequestsMiddleware.php) Blocks unsecure (other than `HTTPS`) requests responses
 * [`CallableMiddleware`](src/CallableMiddleware.php) Uses a callable as a middleware 
 * [`ExceptionCaptureMiddleware`](src/ExceptionCaptureMiddleware.php) Captures exceptions thrown during the handling of the request 
 * [`HttpVersionCheckMiddleware`](src/HttpVersionCheckMiddleware.php) Insure that the HTTP version of the response is the same of the version used for the request.
