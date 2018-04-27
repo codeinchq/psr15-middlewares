@@ -130,7 +130,7 @@ class ExpectCtMiddleware extends AbstractSingleValueHttpHeaderMiddleware
             $value .= 'report-uri="'.$this->reportUri.'"';
         }
         if ($this->enforce) {
-            $value .= (!empty($value) ? ', ' : '').'enfore';
+            $value .= (!empty($value) ? ', ' : '').'enforce';
         }
         if ($this->maxAge) {
             $value .= (!empty($value) ? ', ' : '').'max-age='.$this->maxAge;
