@@ -24,13 +24,13 @@ namespace CodeInc\Psr15Middlewares;
 
 
 /**
- * Class XFrameOptionsMiddleware
+ * Class FrameOptionsMiddleware
  *
  * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Frame-Options
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XFrameOptionsMiddleware extends AbstractHeaderMiddleware
+class FrameOptionsMiddleware extends AbstractHeaderMiddleware
 {
     /**
      * @var string|null

@@ -15,7 +15,7 @@ This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-1
 * [`RespExtraHttpHeadersMiddleware`](src/RespExtraHttpHeadersMiddleware.php) Add multiple HTTP headers to the response
 * [`StrictTransportSecurityMiddleware`](src/StrictTransportSecurityMiddleware.php) Add a [`Strict-Transport-Security`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security) HTTP headers to the response
 * [`XContentTypeOptionsMiddleware`](src/ContentTypeOptionsMiddleware.php) Add a [`X-Content-Type-Options`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options) HTTP headers to the response
-* [`XFrameOptionMiddleware`](src/XFrameOptionsMiddleware.php) Add a [`X-Frame-Options`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options) HTTP headers to the response
+* [`XFrameOptionMiddleware`](src/FrameOptionsMiddleware.php) Add a [`X-Frame-Options`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options) HTTP headers to the response
 * [`XPoweredByMiddleware`](src/XPoweredByMiddleware.php) Add a `X-Powered-By` HTTP headers to the response
 
 
