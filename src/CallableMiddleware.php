@@ -33,7 +33,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class `` implements MiddlewareInterface
+class CallableMiddleware implements MiddlewareInterface
 {
     /**
      * @var callable

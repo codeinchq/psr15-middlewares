@@ -5,7 +5,7 @@ This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-1
 **The current collection includes:** 
 * [`CacheMiddleware`](src/CacheMiddleware.php) Add cache headers to the response (via [micheh/psr7-cache](https://packagist.org/packages/micheh/psr7-cache))
 * [`CallableMiddleware`](src/CallableMiddleware.php) Uses a callable as a middleware 
-* [`ContentSecurityPolicyMiddleware`](src/ContentSecurityPolicyMiddleware.php) Add a [`Content-Security-Policy`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy) header to the response
+* [`ContentSecurityPolicyMiddleware`](src/ContentSecurityPolicyHeaderMiddleware.php) Add a [`Content-Security-Policy`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy) header to the response
 * [`ExceptionCaptureMiddleware`](src/ExceptionCaptureMiddleware.php) Capture exceptions during the `handle()` call
 * [`HeaderMiddleware`](src/HttpHeaderMiddleware.php) Add a HTTP header to the response
 * [`HttpVersionCheckMiddleware`](src/HttpVersionCheckMiddleware.php) Insure that the HTTP version of the response is the same of the version used for the request.

@@ -21,16 +21,18 @@
 //
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares;
+use CodeInc\Psr15Middlewares\Tests\ContentSecurityPolicyHeaderMiddlewareTest;
 
 
 /**
- * Class ContentSecurityPolicyMiddleware
+ * Class ContentSecurityPolicyHeaderMiddleware
  *
  * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy
+ * @see ContentSecurityPolicyHeaderMiddlewareTest
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ContentSecurityPolicyMiddleware extends AbstractHeaderMiddleware
+class ContentSecurityPolicyHeaderMiddleware extends AbstractHeaderMiddleware
 {
 	public const SRC_SELF  = '\'self\'';
 	public const SRC_NONE  = '\'none\'';
