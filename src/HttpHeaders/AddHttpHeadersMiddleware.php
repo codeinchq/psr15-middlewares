@@ -15,49 +15,57 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     14/03/2018
-// Time:     11:09
+// Date:     23/02/2018
+// Time:     18:59
 // Project:  Psr15Middlewares
 //
 declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
+namespace CodeInc\Psr15Middlewares\HttpHeaders;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+
 
 /**
- * Class HttpHeaderMiddleware
+ * Class AddHttpHeadersMiddleware
  *
- * @package CodeInc\Psr15Middlewares
+ * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class HttpHeaderMiddleware extends AbstractHeaderMiddleware
+class AddHttpHeadersMiddleware implements MiddlewareInterface
 {
-    /**
-     * @var array|null
-     */
-    private $headerValues;
+	/**
+	 * @var string[]
+	 */
+	private $headers = [];
 
     /**
-     * AbstractHeaderMiddleware constructor.
-     *
-     * @param string $headerName
-     * @param string|array|null $headerValues
+     * @param string $header
+     * @param string $value
+     * @param bool $replace
      */
-    public function __construct(string $headerName, $headerValues = null)
-    {
-        parent::__construct($headerName);
-        if (is_array($headerValues)) {
-            $this->headerValues = $headerValues;
-        }
-        elseif (!is_null($headerValues)) {
-            $this->headerValues = [(string)$headerValues];
-        }
-    }
+	public function addHeader(string $header, string $value,
+        bool $replace = true):void
+	{
+		$this->headers[] = [$header, $value, $replace];
+	}
 
-    /**
-     * @inheritdoc
-     * @return array|null
-     */
-    public function getHeaderValues():?array
-    {
-        return $this->headerValues;
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function process(ServerRequestInterface $request,
+        RequestHandlerInterface $handler):ResponseInterface
+	{
+		$response = $handler->handle($request);
+
+		// adding headers
+		foreach ($this->headers as [$header, $value, $replace]) {
+		    if ($replace || !$response->hasHeader($header)) {
+                $response = $response->withHeader($header, $value);
+            }
+		}
+
+		return $response;
+	}
 }

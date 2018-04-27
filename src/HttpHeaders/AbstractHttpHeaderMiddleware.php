@@ -20,7 +20,7 @@
 // Project:  Psr15Middlewares
 //
 declare(strict_types=1);
-namespace CodeInc\Psr15Middlewares;
+namespace CodeInc\Psr15Middlewares\HttpHeaders;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -28,12 +28,12 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class AbstractHeaderMiddleware
+ * Class AbstractHttpHeaderMiddleware
  *
- * @package CodeInc\Psr15Middlewares
+ * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-abstract class AbstractHeaderMiddleware implements MiddlewareInterface
+abstract class AbstractHttpHeaderMiddleware implements MiddlewareInterface
 {
     /**
      * @var string
@@ -68,7 +68,7 @@ abstract class AbstractHeaderMiddleware implements MiddlewareInterface
      *
      * @return array|null
      */
-    abstract protected function getHeaderValues():?array;
+    abstract public function getHeaderValues():?array;
 
 
     /**

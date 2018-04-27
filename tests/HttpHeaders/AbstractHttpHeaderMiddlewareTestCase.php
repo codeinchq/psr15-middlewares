@@ -20,7 +20,7 @@
 // Project:  Psr15Middlewares
 //
 declare(strict_types=1);
-namespace CodeInc\Psr15Middlewares\Tests;
+namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 

@@ -15,32 +15,48 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     27/04/2018
-// Time:     11:05
+// Date:     14/03/2018
+// Time:     11:08
 // Project:  Psr15Middlewares
 //
-declare(strict_types=1);
-namespace CodeInc\Psr15Middlewares\Tests\Assets;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
+declare(strict_types = 1);
+namespace CodeInc\Psr15Middlewares\HttpHeaders\Security;
+use CodeInc\Psr15Middlewares\HttpHeaders\AbstractSingleValueHttpHeaderMiddleware;
 
 
 /**
- * Class FakeRequestHandler
+ * Class ContentTypeOptionsMiddleware
  *
- * @package CodeInc\Psr15Middlewares\Tests\Assets
+ * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Content-Type-Options
+ * @package CodeInc\Psr15Middlewares\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class FakeRequestHandler implements RequestHandlerInterface
+class ContentTypeOptionsMiddleware extends AbstractSingleValueHttpHeaderMiddleware
 {
     /**
-     * @inheritdoc
-     * @param ServerRequestInterface $request
-     * @return ResponseInterface
+     * @var bool
      */
-    public function handle(ServerRequestInterface $request):ResponseInterface
+    private $enable;
+
+
+    /**
+     * XContentTypeOptionsMiddleware constructor.
+     *
+     * @param bool $enable
+     */
+    public function __construct(bool $enable)
     {
-        return new BlankResponse();
+        $this->enable = $enable;
+        parent::__construct('X-Content-Type-Options');
+    }
+
+
+    /**
+     * @inheritdoc
+     * @return null|string
+     */
+    public function getHeaderValue():?string
+    {
+        return $this->enable ? 'nosniff' : null;
     }
 }

@@ -20,17 +20,18 @@
 // Project:  Psr15Middlewares
 //
 declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
+namespace CodeInc\Psr15Middlewares\HttpHeaders\Security;
+use CodeInc\Psr15Middlewares\HttpHeaders\AbstractSingleValueHttpHeaderMiddleware;
 
 
 /**
  * Class FrameOptionsMiddleware
  *
  * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Frame-Options
- * @package CodeInc\Psr15Middlewares
+ * @package CodeInc\Psr15Middlewares\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class FrameOptionsMiddleware extends AbstractHeaderMiddleware
+class FrameOptionsMiddleware extends AbstractSingleValueHttpHeaderMiddleware
 {
     /**
      * @var string|null
@@ -75,8 +76,8 @@ class FrameOptionsMiddleware extends AbstractHeaderMiddleware
      * @inheritdoc
      * @return null|string
      */
-    public function getHeaderValues():?array
+    public function getHeaderValue():?string
     {
-        return $this->value ? [$this->value] : null;
+        return $this->value;
     }
 }

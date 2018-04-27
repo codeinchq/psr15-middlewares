@@ -20,20 +20,21 @@
 // Project:  Psr15Middlewares
 //
 declare(strict_types=1);
-namespace CodeInc\Psr15Middlewares\Tests;
-use CodeInc\Psr15Middlewares\ContentSecurityPolicyHeaderMiddleware;
-use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
+namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security;
+use CodeInc\Psr15Middlewares\HttpHeaders\Security\ContentSecurityPolicyMiddleware;
+use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Assets\FakeRequestHandler;
+use CodeInc\Psr15Middlewares\Tests\HttpHeaders\AbstractHttpHeaderMiddlewareTestCase;
 use GuzzleHttp\Psr7\ServerRequest;
 
 
 /**
  * Class ContentSecurityPolicyMiddlewareTest
  *
- * @see ContentSecurityPolicyHeaderMiddleware
+ * @see ContentSecurityPolicyMiddleware
  * @package CodeInc\Psr15Middlewares\Tests
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ContentSecurityPolicyHeaderMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
+class ContentSecurityPolicyMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
     private const URI_1 = 'https://example.com';
     private const URI_2 = 'https://example.org';
@@ -62,7 +63,7 @@ class ContentSecurityPolicyHeaderMiddlewareTest extends AbstractHttpHeaderMiddle
 
     public function testEmptyCSP():void
     {
-        $csp = new ContentSecurityPolicyHeaderMiddleware();
+        $csp = new ContentSecurityPolicyMiddleware();
         self::assertNull($csp->getHeaderValue());
         self::assertResponseNotHasHeader(
             $csp->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
@@ -74,7 +75,7 @@ class ContentSecurityPolicyHeaderMiddlewareTest extends AbstractHttpHeaderMiddle
     public function testUpgradeInsecureRequests():void
     {
 
-        $csp = new ContentSecurityPolicyHeaderMiddleware();
+        $csp = new ContentSecurityPolicyMiddleware();
         $csp->upgradeInsecureRequests();
         self::assertCspValue($csp, 'upgrade-insecure-requests;');
     }
@@ -82,7 +83,7 @@ class ContentSecurityPolicyHeaderMiddlewareTest extends AbstractHttpHeaderMiddle
 
     public function testBlockAllMixedContent():void
     {
-        $csp = new ContentSecurityPolicyHeaderMiddleware();
+        $csp = new ContentSecurityPolicyMiddleware();
         $csp->blockAllMixedContent();
         self::assertCspValue($csp, 'block-all-mixed-content;');
     }
@@ -93,7 +94,7 @@ class ContentSecurityPolicyHeaderMiddlewareTest extends AbstractHttpHeaderMiddle
      */
     public function testSandbox():void
     {
-        $csp = new ContentSecurityPolicyHeaderMiddleware();
+        $csp = new ContentSecurityPolicyMiddleware();
         foreach ($csp::SANDBOX_VALUES as $value) {
             $csp->setSandbox($value);;
             self::assertCspValue($csp, 'sandbox '.$value.';');
@@ -106,7 +107,7 @@ class ContentSecurityPolicyHeaderMiddlewareTest extends AbstractHttpHeaderMiddle
      */
     public function testRefererPolicy():void
     {
-        $csp = new ContentSecurityPolicyHeaderMiddleware();
+        $csp = new ContentSecurityPolicyMiddleware();
         foreach ($csp::REFERER_POLICY_VALUES as $value) {
             $csp->setRefererPolicy($value);;
             self::assertCspValue($csp, 'referer '.$value.';');
@@ -116,17 +117,17 @@ class ContentSecurityPolicyHeaderMiddlewareTest extends AbstractHttpHeaderMiddle
 
     public function testRequireSriFor():void
     {
-        $csp = new ContentSecurityPolicyHeaderMiddleware();
+        $csp = new ContentSecurityPolicyMiddleware();
         $csp->requireSriFor(true, true);
         self::assertCspValue($csp, 'require-sri-for script style;');
 
-        $csp = new ContentSecurityPolicyHeaderMiddleware();
+        $csp = new ContentSecurityPolicyMiddleware();
         $csp->requireSriFor(false, true);
         self::assertCspValue($csp, 'require-sri-for style;');
 
 
 
-        $csp = new ContentSecurityPolicyHeaderMiddleware();
+        $csp = new ContentSecurityPolicyMiddleware();
         $csp->requireSriFor(true, false);
         self::assertCspValue($csp, 'require-sri-for script;');
     }
@@ -137,17 +138,17 @@ class ContentSecurityPolicyHeaderMiddlewareTest extends AbstractHttpHeaderMiddle
      */
     public function testPluginType():void
     {
-        $csp = new ContentSecurityPolicyHeaderMiddleware();
+        $csp = new ContentSecurityPolicyMiddleware();
         self::assertTrue($csp->addPluginType(self::MEDIA_TYPE_1));
         self::assertCspValue($csp, 'plugin-types '.self::MEDIA_TYPE_1.';');
 
-        $csp = new ContentSecurityPolicyHeaderMiddleware();
+        $csp = new ContentSecurityPolicyMiddleware();
         self::assertTrue($csp->addPluginType(self::MEDIA_TYPE_1));
         self::assertTrue($csp->addPluginType(self::MEDIA_TYPE_2));
         self::assertCspValue($csp, 'plugin-types '.self::MEDIA_TYPE_1.' '.self::MEDIA_TYPE_2.';');
 
         // duplicate
-        $csp = new ContentSecurityPolicyHeaderMiddleware();
+        $csp = new ContentSecurityPolicyMiddleware();
         self::assertTrue($csp->addPluginType(self::MEDIA_TYPE_1));
         self::assertFalse($csp->addPluginType(self::MEDIA_TYPE_1));
         self::assertCspValue($csp, 'plugin-types '.self::MEDIA_TYPE_1.';');
@@ -159,21 +160,21 @@ class ContentSecurityPolicyHeaderMiddlewareTest extends AbstractHttpHeaderMiddle
      */
     public function testSrc():void
     {
-        $reflexionClass = new \ReflectionClass(ContentSecurityPolicyHeaderMiddleware::class);
+        $reflexionClass = new \ReflectionClass(ContentSecurityPolicyMiddleware::class);
         foreach (self::MIDDLEWARE_SOURCES as $tag => $method) {
             // on entry
-            $csp = new ContentSecurityPolicyHeaderMiddleware();
+            $csp = new ContentSecurityPolicyMiddleware();
             self::assertTrue($reflexionClass->getMethod($method)->invoke($csp, self::URI_1));
             self::assertCspValue($csp, $tag.' '.self::URI_1.';');
 
             // two entries
-            $csp = new ContentSecurityPolicyHeaderMiddleware();
+            $csp = new ContentSecurityPolicyMiddleware();
             self::assertTrue($reflexionClass->getMethod($method)->invoke($csp, self::URI_1));
             self::assertTrue($reflexionClass->getMethod($method)->invoke($csp, self::URI_2));
             self::assertCspValue($csp, $tag.' '.self::URI_1.' '.self::URI_2.';');
 
             // duplicate
-            $csp = new ContentSecurityPolicyHeaderMiddleware();
+            $csp = new ContentSecurityPolicyMiddleware();
             self::assertTrue($reflexionClass->getMethod($method)->invoke($csp, self::URI_1));
             self::assertFalse($reflexionClass->getMethod($method)->invoke($csp, self::URI_1));
             self::assertCspValue($csp, $tag.' '.self::URI_1.';');
@@ -182,10 +183,10 @@ class ContentSecurityPolicyHeaderMiddlewareTest extends AbstractHttpHeaderMiddle
 
 
     /**
-     * @param ContentSecurityPolicyHeaderMiddleware $cspMiddleware
+     * @param \CodeInc\Psr15Middlewares\HttpHeaders\Security\ContentSecurityPolicyMiddleware $cspMiddleware
      * @param string $expectedValue
      */
-    private static function assertCspValue(ContentSecurityPolicyHeaderMiddleware $cspMiddleware, string $expectedValue):void
+    private static function assertCspValue(ContentSecurityPolicyMiddleware $cspMiddleware, string $expectedValue):void
     {
         ;
         self::assertEquals($cspMiddleware->getHeaderValue(), $expectedValue);

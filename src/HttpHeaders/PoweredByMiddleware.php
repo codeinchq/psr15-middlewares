@@ -15,57 +15,29 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     23/02/2018
-// Time:     18:59
+// Date:     07/03/2018
+// Time:     01:56
 // Project:  Psr15Middlewares
 //
 declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
+namespace CodeInc\Psr15Middlewares\HttpHeaders;
 
 
 /**
- * Class RestExtraHttpHeadersMiddleware
+ * Class PoweredByMiddleware
  *
- * @package CodeInc\Psr15Middlewares
+ * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class RespExtraHttpHeadersMiddleware implements MiddlewareInterface
+class PoweredByMiddleware extends HttpHeaderMiddleware
 {
-	/**
-	 * @var string[]
-	 */
-	private $headers = [];
-
     /**
-     * @param string $header
-     * @param string $value
-     * @param bool $replace
+     * XPoweredByMiddleware constructor.
+     *
+     * @param string $poweredBy
      */
-	public function addHeader(string $header, string $value,
-        bool $replace = true):void
-	{
-		$this->headers[] = [$header, $value, $replace];
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function process(ServerRequestInterface $request,
-        RequestHandlerInterface $handler):ResponseInterface
-	{
-		$response = $handler->handle($request);
-
-		// adding headers
-		foreach ($this->headers as [$header, $value, $replace]) {
-		    if ($replace || !$response->hasHeader($header)) {
-                $response = $response->withHeader($header, $value);
-            }
-		}
-
-		return $response;
-	}
+	public function __construct(string $poweredBy)
+    {
+        parent::__construct('X-Powered-By', $poweredBy);
+    }
 }

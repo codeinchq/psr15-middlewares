@@ -20,7 +20,8 @@
 // Project:  Psr15Middlewares
 //
 declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
+namespace CodeInc\Psr15Middlewares\HttpHeaders\Security;
+use CodeInc\Psr15Middlewares\HttpHeaders\AbstractSingleValueHttpHeaderMiddleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -31,10 +32,10 @@ use Psr\Http\Server\RequestHandlerInterface;
  *
  * @link https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security
  * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Strict-Transport-Security
- * @package CodeInc\Psr15Middlewares
+ * @package CodeInc\Psr15Middlewares\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class StrictTransportSecurityMiddleware extends AbstractHeaderMiddleware
+class StrictTransportSecurityMiddleware extends AbstractSingleValueHttpHeaderMiddleware
 {
     /**
      * @var int
@@ -85,9 +86,9 @@ class StrictTransportSecurityMiddleware extends AbstractHeaderMiddleware
 
     /**
      * @inheritdoc
-     * @return array
+     * @return string
      */
-	protected function getHeaderValues():array
+	public function getHeaderValue():string
     {
         $value = 'max-age='.$this->maxAge;
         if ($this->includeSubDomains) {
@@ -96,7 +97,7 @@ class StrictTransportSecurityMiddleware extends AbstractHeaderMiddleware
         if ($this->preload) {
             $value .= '; preload';
         }
-        return [$value];
+        return $value;
     }
 
     /**

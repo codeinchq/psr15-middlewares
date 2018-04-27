@@ -20,19 +20,21 @@
 // Project:  Psr15Middlewares
 //
 declare(strict_types=1);
-namespace CodeInc\Psr15Middlewares;
-use CodeInc\Psr15Middlewares\Tests\XssProtectionHeaderMiddlewareTest;
+namespace CodeInc\Psr15Middlewares\HttpHeaders\Security;
+use CodeInc\Psr15Middlewares\HttpHeaders\AbstractSingleValueHttpHeaderMiddleware;
+use CodeInc\Psr15Middlewares\MiddlewareException;
+use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\XssProtectionMiddlewareTest;
 
 
 /**
- * Class XssProtectionHeaderMiddleware
+ * Class XssProtectionMiddleware
  *
  * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/X-XSS-Protection
- * @see XssProtectionHeaderMiddlewareTest
- * @package CodeInc\Psr15Middlewares
+ * @see XssProtectionMiddlewareTest
+ * @package CodeInc\Psr15Middlewares\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XssProtectionHeaderMiddleware extends AbstractHeaderMiddleware
+class XssProtectionMiddleware extends AbstractSingleValueHttpHeaderMiddleware
 {
     /**
      * @var bool
@@ -116,8 +118,7 @@ class XssProtectionHeaderMiddleware extends AbstractHeaderMiddleware
 
 
     /**
-     * Returns the header value.
-     *
+     * @inheritdoc
      * @return string
      */
     public function getHeaderValue():string
@@ -130,15 +131,5 @@ class XssProtectionHeaderMiddleware extends AbstractHeaderMiddleware
             $value .= '; report='.$this->reportUri;
         }
         return $value;
-    }
-
-
-    /**
-     * @inheritdoc
-     * @return array|null
-     */
-    protected function getHeaderValues():?array
-    {
-        return [$this->getHeaderValue()];
     }
 }

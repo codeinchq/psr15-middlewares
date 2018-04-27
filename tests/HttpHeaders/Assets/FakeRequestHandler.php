@@ -15,45 +15,32 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     14/03/2018
-// Time:     11:08
+// Date:     27/04/2018
+// Time:     11:05
 // Project:  Psr15Middlewares
 //
-declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
+declare(strict_types=1);
+namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders\Assets;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class ContentTypeOptionsMiddleware
+ * Class FakeRequestHandler
  *
- * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Content-Type-Options
- * @package CodeInc\Psr15Middlewares
+ * @package CodeInc\Psr15Middlewares\Tests\Assets
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ContentTypeOptionsMiddleware extends AbstractHeaderMiddleware
+class FakeRequestHandler implements RequestHandlerInterface
 {
     /**
-     * @var bool
-     */
-    private $enable;
-
-    /**
-     * XContentTypeOptionsMiddleware constructor.
-     *
-     * @param bool $enable
-     */
-    public function __construct(bool $enable)
-    {
-        $this->enable = $enable;
-        parent::__construct('X-Content-Type-Options');
-    }
-
-    /**
      * @inheritdoc
-     * @return array|null
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
      */
-    protected function getHeaderValues():?array
+    public function handle(ServerRequestInterface $request):ResponseInterface
     {
-        return $this->enable ? ['nosniff'] : null;
+        return new BlankResponse();
     }
 }

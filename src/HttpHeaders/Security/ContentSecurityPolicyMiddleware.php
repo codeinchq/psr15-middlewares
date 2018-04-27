@@ -20,19 +20,21 @@
 // Project:  Psr15Middlewares
 //
 declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
-use CodeInc\Psr15Middlewares\Tests\ContentSecurityPolicyHeaderMiddlewareTest;
+namespace CodeInc\Psr15Middlewares\HttpHeaders\Security;
+use CodeInc\Psr15Middlewares\HttpHeaders\AbstractSingleValueHttpHeaderMiddleware;
+use CodeInc\Psr15Middlewares\MiddlewareException;
+use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\ContentSecurityPolicyMiddlewareTest;
 
 
 /**
- * Class ContentSecurityPolicyHeaderMiddleware
+ * Class ContentSecurityPolicyMiddleware
  *
  * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy
- * @see ContentSecurityPolicyHeaderMiddlewareTest
- * @package CodeInc\Psr15Middlewares
+ * @see ContentSecurityPolicyMiddlewareTest
+ * @package CodeInc\Psr15Middlewares\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ContentSecurityPolicyHeaderMiddleware extends AbstractHeaderMiddleware
+class ContentSecurityPolicyMiddleware extends AbstractSingleValueHttpHeaderMiddleware
 {
 	public const SRC_SELF  = '\'self\'';
 	public const SRC_NONE  = '\'none\'';
@@ -486,16 +488,4 @@ class ContentSecurityPolicyHeaderMiddleware extends AbstractHeaderMiddleware
         }
         return $headerValue ? implode(' ', $headerValue) : null;
     }
-
-    /**
-     * @inheritdoc
-     * @return array|null
-     */
-   protected function getHeaderValues():?array
-   {
-       if ($headerValue = $this->getHeaderValue()) {
-           return [$headerValue];
-       }
-       return null;
-   }
 }

@@ -15,28 +15,50 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     27/04/2018
-// Time:     11:06
+// Date:     14/03/2018
+// Time:     11:09
 // Project:  Psr15Middlewares
 //
-declare(strict_types=1);
-namespace CodeInc\Psr15Middlewares\Tests\Assets;
-use CodeInc\Psr7Responses\HtmlResponse;
+declare(strict_types = 1);
+namespace CodeInc\Psr15Middlewares\HttpHeaders;
 
 
 /**
- * Class BlankResponse
+ * Class HttpHeaderMiddleware
  *
- * @package CodeInc\Psr15Middlewares\Tests\Assets
+ * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class BlankResponse extends HtmlResponse
+class HttpHeaderMiddleware extends AbstractHttpHeaderMiddleware
 {
     /**
-     * BlankResponse constructor.
+     * @var array|null
      */
-    public function __construct()
+    private $headerValues;
+
+    /**
+     * AbstractHeaderMiddleware constructor.
+     *
+     * @param string $headerName
+     * @param string|array|null $headerValues
+     */
+    public function __construct(string $headerName, $headerValues = null)
     {
-        parent::__construct('<i>This is a blank PSR-7 response</i>');
+        parent::__construct($headerName);
+        if (is_array($headerValues)) {
+            $this->headerValues = $headerValues;
+        }
+        elseif (!is_null($headerValues)) {
+            $this->headerValues = [(string)$headerValues];
+        }
+    }
+
+    /**
+     * @inheritdoc
+     * @return array|null
+     */
+    public function getHeaderValues():?array
+    {
+        return $this->headerValues;
     }
 }

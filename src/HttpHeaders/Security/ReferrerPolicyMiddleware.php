@@ -20,18 +20,22 @@
 // Project:  Psr15Middlewares
 //
 declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
+namespace CodeInc\Psr15Middlewares\HttpHeaders\Security;
+use CodeInc\Psr15Middlewares\HttpHeaders\AbstractSingleValueHttpHeaderMiddleware;
+use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\ReferrerPolicyMiddlewareTest;
 
 
 /**
  * Class ReferrerPolicyMiddleware
  *
+ * @see ReferrerPolicyMiddlewareTest
  * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Referrer-Policy
- * @package CodeInc\Psr15Middlewares
+ * @package CodeInc\Psr15Middlewares\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ReferrerPolicyMiddleware extends AbstractHeaderMiddleware
+class ReferrerPolicyMiddleware extends AbstractSingleValueHttpHeaderMiddleware
 {
+    // possible values
     public const VALUE_NO_REFERRER = 'no-referrer';
     public const VALUE_NO_REFERRER_WHEN_DOWNGRADE = 'no-referrer-when-downgrade';
     public const VALUE_ORIGIN = 'origin';
@@ -149,10 +153,10 @@ class ReferrerPolicyMiddleware extends AbstractHeaderMiddleware
 
     /**
      * @inheritdoc
-     * @return array|null
+     * @return string|null
      */
-    protected function getHeaderValues():?array
+    public function getHeaderValue():?string
     {
-        return $this->referrerPolicy ? [$this->referrerPolicy] : null;
+        return $this->referrerPolicy;
     }
 }

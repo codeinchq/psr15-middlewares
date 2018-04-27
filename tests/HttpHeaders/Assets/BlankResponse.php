@@ -15,29 +15,28 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     07/03/2018
-// Time:     01:56
+// Date:     27/04/2018
+// Time:     11:06
 // Project:  Psr15Middlewares
 //
-declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
+declare(strict_types=1);
+namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders\Assets;
+use CodeInc\Psr7Responses\HtmlResponse;
 
 
 /**
- * Class XPoweredByMiddleware
+ * Class BlankResponse
  *
- * @package CodeInc\Psr15Middlewares
+ * @package CodeInc\Psr15Middlewares\Tests\Assets
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class PoweredByHeaderMiddleware extends HttpHeaderMiddleware
+class BlankResponse extends HtmlResponse
 {
     /**
-     * XPoweredByMiddleware constructor.
-     *
-     * @param string $poweredBy
+     * BlankResponse constructor.
      */
-	public function __construct(string $poweredBy)
+    public function __construct()
     {
-        parent::__construct('X-Powered-By', $poweredBy);
+        parent::__construct('<i>This is a blank PSR-7 response</i>');
     }
 }
