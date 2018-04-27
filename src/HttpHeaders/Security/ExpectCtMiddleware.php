@@ -21,11 +21,8 @@
 //
 declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\HttpHeaders\Security;
-use CodeInc\Psr15Middlewares\HttpHeaders\AbstractHttpHeaderMiddleware;
+use CodeInc\Psr15Middlewares\HttpHeaders\AbstractSecureHttpHeaderMiddleware;
 use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\ExpectCtMiddlewareTest;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
@@ -36,7 +33,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  * @package CodeInc\Psr15Middlewares\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ExpectCtMiddleware extends AbstractHttpHeaderMiddleware
+class ExpectCtMiddleware extends AbstractSecureHttpHeaderMiddleware
 {
     /**
      * @var null|string
@@ -141,19 +138,5 @@ class ExpectCtMiddleware extends AbstractHttpHeaderMiddleware
             $value .= (!empty($value) ? ', ' : '').'max-age='.$this->maxAge;
         }
         return !empty($value) ? $value : null;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
-    {
-        // adding the header only if the request has been made through HTTPS
-        if ($request->getUri()->getScheme() == "https") {
-            return parent::process($request, $handler);
-        }
-        else {
-            return $handler->handle($request);
-        }
     }
 }
