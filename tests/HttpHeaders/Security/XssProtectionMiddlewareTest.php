@@ -40,6 +40,9 @@ final class XssProtectionMiddlewareTest extends AbstractHttpHeaderMiddlewareTest
     private const FAKE_REPORT_URI = 'https://example.com/report-uri';
 
 
+    /**
+     * @throws MiddlewareException
+     */
     public function testEnaled():void
     {
         $middleware = new XssProtectionMiddleware(true);
@@ -51,6 +54,9 @@ final class XssProtectionMiddlewareTest extends AbstractHttpHeaderMiddlewareTest
     }
 
 
+    /**
+     * @throws MiddlewareException
+     */
     public function testDisabled():void
     {
         $middleware = new XssProtectionMiddleware(false);
@@ -80,6 +86,20 @@ final class XssProtectionMiddlewareTest extends AbstractHttpHeaderMiddlewareTest
     /**
      * @throws MiddlewareException
      */
+    public function testBlockModeViaConstructor():void
+    {
+        $middleware = new XssProtectionMiddleware(true, true);
+        self::assertResponseHasHeaderValue(
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
+            'X-Xss-Protection',
+            ['1; mode=block']
+        );
+    }
+
+
+    /**
+     * @throws MiddlewareException
+     */
     public function testReportUri():void
     {
         $middleware = new XssProtectionMiddleware(true);
@@ -93,12 +113,42 @@ final class XssProtectionMiddlewareTest extends AbstractHttpHeaderMiddlewareTest
 
 
     /**
+     * @throws MiddlewareException
+     */
+    public function testReportUriViaConstructor():void
+    {
+        $middleware = new XssProtectionMiddleware(
+            true,
+            false,
+            self::FAKE_REPORT_URI
+        );
+        self::assertResponseHasHeaderValue(
+            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
+            'X-Xss-Protection',
+            ['1; report='.self::FAKE_REPORT_URI]
+        );
+    }
+
+
+    /**
      * @expectedException \Exception
      */
-    public function testExceptions():void
+    public function testDoubleModeException():void
     {
         $middleware = new XssProtectionMiddleware(true);
         $middleware->enableBlockMode();
         $middleware->setReportUri(self::FAKE_REPORT_URI);
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testDoubleModeConstructorException():void
+    {
+        new XssProtectionMiddleware(
+            true,
+            true,
+            self::FAKE_REPORT_URI
+        );
     }
 }

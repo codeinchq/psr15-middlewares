@@ -22,6 +22,7 @@
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares\HttpHeaders;
 use CodeInc\Psr15Middlewares\Tests\HttpHeaders\AddHttpHeadersMiddlewareTest;
+use function GuzzleHttp\Psr7\str;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -42,12 +43,40 @@ class AddHttpHeadersMiddleware implements MiddlewareInterface
 	 */
 	private $headers = [];
 
+
     /**
+     * AddHttpHeadersMiddleware constructor.
+     *
+     * @param array|null $headers
+     */
+	public function __construct(?array $headers = null)
+    {
+        if ($headers) {
+            $this->addHeaders($headers);
+        }
+    }
+
+
+    /**
+     * Adds multiple headers.
+     *
+     * @param array $headers
+     */
+    public function addHeaders(array $headers):void
+    {
+        foreach ($headers as $name => $value) {
+            $this->addHeader((string)$name, $value);
+        }
+    }
+
+
+    /**
+     * Adds one header.
+     *
      * @param string $header
      * @param string|array|iterable $value
-     * @param bool $replace
      */
-	public function addHeader(string $header, $value, bool $replace = true):void
+	public function addHeader(string $header, $value):void
 	{
 	    if (is_iterable($value) || is_array($value)) {
 	        $iterable = $value;
@@ -60,8 +89,9 @@ class AddHttpHeadersMiddleware implements MiddlewareInterface
 	        $value = (string)$value;
         }
 
-		$this->headers[] = [$header, $value, $replace];
+		$this->headers[] = [$header, $value];
 	}
+
 
 	/**
 	 * @inheritdoc
@@ -71,10 +101,8 @@ class AddHttpHeadersMiddleware implements MiddlewareInterface
 		$response = $handler->handle($request);
 
 		// adding HTTP headers
-		foreach ($this->headers as [$header, $value, $replace]) {
-		    if ($replace || !$response->hasHeader($header)) {
-                $response = $response->withHeader($header, $value);
-            }
+		foreach ($this->headers as [$header, $value]) {
+		    $response = $response->withHeader($header, $value);
 		}
 
 		return $response;

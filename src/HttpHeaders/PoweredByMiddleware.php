@@ -34,7 +34,7 @@ use CodeInc\Psr15Middlewares\Tests\HttpHeaders\PoweredByMiddlewareTest;
 class PoweredByMiddleware extends AbstractHttpHeaderMiddleware
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $poweredBy;
 
@@ -44,26 +44,26 @@ class PoweredByMiddleware extends AbstractHttpHeaderMiddleware
      *
      * @param null|string $poweredBy
      */
-	public function __construct(?string $poweredBy = null)
+	public function __construct(string $poweredBy)
     {
-        $this->poweredBy = $poweredBy;
         parent::__construct('X-Powered-By');
+        $this->poweredBy = $poweredBy;
     }
 
 
     /**
-     * @param null|string $poweredBy
+     * @param string $poweredBy
      */
-    public function setPoweredBy(?string $poweredBy):void
+    public function setPoweredBy(string $poweredBy):void
     {
         $this->poweredBy = $poweredBy;
     }
 
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getPoweredBy():?string
+    public function getPoweredBy():string
     {
         return $this->poweredBy;
     }
@@ -71,9 +71,9 @@ class PoweredByMiddleware extends AbstractHttpHeaderMiddleware
 
     /**
      * @inheritdoc
-     * @return null|string
+     * @return string
      */
-    public function getHeaderValue():?string
+    public function getHeaderValue():string
     {
         return $this->poweredBy;
     }

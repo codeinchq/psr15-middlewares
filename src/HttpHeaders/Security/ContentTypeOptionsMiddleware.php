@@ -36,29 +36,20 @@ use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\ContentTypeOptionsMiddle
 class ContentTypeOptionsMiddleware extends AbstractHttpHeaderMiddleware
 {
     /**
-     * @var bool
-     */
-    private $enable;
-
-
-    /**
      * XContentTypeOptionsMiddleware constructor.
-     *
-     * @param bool $enable
      */
-    public function __construct(bool $enable)
+    public function __construct()
     {
-        $this->enable = $enable;
         parent::__construct('X-Content-Type-Options');
     }
 
 
     /**
      * @inheritdoc
-     * @return null|string
+     * @return string
      */
-    public function getHeaderValue():?string
+    public function getHeaderValue():string
     {
-        return $this->enable ? 'nosniff' : null;
+        return 'nosniff';
     }
 }

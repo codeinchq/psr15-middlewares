@@ -53,14 +53,24 @@ class XssProtectionMiddleware extends AbstractHttpHeaderMiddleware
 
 
     /**
-     * XXssProtectionMiddleware constructor.
+     * XssProtectionMiddleware constructor.
      *
-     * @param bool $enableProtection
+     * @param bool|null $enableProtection
+     * @param bool|null $enableBlockMode
+     * @param null|string $reportUri
+     * @throws MiddlewareException
      */
-    public function __construct(bool $enableProtection)
+    public function __construct(?bool $enableProtection = null, ?bool $enableBlockMode = null,
+        ?string $reportUri = null)
     {
-        $this->enableProtection = $enableProtection;
         parent::__construct('X-Xss-Protection');
+        $this->enableProtection = $enableProtection;
+        if ($enableBlockMode) {
+            $this->enableBlockMode();
+        }
+        if ($reportUri) {
+            $this->setReportUri($reportUri);
+        }
     }
 
 

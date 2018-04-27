@@ -35,35 +35,8 @@ use CodeInc\Psr15Middlewares\Tests\Assets\FakeServerRequest;
  */
 final class PoweredByMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
-    public function testDisabled():void
+    public function testMiddleware():void
     {
-        $middleware = new PoweredByMiddleware();
-        self::assertResponseNotHasHeader(
-            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
-            'X-Powered-By'
-        );
-    }
-
-    public function testDisabling():void
-    {
-        $middleware = new PoweredByMiddleware('Test');
-        $middleware->setPoweredBy(null);
-        self::assertResponseNotHasHeader(
-            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
-            'X-Powered-By'
-        );
-    }
-
-    public function testEnabled():void
-    {
-        $middleware = new PoweredByMiddleware();
-        $middleware->setPoweredBy('Test');
-        self::assertResponseHasHeaderValue(
-            $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
-            'X-Powered-By',
-            ['Test']
-        );
-
         $middleware = new PoweredByMiddleware('Test');
         self::assertResponseHasHeaderValue(
             $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
