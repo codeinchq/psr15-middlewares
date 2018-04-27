@@ -11,12 +11,12 @@ This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-1
 * [`PoweredByMiddleware`](src/HttpHeaders/PoweredByMiddleware.php) Adds a `X-Powered-By` HTTP headers to the response
 
 ### Security HTTP headers
-* [`ContentSecurityPolicyMiddleware`](src/HttpHeaders/Security/ContentSecurityPolicyMiddleware.php) Adds a `Content-Security-Policy` HTTP headers to the response
-* [`ContentTypeOptionsMiddleware`](src/HttpHeaders/Security/ContentTypeOptionsMiddleware.php) Adds a `X-Content-Type-Options` HTTP headers to the response
-* [`FrameOptionsMiddleware`](src/HttpHeaders/Security/FrameOptionsMiddleware.php) Adds a `X-Frame-Options` HTTP headers to the response
-* [`ReferrerPolicyMiddleware`](src/HttpHeaders/Security/ReferrerPolicyMiddleware.php) Adds a `Referrer-Policy` HTTP headers to the response
-* [`StrictTransportSecurityMiddleware`](src/HttpHeaders/Security/StrictTransportSecurityMiddleware.php) Adds a `Strict-Transport-Security` HTTP headers to the response
-* [`XssProtectionMiddleware`](src/HttpHeaders/Security/XssProtectionMiddleware.php) Adds a `X-Xss-Protection` HTTP headers to the response
+* [`ContentSecurityPolicyMiddleware`](src/HttpHeaders/Security/ContentSecurityPolicyMiddleware.php) Adds a [`Content-Security-Policy`](https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy) HTTP headers to the response
+* [`ContentTypeOptionsMiddleware`](src/HttpHeaders/Security/ContentTypeOptionsMiddleware.php) Adds a [`X-Content-Type-Options`]'(https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Content-Type-Options) HTTP headers to the response
+* [`FrameOptionsMiddleware`](src/HttpHeaders/Security/FrameOptionsMiddleware.php) Adds a [`X-Frame-Options`](https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Frame-Options) HTTP headers to the response
+* [`ReferrerPolicyMiddleware`](src/HttpHeaders/Security/ReferrerPolicyMiddleware.php) Adds a [`Referrer-Policy`](https://developer.mozilla.org/docs/Web/HTTP/Headers/Referrer-Policy) HTTP headers to the response
+* [`StrictTransportSecurityMiddleware`](src/HttpHeaders/Security/StrictTransportSecurityMiddleware.php) Adds a [`Strict-Transport-Security`](https://developer.mozilla.org/docs/Web/HTTP/Headers/Strict-Transport-Security) HTTP headers to the response
+* [`XssProtectionMiddleware`](src/HttpHeaders/Security/XssProtectionMiddleware.php) Adds a [`X-Xss-Protection`](https://developer.mozilla.org/docs/Web/HTTP/Headers/X-XSS-Protection) HTTP headers to the response
 
 
 ### Other middleware
