@@ -1,22 +1,32 @@
 # PSR-15 middlewares 
 
-This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-15/) middlewares. It is currently under active developpment and the collection should grow fast in the upcoming months.
+This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-15/) middlewares. 
 
-**The current collection includes:** 
-* [`CacheMiddleware`](src/CacheMiddleware.php) Add cache headers to the response (via [micheh/psr7-cache](https://packagist.org/packages/micheh/psr7-cache))
+
+
+## The current collection includes
+
+### HTTP headers
+* [`AddHttpHeadersMiddleware`](src/HttpHeaders/AddHttpHeadersMiddleware.php) Adds HTTP headers to the response
+* [`PoweredByMiddleware`](src/HttpHeaders/PoweredByMiddleware.php) Add a `X-Powered-By` HTTP headers to the response
+
+### Security HTTP headers
+* [`ContentSecurityPolicyMiddleware`](src/HttpHeaders/Security/ContentSecurityPolicyMiddleware.php) Add a `Content-Security-Policy` HTTP headers to the response
+* [`ContentTypeOptionsMiddleware`](src/HttpHeaders/Security/ContentTypeOptionsMiddleware.php) Add a `X-Content-Type-Options` HTTP headers to the response
+* [`FrameOptionsMiddleware`](src/HttpHeaders/Security/FrameOptionsMiddleware.php) Add a `X-Frame-Options` HTTP headers to the response
+* [`ReferrerPolicyMiddleware`](src/HttpHeaders/Security/ReferrerPolicyMiddleware.php) Add a `Referrer-Policy` HTTP headers to the response
+* [`StrictTransportSecurityMiddleware`](src/HttpHeaders/Security/StrictTransportSecurityMiddleware.php) Add a `Strict-Transport-Security` HTTP headers to the response
+* [`XssProtectionMiddleware`](src/HttpHeaders/Security/XssProtectionMiddleware.php) Add a `X-Xss-Protection` HTTP headers to the response
+
+
+### Other middleware
+* [`CacheMiddleware`](src/CacheMiddleware.php) Adds cache headers to the response (via [micheh/psr7-cache](https://packagist.org/packages/micheh/psr7-cache))
 * [`CallableMiddleware`](src/CallableMiddleware.php) Uses a callable as a middleware 
-* [`ContentSecurityPolicyMiddleware`](src/ContentSecurityPolicyMiddleware.php) Add a [`Content-Security-Policy`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy) header to the response
-* [`ExceptionCaptureMiddleware`](src/ExceptionCaptureMiddleware.php) Capture exceptions during the `handle()` call
-* [`HeaderMiddleware`](src/HttpHeaderMiddleware.php) Add a HTTP header to the response
+* [`ExceptionCaptureMiddleware`](src/ExceptionCaptureMiddleware.php) Captures exceptions thrown during the handling of the request 
 * [`HttpVersionCheckMiddleware`](src/HttpVersionCheckMiddleware.php) Insure that the HTTP version of the response is the same of the version used for the request.
 * [`ReferrerPolicyMiddleware`](src/ReferrerPolicyMiddleware.php) Add a [`Referrer-Policy`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy) HTTP headers to the response
 * [`PhpGpcVarsMiddleware`](src/PhpGpcVarsMiddleware.php) Extract PSR-7 request data to PHP GPC variables `$_GET`, `$_POST` and `$_COOKIE`
 * [`PhpSessionMiddleware`](src/PhpSessionMiddleware.php) Read sesion cookie from PSR-7 requests and add session cookie to PSR-7 responses
-* [`RespExtraHttpHeadersMiddleware`](src/RespExtraHttpHeadersMiddleware.php) Add multiple HTTP headers to the response
-* [`StrictTransportSecurityMiddleware`](src/StrictTransportSecurityMiddleware.php) Add a [`Strict-Transport-Security`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security) HTTP headers to the response
-* [`XContentTypeOptionsMiddleware`](src/ContentTypeOptionsMiddleware.php) Add a [`X-Content-Type-Options`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options) HTTP headers to the response
-* [`XFrameOptionMiddleware`](src/FrameOptionsMiddleware.php) Add a [`X-Frame-Options`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options) HTTP headers to the response
-* [`XPoweredByMiddleware`](src/PoweredByMiddleware.php) Add a `X-Powered-By` HTTP headers to the response
 
 
 ## Installation
