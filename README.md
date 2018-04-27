@@ -8,15 +8,15 @@ This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-1
 
 ### HTTP headers
 * [`AddHttpHeadersMiddleware`](src/HttpHeaders/AddHttpHeadersMiddleware.php) Adds HTTP headers to the response
-* [`PoweredByMiddleware`](src/HttpHeaders/PoweredByMiddleware.php) Add a `X-Powered-By` HTTP headers to the response
+* [`PoweredByMiddleware`](src/HttpHeaders/PoweredByMiddleware.php) Adds a `X-Powered-By` HTTP headers to the response
 
 ### Security HTTP headers
-* [`ContentSecurityPolicyMiddleware`](src/HttpHeaders/Security/ContentSecurityPolicyMiddleware.php) Add a `Content-Security-Policy` HTTP headers to the response
-* [`ContentTypeOptionsMiddleware`](src/HttpHeaders/Security/ContentTypeOptionsMiddleware.php) Add a `X-Content-Type-Options` HTTP headers to the response
-* [`FrameOptionsMiddleware`](src/HttpHeaders/Security/FrameOptionsMiddleware.php) Add a `X-Frame-Options` HTTP headers to the response
-* [`ReferrerPolicyMiddleware`](src/HttpHeaders/Security/ReferrerPolicyMiddleware.php) Add a `Referrer-Policy` HTTP headers to the response
-* [`StrictTransportSecurityMiddleware`](src/HttpHeaders/Security/StrictTransportSecurityMiddleware.php) Add a `Strict-Transport-Security` HTTP headers to the response
-* [`XssProtectionMiddleware`](src/HttpHeaders/Security/XssProtectionMiddleware.php) Add a `X-Xss-Protection` HTTP headers to the response
+* [`ContentSecurityPolicyMiddleware`](src/HttpHeaders/Security/ContentSecurityPolicyMiddleware.php) Adds a `Content-Security-Policy` HTTP headers to the response
+* [`ContentTypeOptionsMiddleware`](src/HttpHeaders/Security/ContentTypeOptionsMiddleware.php) Adds a `X-Content-Type-Options` HTTP headers to the response
+* [`FrameOptionsMiddleware`](src/HttpHeaders/Security/FrameOptionsMiddleware.php) Adds a `X-Frame-Options` HTTP headers to the response
+* [`ReferrerPolicyMiddleware`](src/HttpHeaders/Security/ReferrerPolicyMiddleware.php) Adds a `Referrer-Policy` HTTP headers to the response
+* [`StrictTransportSecurityMiddleware`](src/HttpHeaders/Security/StrictTransportSecurityMiddleware.php) Adds a `Strict-Transport-Security` HTTP headers to the response
+* [`XssProtectionMiddleware`](src/HttpHeaders/Security/XssProtectionMiddleware.php) Adds a `X-Xss-Protection` HTTP headers to the response
 
 
 ### Other middleware
