@@ -38,14 +38,14 @@ final class ReferrerPolicyMiddlewareTest extends AbstractHttpHeaderMiddlewareTes
 {
     private const MIDDLEWARE_VALUES = ReferrerPolicyMiddleware::ALL_VALUES;
     private const MIDDLEWARE_METHODS = [
-        'setNoReferer' => ReferrerPolicyMiddleware::VALUE_NO_REFERRER,
-        'setNoRefererWhenDowngrade' => ReferrerPolicyMiddleware::VALUE_NO_REFERRER_WHEN_DOWNGRADE,
-        'setOrigin' => ReferrerPolicyMiddleware::VALUE_ORIGIN,
-        'setOriginWhenCrossOrigin' => ReferrerPolicyMiddleware::VALUE_ORIGIN_WHEN_CROSS_ORIGIN,
-        'setSameOrigin' => ReferrerPolicyMiddleware::VALUE_SAME_ORIGIN,
-        'setStrictOrigin' => ReferrerPolicyMiddleware::VALUE_STRICT_ORIGIN,
-        'setStrictOriginWhenCrossOrigin' => ReferrerPolicyMiddleware::VALUE_STRICT_ORIGIN_WHEN_CROSS_ORIGIN,
-        'setUnsafeUrl' => ReferrerPolicyMiddleware::VALUE_UNSAFE_URL,
+        'noReferer' => ReferrerPolicyMiddleware::VALUE_NO_REFERRER,
+        'noRefererWhenDowngrade' => ReferrerPolicyMiddleware::VALUE_NO_REFERRER_WHEN_DOWNGRADE,
+        'origin' => ReferrerPolicyMiddleware::VALUE_ORIGIN,
+        'originWhenCrossOrigin' => ReferrerPolicyMiddleware::VALUE_ORIGIN_WHEN_CROSS_ORIGIN,
+        'sameOrigin' => ReferrerPolicyMiddleware::VALUE_SAME_ORIGIN,
+        'strictOrigin' => ReferrerPolicyMiddleware::VALUE_STRICT_ORIGIN,
+        'strictOriginWhenCrossOrigin' => ReferrerPolicyMiddleware::VALUE_STRICT_ORIGIN_WHEN_CROSS_ORIGIN,
+        'unsafeUrl' => ReferrerPolicyMiddleware::VALUE_UNSAFE_URL,
     ];
 
 
@@ -53,8 +53,11 @@ final class ReferrerPolicyMiddlewareTest extends AbstractHttpHeaderMiddlewareTes
     {
         foreach (self::MIDDLEWARE_VALUES as $value) {
             $middleware = new ReferrerPolicyMiddleware($value);
-            $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
-            self::assertResponseHasHeaderValue($response, 'Referrer-Policy', [$value]);
+            self::assertResponseHasHeaderValue(
+                $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
+                'Referrer-Policy',
+                [$value]
+            );
         }
     }
 
@@ -62,10 +65,13 @@ final class ReferrerPolicyMiddlewareTest extends AbstractHttpHeaderMiddlewareTes
     public function testMiddlewareMethods():void
     {
         foreach (self::MIDDLEWARE_METHODS as $method => $value) {
-            $middleware = new ReferrerPolicyMiddleware();
-            call_user_func([$middleware, $method]);
-            $response = $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler());
-            self::assertResponseHasHeaderValue($response, 'Referrer-Policy', [$value]);
+            /** @var ReferrerPolicyMiddleware $middleware */
+            $middleware = call_user_func([ReferrerPolicyMiddleware::class, $method]);
+            self::assertResponseHasHeaderValue(
+                $middleware->process(FakeServerRequest::getSecureServerRequest(), new FakeRequestHandler()),
+                'Referrer-Policy',
+                [$value]
+            );
         }
     }
 }

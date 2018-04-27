@@ -51,7 +51,7 @@ class ReferrerPolicyMiddleware extends AbstractHttpHeaderMiddleware
     ];
 
     /**
-     * @var null|string
+     * @var string
      */
     private $referrerPolicy;
 
@@ -59,12 +59,12 @@ class ReferrerPolicyMiddleware extends AbstractHttpHeaderMiddleware
     /**
      * ReferrerPolicyMiddleware constructor.
      *
-     * @param null|string $referrerPolicy
+     * @param string $referrerPolicy
      */
-    public function __construct(?string $referrerPolicy = null)
+    public function __construct(string $referrerPolicy)
     {
-        $this->referrerPolicy = $referrerPolicy;
         parent::__construct('Referrer-Policy');
+        $this->referrerPolicy = $referrerPolicy;
     }
 
 
@@ -80,93 +80,109 @@ class ReferrerPolicyMiddleware extends AbstractHttpHeaderMiddleware
 
 
     /**
-     * Sets the policy value to 'no-referrer'.
-     */
-    public function setNoReferer():void
-    {
-        $this->referrerPolicy = self::VALUE_NO_REFERRER;
-    }
-
-
-    /**
-     * Sets the policy value to 'no-referrer-when-downgrade'
-     */
-    public function setNoRefererWhenDowngrade():void
-    {
-        $this->referrerPolicy = self::VALUE_NO_REFERRER_WHEN_DOWNGRADE;
-    }
-
-
-    /**
-     * Sets the policy value to 'origin'.
-     */
-    public function setOrigin():void
-    {
-        $this->referrerPolicy = self::VALUE_ORIGIN;
-    }
-
-
-    /**
-     * Sets the policy value to 'origin-when-cross-origin'.
-     */
-    public function setOriginWhenCrossOrigin():void
-    {
-        $this->referrerPolicy = self::VALUE_ORIGIN_WHEN_CROSS_ORIGIN;
-    }
-
-
-    /**
-     * Sets the policy value to 'same-origin'.
-     */
-    public function setSameOrigin():void
-    {
-        $this->referrerPolicy = self::VALUE_SAME_ORIGIN;
-    }
-
-
-    /**
-     * Sets the policy value to 'strict-origin'.
-     */
-    public function setStrictOrigin():void
-    {
-        $this->referrerPolicy = self::VALUE_STRICT_ORIGIN;
-    }
-
-
-    /**
-     * Sets the policy value to 'strict-origin-when-cross-origin'.
-     */
-    public function setStrictOriginWhenCrossOrigin():void
-    {
-        $this->referrerPolicy = self::VALUE_STRICT_ORIGIN_WHEN_CROSS_ORIGIN;
-    }
-
-
-    /**
-     * Sets the policy value to 'unsafe-url'.
-     */
-    public function setUnsafeUrl():void
-    {
-        $this->referrerPolicy = self::VALUE_UNSAFE_URL;
-    }
-
-
-    /**
      * Returns the referer policy.
      *
-     * @return null|string
+     * @return string
      */
-    public function getReferrerPolicy():?string
+    public function getReferrerPolicy():string
     {
         return $this->referrerPolicy;
     }
 
 
     /**
-     * @inheritdoc
-     * @return string|null
+     * Sets the policy value to 'no-referrer'.
+     *
+     * @return self
      */
-    public function getHeaderValue():?string
+    public static function noReferer():self
+    {
+        return new self(self::VALUE_NO_REFERRER);
+    }
+
+
+    /**
+     * Sets the policy value to 'no-referrer-when-downgrade'
+     *
+     * @return self
+     */
+    public static function noRefererWhenDowngrade():self
+    {
+        return new self(self::VALUE_NO_REFERRER_WHEN_DOWNGRADE);
+    }
+
+
+    /**
+     * Sets the policy value to 'origin'.
+     *
+     * @return self
+     */
+    public static function origin():self
+    {
+        return new self(self::VALUE_ORIGIN);
+    }
+
+
+    /**
+     * Sets the policy value to 'origin-when-cross-origin'.
+     *
+     * @return self
+     */
+    public static function originWhenCrossOrigin():self
+    {
+        return new self(self::VALUE_ORIGIN_WHEN_CROSS_ORIGIN);
+    }
+
+
+    /**
+     * Sets the policy value to 'same-origin'.
+     *
+     * @return self
+     */
+    public static function sameOrigin():self
+    {
+        return new self(self::VALUE_SAME_ORIGIN);
+    }
+
+
+    /**
+     * Sets the policy value to 'strict-origin'.
+     *
+     * @return self
+     */
+    public static function strictOrigin():self
+    {
+        return new self(self::VALUE_STRICT_ORIGIN);
+    }
+
+
+    /**
+     * Sets the policy value to 'strict-origin-when-cross-origin'.
+     *
+     * @return self
+     */
+    public static function strictOriginWhenCrossOrigin():self
+    {
+        return new self(self::VALUE_STRICT_ORIGIN_WHEN_CROSS_ORIGIN);
+    }
+
+
+    /**
+     * Sets the policy value to 'unsafe-url'.
+     *
+     * @return self
+     */
+    public static function unsafeUrl():self
+    {
+        return new self(self::VALUE_UNSAFE_URL);
+    }
+
+
+    /**
+     * @inheritdoc
+     * @return string
+     */
+    public function getHeaderValue():string
     {
         return $this->referrerPolicy;
     }
