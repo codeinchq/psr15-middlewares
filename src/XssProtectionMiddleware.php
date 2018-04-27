@@ -23,13 +23,12 @@ declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares;
 
 /**
- * Class XXssProtectionMiddleware
+ * Class XssProtectionMiddleware
  *
- * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/X-XSS-Protection
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XXssProtectionMiddleware extends AbstractHeaderMiddleware
+class XssProtectionMiddleware extends AbstractHeaderMiddleware
 {
     /**
      * @var bool
@@ -66,6 +65,12 @@ class XXssProtectionMiddleware extends AbstractHeaderMiddleware
      */
     public function enableBlockMode():void
     {
+        if (!$this->enableProtection) {
+            throw new MiddlewareException(
+                $this,
+                "You can't enable the block mode because the XSS protection is disabled"
+            );
+        }
         if ($this->reportUri) {
             throw new MiddlewareException(
                 $this,
@@ -87,11 +92,17 @@ class XXssProtectionMiddleware extends AbstractHeaderMiddleware
      */
     public function setReportUri(string $reportUri):void
     {
+        if (!$this->enableProtection) {
+            throw new MiddlewareException(
+                $this,
+                "You can't set the report URI because the XSS protection is disabled"
+            );
+        }
         if ($this->blockMode) {
             throw new MiddlewareException(
                 $this,
                 sprintf(
-                    "You can't enable the report mode because the block mode is already enabled (see %s)",
+                    "You can't set the report URI because the block mode is already enabled (see %s)",
                     'https://developer.mozilla.org/docs/Web/HTTP/Headers/X-XSS-Protection'
                 )
             );
