@@ -15,42 +15,40 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     23/02/2018
-// Time:     18:37
+// Date:     27/04/2018
+// Time:     13:43
 // Project:  Psr15Middlewares
 //
-declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
-use CodeInc\Psr15Middlewares\Tests\HttpVersionCheckMiddlewareTest;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
+declare(strict_types=1);
+namespace CodeInc\Psr15Middlewares\Tests;
+use CodeInc\Psr15Middlewares\HttpVersionCheckMiddleware;
+use CodeInc\Psr15Middlewares\Tests\Assets\BlankResponse;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
+use CodeInc\Psr7Responses\HtmlResponse;
+use GuzzleHttp\Psr7\ServerRequest;
+use PHPUnit\Framework\TestCase;
 
 
 /**
- * Class HttpVersionCheckMiddleware
+ * Class HttpVersionCheckMiddlewareTest
  *
- * @see HttpVersionCheckMiddlewareTest
- * @package CodeInc\Psr15Middlewares
+ * @uses HttpVersionCheckMiddleware
+ * @package CodeInc\Psr15Middlewares\Tests
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class HttpVersionCheckMiddleware implements MiddlewareInterface
+class HttpVersionCheckMiddlewareTest extends TestCase
 {
-	/**
-	 * @inheritdoc
-	 * @return ResponseInterface
-	 */
-	public function process(ServerRequestInterface $request,
-        RequestHandlerInterface $handler):ResponseInterface
-	{
-		$response = $handler->handle($request);
+    public function testMiddleware():void
+    {
+        $testResponse = (new BlankResponse())->withProtocolVersion('1.1');
 
-		// checks the HTTP version
-		if ($request->getProtocolVersion() != $response->getProtocolVersion()) {
-			return $response->withProtocolVersion($request->getProtocolVersion());
-		}
+        $middleware = new HttpVersionCheckMiddleware();
+        $response = $middleware->process(
+            ServerRequest::fromGlobals()->withProtocolVersion('2.0'),
+            new FakeRequestHandler($testResponse)
+        );
 
-		return $response;
-	}
+        self::assertEquals($testResponse->getProtocolVersion(), '1.1');
+        self::assertEquals($response->getProtocolVersion(), '2.0');
+    }
 }
