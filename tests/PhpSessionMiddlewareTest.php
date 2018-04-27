@@ -22,13 +22,11 @@
 declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\Tests;
 use CodeInc\Psr15Middlewares\PhpSessionMiddleware;
-use CodeInc\Psr15Middlewares\Tests\Assets\BlankResponse;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
 use GuzzleHttp\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 
 session_start();
@@ -73,7 +71,7 @@ class PhpSessionMiddlewareTest extends TestCase
     public function testSessionValues():void
     {
         $_SESSION['count'] = 0;
-        
+
         $middleware = new PhpSessionMiddleware();
         $middleware->process(
             ServerRequest::fromGlobals(),
