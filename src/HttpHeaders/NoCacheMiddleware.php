@@ -46,7 +46,7 @@ class NoCacheMiddleware implements MiddlewareInterface
 	public function process(ServerRequestInterface $request,
         RequestHandlerInterface $handler):ResponseInterface
 	{
-		// returns the respknse with the cache prevention headers
+		// returns the response with the cache prevention headers
 		return (new CacheUtil())->withCachePrevention($handler->handle($request));
 	}
 }
