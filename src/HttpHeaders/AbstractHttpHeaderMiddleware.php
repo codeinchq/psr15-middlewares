@@ -21,6 +21,11 @@
 //
 declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\HttpHeaders;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+
 
 /**
  * Class AbstractSingleValueHttpHeaderMiddleware
@@ -28,8 +33,35 @@ namespace CodeInc\Psr15Middlewares\HttpHeaders;
  * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-abstract class AbstractSingleValueHttpHeaderMiddleware extends AbstractHttpHeaderMiddleware
+abstract class AbstractHttpHeaderMiddleware implements MiddlewareInterface
 {
+    /**
+     * @var string
+     */
+    private $headerName;
+
+    /**
+     * AbstractHeaderMiddleware constructor.
+     *
+     * @param string $headerName
+     */
+    public function __construct(string $headerName)
+    {
+        $this->headerName = $headerName;
+    }
+
+
+    /**
+     * Returns the header name.
+     *
+     * @return string
+     */
+    public function getHeaderName():string
+    {
+        return $this->headerName;
+    }
+
+
     /**
      * Returns the header value of null is no value is set.
      *
@@ -40,13 +72,17 @@ abstract class AbstractSingleValueHttpHeaderMiddleware extends AbstractHttpHeade
 
     /**
      * @inheritdoc
-     * @return array|null
      */
-    public function getHeaderValues():?array
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
     {
-        if (($headerValue = $this->getHeaderValue()) !== null) {
-            return [$headerValue];
+        // processes the request
+        $response = $handler->handle($request);
+
+        // adds the headers value(s)
+        if (($value = $this->getHeaderValue()) !== null) {
+            $response = $response->withHeader($this->headerName, $value);
         }
-        return null;
+
+        return $response;
     }
 }
