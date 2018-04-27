@@ -23,6 +23,9 @@ declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\HttpHeaders\Security;
 use CodeInc\Psr15Middlewares\HttpHeaders\AbstractSingleValueHttpHeaderMiddleware;
 use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\ExpectCtMiddlewareTest;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
@@ -138,5 +141,19 @@ class ExpectCtMiddleware extends AbstractSingleValueHttpHeaderMiddleware
             $value .= (!empty($value) ? ', ' : '').'max-age='.$this->maxAge;
         }
         return !empty($value) ? $value : null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
+    {
+        // adding the header only if the request has been made through HTTPS
+        if ($request->getUri()->getScheme() == "https") {
+            return parent::process($request, $handler);
+        }
+        else {
+            return $handler->handle($request);
+        }
     }
 }
