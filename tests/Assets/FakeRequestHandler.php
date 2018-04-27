@@ -35,12 +35,29 @@ use Psr\Http\Server\RequestHandlerInterface;
 class FakeRequestHandler implements RequestHandlerInterface
 {
     /**
+     * @var BlankResponse|null|ResponseInterface
+     */
+    private $response;
+
+
+    /**
+     * FakeRequestHandler constructor.
+     *
+     * @param null|ResponseInterface $response
+     */
+    public function __construct(?ResponseInterface $response = null)
+    {
+        $this->response = $response ?? new BlankResponse();
+    }
+
+
+    /**
      * @inheritdoc
      * @param ServerRequestInterface $request
      * @return ResponseInterface
      */
     public function handle(ServerRequestInterface $request):ResponseInterface
     {
-        return new BlankResponse();
+        return $this->response;
     }
 }
