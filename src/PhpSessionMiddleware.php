@@ -34,6 +34,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 /**
  * Class PhpSessionMiddleware
  *
+ * @uses ResponseCacheControl
  * @see PhpSessionMiddlewareTest
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
