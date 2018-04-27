@@ -57,8 +57,7 @@ class CallableMiddleware implements MiddlewareInterface
      * @inheritdoc
      * @throws MiddlewareException
      */
-    public function process(ServerRequestInterface $request,
-        RequestHandlerInterface $handler):ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
     {
         // executes the callable
         try {
