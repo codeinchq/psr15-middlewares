@@ -131,8 +131,7 @@ class StrictTransportSecurityMiddleware extends AbstractSingleValueHttpHeaderMid
     /**
      * @inheritdoc
      */
-	public function process(ServerRequestInterface $request,
-        RequestHandlerInterface $handler):ResponseInterface
+	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
     {
         // adding the header only if the request has been made through HTTPS
         if ($request->getUri()->getScheme() == "https") {
