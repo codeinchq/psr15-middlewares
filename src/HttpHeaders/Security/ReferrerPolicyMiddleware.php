@@ -69,6 +69,17 @@ class ReferrerPolicyMiddleware extends AbstractSingleValueHttpHeaderMiddleware
 
 
     /**
+     * Sets the referer police. See the VALUE_XYZ class constants for possible values.
+     *
+     * @param null|string $referrerPolicy
+     */
+    public function setReferrerPolicy(?string $referrerPolicy):void
+    {
+        $this->referrerPolicy = $referrerPolicy;
+    }
+
+
+    /**
      * Sets the policy value to 'no-referrer'.
      */
     public function setNoReferer():void
