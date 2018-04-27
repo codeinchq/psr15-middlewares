@@ -40,7 +40,8 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 final class CallableMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
-    private const TEST_BODY = 'It\'s a test!';
+    private const TEST_BODY_1 = 'It\'s a test!';
+    private const TEST_BODY_2 = 'It\'s another test!';
 
     /**
      * @throws \CodeInc\Psr15Middlewares\MiddlewareException
@@ -48,16 +49,38 @@ final class CallableMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
     public function testWithPsr7Response():void
     {
         $middleware = new CallableMiddleware(function(ServerRequestInterface $request):ResponseInterface {
-            return new TextResponse(self::TEST_BODY);
+            return new TextResponse(self::TEST_BODY_1);
         });
 
         $response = $middleware->process(
             FakeServerRequest::getSecureServerRequest(),
             new FakeRequestHandler()
         );
-        self::assertEquals($response->getBody()->__toString(), self::TEST_BODY);
+        self::assertEquals($response->getBody()->__toString(), self::TEST_BODY_1);
         self::assertInstanceOf(TextResponse::class, $response);
     }
+
+
+    /**
+     * @throws \CodeInc\Psr15Middlewares\MiddlewareException
+     */
+    public function testWithCallableReplacement():void
+    {
+        $middleware = new CallableMiddleware(function(ServerRequestInterface $request):ResponseInterface {
+            return new TextResponse(self::TEST_BODY_1);
+        });
+        $middleware->setCallable(function(ServerRequestInterface $request):ResponseInterface {
+            return new HtmlResponse(self::TEST_BODY_2);
+        });
+
+        $response = $middleware->process(
+            FakeServerRequest::getSecureServerRequest(),
+            new FakeRequestHandler()
+        );
+        self::assertEquals($response->getBody()->__toString(), self::TEST_BODY_2);
+        self::assertInstanceOf(HtmlResponse::class, $response);
+    }
+
 
     /**
      * @throws \CodeInc\Psr15Middlewares\MiddlewareException
@@ -65,16 +88,17 @@ final class CallableMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
     public function testWithRawResponse():void
     {
         $middleware = new CallableMiddleware(function(ServerRequestInterface $request):string {
-            return self::TEST_BODY;
+            return self::TEST_BODY_1;
         });
 
         $response = $middleware->process(
             FakeServerRequest::getSecureServerRequest(),
             new FakeRequestHandler()
         );
-        self::assertEquals($response->getBody()->__toString(), self::TEST_BODY);
+        self::assertEquals($response->getBody()->__toString(), self::TEST_BODY_1);
         self::assertInstanceOf(HtmlResponse::class, $response);
     }
+
 
     /**
      * @throws \CodeInc\Psr15Middlewares\MiddlewareException
@@ -90,6 +114,7 @@ final class CallableMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
         );
         self::assertEquals($response->getBody()->__toString(), 'bar');
     }
+
 
     /**
      * @throws \CodeInc\Psr15Middlewares\MiddlewareException
