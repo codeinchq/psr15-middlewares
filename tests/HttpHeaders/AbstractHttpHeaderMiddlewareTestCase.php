@@ -64,4 +64,14 @@ abstract class AbstractHttpHeaderMiddlewareTestCase extends TestCase
     {
         self::assertArrayNotHasKey($headerName, $response->getHeaders());
     }
+
+
+    /**
+     * @param ResponseInterface $response
+     * @param int $headersCount
+     */
+    protected static function assertResponseHeadersCount(ResponseInterface $response, int $headersCount):void
+    {
+        self::assertCount($headersCount, $response->getHeaders());
+    }
 }
