@@ -137,6 +137,17 @@ class ReferrerPolicyMiddleware extends AbstractHeaderMiddleware
 
 
     /**
+     * Returns the referer policy.
+     *
+     * @return null|string
+     */
+    public function getReferrerPolicy():?string
+    {
+        return $this->referrerPolicy;
+    }
+
+
+    /**
      * @inheritdoc
      * @return array|null
      */
