@@ -24,7 +24,6 @@ namespace CodeInc\Psr15Middlewares\Tests;
 use CodeInc\Psr15Middlewares\HttpVersionCheckMiddleware;
 use CodeInc\Psr15Middlewares\Tests\Assets\BlankResponse;
 use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
-use CodeInc\Psr7Responses\HtmlResponse;
 use GuzzleHttp\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
 
