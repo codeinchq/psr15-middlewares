@@ -20,7 +20,7 @@
 // Project:  Psr15Middlewares
 //
 declare(strict_types=1);
-namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders\Assets;
+namespace CodeInc\Psr15Middlewares\Tests\Assets;
 use CodeInc\Psr7Responses\HtmlResponse;
 
 

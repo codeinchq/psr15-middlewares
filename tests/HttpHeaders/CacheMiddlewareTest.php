@@ -22,7 +22,7 @@
 declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders;
 use CodeInc\Psr15Middlewares\HttpHeaders\CacheMiddleware;
-use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Assets\FakeRequestHandler;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
 use GuzzleHttp\Psr7\ServerRequest;
 
 
