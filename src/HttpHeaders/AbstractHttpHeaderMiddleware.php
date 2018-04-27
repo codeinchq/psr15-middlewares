@@ -15,13 +15,12 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     26/03/2018
-// Time:     14:10
+// Date:     26/04/2018
+// Time:     12:58
 // Project:  Psr15Middlewares
 //
 declare(strict_types=1);
-namespace CodeInc\Psr15Middlewares;
-use CodeInc\Psr15Middlewares\Tests\PhpGpcVarsMiddlewareTest;
+namespace CodeInc\Psr15Middlewares\HttpHeaders;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -29,41 +28,63 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class PhpGpcVarsMiddleware
+ * Class AbstractHttpHeaderMiddleware
  *
- * @see PhpGpcVarsMiddlewareTest
- * @package CodeInc\Psr15Middlewares
+ * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class PhpGpcVarsMiddleware implements MiddlewareInterface
+abstract class AbstractHttpHeaderMiddleware implements MiddlewareInterface
 {
     /**
-     * @param ServerRequestInterface $request
-     * @param RequestHandlerInterface $handler
-     * @return ResponseInterface
+     * @var string
+     */
+    private $headerName;
+
+    /**
+     * AbstractHeaderMiddleware constructor.
+     *
+     * @param string $headerName
+     * @param bool|null $replace
+     */
+    public function __construct(string $headerName, ?bool $replace = null)
+    {
+        $this->headerName = $headerName;
+    }
+
+
+    /**
+     * Returns the header name.
+     *
+     * @return string
+     */
+    public function getHeaderName():string
+    {
+        return $this->headerName;
+    }
+
+
+    /**
+     * Retuns the header value(s) in an array or NULL if no value is set.
+     *
+     * @return array|null
+     */
+    abstract public function getHeaderValues():?array;
+
+
+    /**
+     * @inheritdoc
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
     {
-        // saving previous global variables value
-        $prevPOST = $_POST;
-        $prevCOOKIE = $_COOKIE;
-        $prevGET = $_GET;
-        $prevSERVER = $_SERVER;
-
-        // extracting to global variables
-        $_POST = $request->getParsedBody();
-        $_COOKIE = $request->getCookieParams();
-        $_GET = $request->getQueryParams();
-        $_SERVER = $request->getServerParams();
-
-        // processing
+        // processes the request
         $response = $handler->handle($request);
 
-        // restoring global variables value
-        $_POST =& $prevPOST;
-        $_COOKIE =& $prevCOOKIE;
-        $_GET =& $prevGET;
-        $_SERVER =& $prevSERVER;
+        // adds the headers value(s)
+        if ($values = $this->getHeaderValues()) {
+            foreach ($values as $value) {
+                $response = $response->withHeader($this->headerName, $value);
+            }
+        }
 
         return $response;
     }

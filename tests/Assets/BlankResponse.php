@@ -15,44 +15,28 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     07/03/2018
-// Time:     02:05
+// Date:     27/04/2018
+// Time:     11:06
 // Project:  Psr15Middlewares
 //
-declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
+declare(strict_types=1);
+namespace CodeInc\Psr15Middlewares\Tests\Assets;
+use CodeInc\Psr7Responses\HtmlResponse;
 
 
 /**
- * Class ContentSecurityPolicyMiddleware
+ * Class BlankResponse
  *
- * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
- * @package CodeInc\Psr15Middlewares
+ * @package CodeInc\Psr15Middlewares\Tests\Assets
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ContentSecurityPolicyMiddleware extends HeaderMiddleware
+class BlankResponse extends HtmlResponse
 {
-	public const SRC_SELF  = "'self'";
-
     /**
-     * ContentSecurityPolicyMiddleware constructor.
-     *
-     * @param array $sources
-     * @param bool $replace
+     * BlankResponse constructor.
      */
-	public function __construct(array $sources, bool $replace = true)
-	{
-	    // preparing the value
-        $value = [];
-        foreach ($sources as $source) {
-            $value[] = implode(": ", $source);
-        }
-        $value = implode("; ", $value);
-
-        parent::__construct(
-            'Content-Security-Policy',
-            $value,
-            $replace
-        );
-	}
+    public function __construct()
+    {
+        parent::__construct('<i>This is a blank PSR-7 response</i>');
+    }
 }

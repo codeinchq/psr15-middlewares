@@ -21,6 +21,8 @@
 //
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares;
+use CodeInc\Psr15Middlewares\Tests\CallableMiddlewareTest;
+use CodeInc\Psr7Responses\HtmlResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -30,10 +32,11 @@ use Psr\Http\Server\RequestHandlerInterface;
 /**
  * Class CallableMiddleware
  *
+ * @see CallableMiddlewareTest
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class `` implements MiddlewareInterface
+class CallableMiddleware implements MiddlewareInterface
 {
     /**
      * @var callable
@@ -54,9 +57,9 @@ class `` implements MiddlewareInterface
      * @inheritdoc
      * @throws MiddlewareException
      */
-    public function process(ServerRequestInterface $request,
-        RequestHandlerInterface $handler):ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
     {
+        // executes the callable
         try {
             $response = call_user_func($this->callable, $request);
         }
@@ -64,11 +67,13 @@ class `` implements MiddlewareInterface
             throw new MiddlewareException($this,
                 "Error while executing the callable");
         }
+
+        // processes the response
         if (!$response instanceof ResponseInterface) {
-            throw new MiddlewareException($this,
-                sprintf("The callable response must be an object implementing %s",
-                    ResponseInterface::class));
+            return new HtmlResponse((string)$response);
         }
-        return $response;
+        else {
+            return $response;
+        }
     }
 }

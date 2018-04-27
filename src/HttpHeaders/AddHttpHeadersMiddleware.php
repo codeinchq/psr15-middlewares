@@ -20,7 +20,8 @@
 // Project:  Psr15Middlewares
 //
 declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
+namespace CodeInc\Psr15Middlewares\HttpHeaders;
+use CodeInc\Psr15Middlewares\Tests\HttpHeaders\AddHttpHeadersMiddlewareTest;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -28,12 +29,13 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class RestExtraHttpHeadersMiddleware
+ * Class AddHttpHeadersMiddleware
  *
- * @package CodeInc\Psr15Middlewares
+ * @see AddHttpHeadersMiddlewareTest
+ * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class RespExtraHttpHeadersMiddleware implements MiddlewareInterface
+class AddHttpHeadersMiddleware implements MiddlewareInterface
 {
 	/**
 	 * @var string[]
@@ -42,24 +44,33 @@ class RespExtraHttpHeadersMiddleware implements MiddlewareInterface
 
     /**
      * @param string $header
-     * @param string $value
+     * @param string|array|iterable $value
      * @param bool $replace
      */
-	public function addHeader(string $header, string $value,
-        bool $replace = true):void
+	public function addHeader(string $header, $value, bool $replace = true):void
 	{
+	    if (is_iterable($value) || is_array($value)) {
+	        $iterable = $value;
+	        $value = [];
+	        foreach ($iterable as $key => $entry) {
+                $value[$key] = (string)$entry;
+            }
+        }
+        else {
+	        $value = (string)$value;
+        }
+
 		$this->headers[] = [$header, $value, $replace];
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function process(ServerRequestInterface $request,
-        RequestHandlerInterface $handler):ResponseInterface
+	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
 	{
 		$response = $handler->handle($request);
 
-		// adding headers
+		// adding HTTP headers
 		foreach ($this->headers as [$header, $value, $replace]) {
 		    if ($replace || !$response->hasHeader($header)) {
                 $response = $response->withHeader($header, $value);

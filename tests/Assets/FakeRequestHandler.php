@@ -15,38 +15,49 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     07/03/2018
-// Time:     01:47
+// Date:     27/04/2018
+// Time:     11:05
 // Project:  Psr15Middlewares
 //
-declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
+declare(strict_types=1);
+namespace CodeInc\Psr15Middlewares\Tests\Assets;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class XFrameOptionsMiddleware
+ * Class FakeRequestHandler
  *
- * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
- * @package CodeInc\Psr15Middlewares
+ * @package CodeInc\Psr15Middlewares\Tests\Assets
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XFrameOptionsMiddleware extends HeaderMiddleware
+class FakeRequestHandler implements RequestHandlerInterface
 {
-	public const VALUE_DENY = 'DENY';
-	public const VALUE_SAMEORIGIN = 'SAMEORIGIN';
+    /**
+     * @var BlankResponse|null|ResponseInterface
+     */
+    private $response;
+
 
     /**
-     * XFrameOptionsMiddleware constructor.
+     * FakeRequestHandler constructor.
      *
-     * @param string $frameOptions
-     * @param bool $replace
+     * @param null|ResponseInterface $response
      */
-	public function __construct(string $frameOptions, bool $replace = true)
+    public function __construct(?ResponseInterface $response = null)
     {
-        parent::__construct(
-            'X-Frame-Options',
-            $frameOptions,
-            $replace
-        );
+        $this->response = $response ?? new BlankResponse();
+    }
+
+
+    /**
+     * @inheritdoc
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     */
+    public function handle(ServerRequestInterface $request):ResponseInterface
+    {
+        return $this->response;
     }
 }

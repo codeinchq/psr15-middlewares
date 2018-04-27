@@ -15,42 +15,34 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     04/03/2018
-// Time:     09:13
+// Date:     27/04/2018
+// Time:     14:00
 // Project:  Psr15Middlewares
 //
-declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
-use CodeInc\Psr15Middlewares\Tests\ExceptionCaptureMiddlewareTest;
-use CodeInc\Psr7Responses\ErrorResponse;
+declare(strict_types=1);
+namespace CodeInc\Psr15Middlewares\Tests\Assets;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class ExceptionCaptureMiddleware
+ * Class FakeBuggyRequestHandler
  *
- * @see ExceptionCaptureMiddlewareTest
- * @package CodeInc\Psr15Middlewares
+ * @package CodeInc\Psr15Middlewares\Tests\Assets
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ExceptionCaptureMiddleware implements MiddlewareInterface
+class FakeBuggyRequestHandler extends FakeRequestHandler
 {
-	/**
-	 * @inheritdoc
-	 * @param ServerRequestInterface $request
-	 * @param RequestHandlerInterface $handler
-	 * @return ResponseInterface
-	 */
-	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
-	{
-		try {
-		    return $handler->handle($request);
-		}
-		catch (\Throwable $exception) {
-			return new ErrorResponse($exception);
-		}
-	}
+    public const EXCEPTION_MSG = 'A fake error';
+    public const EXCEPTION_CODE = 666;
+
+
+    /**
+     * @inheritdoc
+     * @throws \Exception
+     */
+    public function handle(ServerRequestInterface $request):ResponseInterface
+    {
+        throw new \Exception(self::EXCEPTION_MSG, self::EXCEPTION_CODE);
+    }
 }

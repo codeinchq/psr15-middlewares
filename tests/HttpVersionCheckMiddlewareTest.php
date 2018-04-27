@@ -15,42 +15,39 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     04/03/2018
-// Time:     09:13
+// Date:     27/04/2018
+// Time:     13:43
 // Project:  Psr15Middlewares
 //
-declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
-use CodeInc\Psr15Middlewares\Tests\ExceptionCaptureMiddlewareTest;
-use CodeInc\Psr7Responses\ErrorResponse;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
+declare(strict_types=1);
+namespace CodeInc\Psr15Middlewares\Tests;
+use CodeInc\Psr15Middlewares\HttpVersionCheckMiddleware;
+use CodeInc\Psr15Middlewares\Tests\Assets\BlankResponse;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
+use GuzzleHttp\Psr7\ServerRequest;
+use PHPUnit\Framework\TestCase;
 
 
 /**
- * Class ExceptionCaptureMiddleware
+ * Class HttpVersionCheckMiddlewareTest
  *
- * @see ExceptionCaptureMiddlewareTest
- * @package CodeInc\Psr15Middlewares
+ * @uses HttpVersionCheckMiddleware
+ * @package CodeInc\Psr15Middlewares\Tests
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ExceptionCaptureMiddleware implements MiddlewareInterface
+class HttpVersionCheckMiddlewareTest extends TestCase
 {
-	/**
-	 * @inheritdoc
-	 * @param ServerRequestInterface $request
-	 * @param RequestHandlerInterface $handler
-	 * @return ResponseInterface
-	 */
-	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
-	{
-		try {
-		    return $handler->handle($request);
-		}
-		catch (\Throwable $exception) {
-			return new ErrorResponse($exception);
-		}
-	}
+    public function testMiddleware():void
+    {
+        $testResponse = (new BlankResponse())->withProtocolVersion('1.1');
+
+        $middleware = new HttpVersionCheckMiddleware();
+        $response = $middleware->process(
+            ServerRequest::fromGlobals()->withProtocolVersion('2.0'),
+            new FakeRequestHandler($testResponse)
+        );
+
+        self::assertEquals($testResponse->getProtocolVersion(), '1.1');
+        self::assertEquals($response->getProtocolVersion(), '2.0');
+    }
 }

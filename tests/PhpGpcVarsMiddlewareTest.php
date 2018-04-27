@@ -15,56 +15,46 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     26/03/2018
-// Time:     14:10
+// Date:     27/04/2018
+// Time:     14:12
 // Project:  Psr15Middlewares
 //
 declare(strict_types=1);
-namespace CodeInc\Psr15Middlewares;
-use CodeInc\Psr15Middlewares\Tests\PhpGpcVarsMiddlewareTest;
+namespace CodeInc\Psr15Middlewares\Tests;
+use CodeInc\Psr15Middlewares\PhpGpcVarsMiddleware;
+use CodeInc\Psr7Responses\TextResponse;
+use GuzzleHttp\Psr7\ServerRequest;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class PhpGpcVarsMiddleware
+ * Class PhpGpcVarsMiddlewareTest
  *
- * @see PhpGpcVarsMiddlewareTest
- * @package CodeInc\Psr15Middlewares
+ * @uses PhpGpcVarsMiddleware
+ * @package CodeInc\Psr15Middlewares\Tests
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class PhpGpcVarsMiddleware implements MiddlewareInterface
+class PhpGpcVarsMiddlewareTest extends TestCase
 {
-    /**
-     * @param ServerRequestInterface $request
-     * @param RequestHandlerInterface $handler
-     * @return ResponseInterface
-     */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
+    public function testMiddleware():void
     {
-        // saving previous global variables value
-        $prevPOST = $_POST;
-        $prevCOOKIE = $_COOKIE;
-        $prevGET = $_GET;
-        $prevSERVER = $_SERVER;
+        $middleware = new PhpGpcVarsMiddleware();
+        $response = $middleware->process(
+            ServerRequest::fromGlobals()->withQueryParams(['foo' => 'bar']),
+            new PhpGpcVarsMiddlewareTestRequestHandler()
+        );
+        self::assertEquals($response->getBody()->__toString(), 'bar');
+    }
+}
 
-        // extracting to global variables
-        $_POST = $request->getParsedBody();
-        $_COOKIE = $request->getCookieParams();
-        $_GET = $request->getQueryParams();
-        $_SERVER = $request->getServerParams();
 
-        // processing
-        $response = $handler->handle($request);
-
-        // restoring global variables value
-        $_POST =& $prevPOST;
-        $_COOKIE =& $prevCOOKIE;
-        $_GET =& $prevGET;
-        $_SERVER =& $prevSERVER;
-
-        return $response;
+final class PhpGpcVarsMiddlewareTestRequestHandler implements RequestHandlerInterface
+{
+    public function handle(ServerRequestInterface $request):ResponseInterface
+    {
+        return new TextResponse((string)@$_GET['foo']);
     }
 }

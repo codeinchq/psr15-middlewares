@@ -15,42 +15,50 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     04/03/2018
-// Time:     09:13
+// Date:     14/03/2018
+// Time:     11:08
 // Project:  Psr15Middlewares
 //
 declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
-use CodeInc\Psr15Middlewares\Tests\ExceptionCaptureMiddlewareTest;
-use CodeInc\Psr7Responses\ErrorResponse;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
+namespace CodeInc\Psr15Middlewares\HttpHeaders\Security;
+use CodeInc\Psr15Middlewares\HttpHeaders\AbstractSingleValueHttpHeaderMiddleware;
+use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\ContentTypeOptionsMiddlewareTest;
 
 
 /**
- * Class ExceptionCaptureMiddleware
+ * Class ContentTypeOptionsMiddleware
  *
- * @see ExceptionCaptureMiddlewareTest
- * @package CodeInc\Psr15Middlewares
+ * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Content-Type-Options
+ * @see ContentTypeOptionsMiddlewareTest
+ * @package CodeInc\Psr15Middlewares\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ExceptionCaptureMiddleware implements MiddlewareInterface
+class ContentTypeOptionsMiddleware extends AbstractSingleValueHttpHeaderMiddleware
 {
-	/**
-	 * @inheritdoc
-	 * @param ServerRequestInterface $request
-	 * @param RequestHandlerInterface $handler
-	 * @return ResponseInterface
-	 */
-	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
-	{
-		try {
-		    return $handler->handle($request);
-		}
-		catch (\Throwable $exception) {
-			return new ErrorResponse($exception);
-		}
-	}
+    /**
+     * @var bool
+     */
+    private $enable;
+
+
+    /**
+     * XContentTypeOptionsMiddleware constructor.
+     *
+     * @param bool $enable
+     */
+    public function __construct(bool $enable)
+    {
+        $this->enable = $enable;
+        parent::__construct('X-Content-Type-Options');
+    }
+
+
+    /**
+     * @inheritdoc
+     * @return null|string
+     */
+    public function getHeaderValue():?string
+    {
+        return $this->enable ? 'nosniff' : null;
+    }
 }

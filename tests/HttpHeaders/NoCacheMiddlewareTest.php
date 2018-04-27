@@ -15,34 +15,33 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     07/03/2018
-// Time:     01:56
+// Date:     27/04/2018
+// Time:     13:24
 // Project:  Psr15Middlewares
 //
-declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
+declare(strict_types=1);
+namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders;
+use CodeInc\Psr15Middlewares\HttpHeaders\NoCacheMiddleware;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
+use GuzzleHttp\Psr7\ServerRequest;
 
 
 /**
- * Class XPoweredByMiddleware
+ * Class NoCacheMiddlewareTest
  *
- * @package CodeInc\Psr15Middlewares
+ * @uses NoCacheMiddleware
+ * @package CodeInc\Psr15Middlewares\Tests\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XPoweredByMiddleware extends HeaderMiddleware
+class NoCacheMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
-    /**
-     * XPoweredByMiddleware constructor.
-     *
-     * @param string $poweredBy
-     * @param bool $replace
-     */
-	public function __construct(string $poweredBy, bool $replace = true)
+    public function testMiddleware():void
     {
-        parent::__construct(
-            'X-Powered-By',
-            $poweredBy,
-            $replace
+        $middleware = new NoCacheMiddleware();
+        self::assertResponseHasHeaderValue(
+            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            'Cache-Control',
+            ['no-cache, no-store, must-revalidate']
         );
     }
 }

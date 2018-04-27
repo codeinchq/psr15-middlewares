@@ -15,35 +15,40 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     14/03/2018
-// Time:     11:22
+// Date:     04/03/2018
+// Time:     08:38
 // Project:  Psr15Middlewares
 //
 declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
+namespace CodeInc\Psr15Middlewares\HttpHeaders;
+use CodeInc\Psr15Middlewares\Tests\HttpHeaders\NoCacheMiddlewareTest;
+use Micheh\Cache\CacheUtil;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 
 /**
- * Class ReferrerPolicyMiddleware
+ * Class NoCacheMiddleware
  *
- * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
- * @package CodeInc\Psr15Middlewares
+ * @uses CacheUtil
+ * @see NoCacheMiddlewareTest
+ * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ReferrerPolicyMiddleware extends HeaderMiddleware
+class NoCacheMiddleware implements MiddlewareInterface
 {
-    /**
-     * ReferrerPolicyMiddleware constructor.
-     *
-     * @param string $referrerPolicy
-     * @param bool $replace
-     */
-    public function __construct(string $referrerPolicy, bool $replace = true)
-    {
-        parent::__construct(
-            'Referrer-Policy',
-            $referrerPolicy,
-            $replace
-        );
-    }
+	/**
+	 * @inheritdoc
+	 * @param ServerRequestInterface $request
+	 * @param RequestHandlerInterface $handler
+	 * @return ResponseInterface
+	 */
+	public function process(ServerRequestInterface $request,
+        RequestHandlerInterface $handler):ResponseInterface
+	{
+		// returns the response with the cache prevention headers
+		return (new CacheUtil())->withCachePrevention($handler->handle($request));
+	}
 }

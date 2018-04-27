@@ -21,6 +21,7 @@
 //
 declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares;
+use CodeInc\Psr15Middlewares\Tests\PhpSessionMiddlewareTest;
 use HansOtt\PSR7Cookies\SetCookie;
 use Micheh\Cache\CacheUtil;
 use Micheh\Cache\Header\ResponseCacheControl;
@@ -33,6 +34,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 /**
  * Class PhpSessionMiddleware
  *
+ * @uses ResponseCacheControl
+ * @see PhpSessionMiddlewareTest
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */

@@ -15,42 +15,38 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     04/03/2018
-// Time:     09:13
+// Date:     27/04/2018
+// Time:     12:05
 // Project:  Psr15Middlewares
 //
-declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
-use CodeInc\Psr15Middlewares\Tests\ExceptionCaptureMiddlewareTest;
-use CodeInc\Psr7Responses\ErrorResponse;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
-
+declare(strict_types=1);
+namespace CodeInc\Psr15Middlewares\HttpHeaders;
 
 /**
- * Class ExceptionCaptureMiddleware
+ * Class AbstractSingleValueHttpHeaderMiddleware
  *
- * @see ExceptionCaptureMiddlewareTest
- * @package CodeInc\Psr15Middlewares
+ * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ExceptionCaptureMiddleware implements MiddlewareInterface
+abstract class AbstractSingleValueHttpHeaderMiddleware extends AbstractHttpHeaderMiddleware
 {
-	/**
-	 * @inheritdoc
-	 * @param ServerRequestInterface $request
-	 * @param RequestHandlerInterface $handler
-	 * @return ResponseInterface
-	 */
-	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
-	{
-		try {
-		    return $handler->handle($request);
-		}
-		catch (\Throwable $exception) {
-			return new ErrorResponse($exception);
-		}
-	}
+    /**
+     * Returns the header value of null is no value is set.
+     *
+     * @return null|string
+     */
+    abstract public function getHeaderValue():?string;
+
+
+    /**
+     * @inheritdoc
+     * @return array|null
+     */
+    public function getHeaderValues():?array
+    {
+        if (($headerValue = $this->getHeaderValue()) !== null) {
+            return [$headerValue];
+        }
+        return null;
+    }
 }

@@ -15,66 +15,66 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     14/03/2018
-// Time:     11:09
+// Date:     07/03/2018
+// Time:     01:56
 // Project:  Psr15Middlewares
 //
 declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
+namespace CodeInc\Psr15Middlewares\HttpHeaders;
+use CodeInc\Psr15Middlewares\Tests\HttpHeaders\PoweredByMiddlewareTest;
 
 
 /**
- * Class HeaderMiddleware
+ * Class PoweredByMiddleware
  *
- * @package CodeInc\Psr15Middlewares
+ * @see PoweredByMiddlewareTest
+ * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class HeaderMiddleware implements MiddlewareInterface
+class PoweredByMiddleware extends AbstractSingleValueHttpHeaderMiddleware
 {
     /**
-     * @var string
+     * @var string|null
      */
-    private $headerName;
+    private $poweredBy;
+
 
     /**
-     * @var string
-     */
-    private $headerValue;
-
-    /**
-     * @var bool
-     */
-    private $replace;
-
-    /**
-     * AbstractHeaderMiddleware constructor.
+     * PoweredByMiddleware constructor.
      *
-     * @param string $headerName
-     * @param string $headerValue
-     * @param bool $replace
+     * @param null|string $poweredBy
      */
-    public function __construct(string $headerName, string $headerValue,
-        bool $replace = true)
+	public function __construct(?string $poweredBy = null)
     {
-        $this->headerName = $headerName;
-        $this->headerValue = $headerValue;
-        $this->replace = $replace;
+        $this->poweredBy = $poweredBy;
+        parent::__construct('X-Powered-By');
     }
+
+
+    /**
+     * @param null|string $poweredBy
+     */
+    public function setPoweredBy(?string $poweredBy):void
+    {
+        $this->poweredBy = $poweredBy;
+    }
+
+
+    /**
+     * @return null|string
+     */
+    public function getPoweredBy():?string
+    {
+        return $this->poweredBy;
+    }
+
 
     /**
      * @inheritdoc
+     * @return null|string
      */
-    public function process(ServerRequestInterface $request,
-        RequestHandlerInterface $handler):ResponseInterface
+    public function getHeaderValue():?string
     {
-        $response = $handler->handle($request);
-        if ($this->replace || !$response->hasHeader($this->headerName)) {
-            $response = $response->withHeader($this->headerName, $this->headerValue);
-        }
-        return $response;
+        return $this->poweredBy;
     }
 }

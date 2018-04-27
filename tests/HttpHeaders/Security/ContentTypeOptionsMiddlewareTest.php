@@ -15,37 +15,43 @@
 // +---------------------------------------------------------------------+
 //
 // Author:   Joan Fabrégat <joan@codeinc.fr>
-// Date:     14/03/2018
-// Time:     11:08
+// Date:     27/04/2018
+// Time:     12:26
 // Project:  Psr15Middlewares
 //
-declare(strict_types = 1);
-namespace CodeInc\Psr15Middlewares;
+declare(strict_types=1);
+namespace CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security;
+use CodeInc\Psr15Middlewares\HttpHeaders\Security\ContentTypeOptionsMiddleware;
+use CodeInc\Psr15Middlewares\Tests\HttpHeaders\AbstractHttpHeaderMiddlewareTestCase;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
+use GuzzleHttp\Psr7\ServerRequest;
 
 
 /**
- * Class XContentTypeOptionsMiddleware
+ * Class ContentTypeOptionsMiddlewareTest
  *
- * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
- * @package CodeInc\Psr15Middlewares
+ * @uses ContentTypeOptionsMiddleware
+ * @package CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XContentTypeOptionsMiddleware extends HeaderMiddleware
+class ContentTypeOptionsMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
-    public const VALUE_NOSNIFF = 'nosniff';
-
-    /**
-     * XContentTypeOptionsMiddleware constructor.
-     *
-     * @param string $contentTypeOptions
-     * @param bool $replace
-     */
-    public function __construct(string $contentTypeOptions, bool $replace = true)
+    public function testEnabled():void
     {
-        parent::__construct(
+        $middleware = new ContentTypeOptionsMiddleware(true);
+        self::assertResponseHasHeaderValue(
+            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
             'X-Content-Type-Options',
-            $contentTypeOptions,
-            $replace
+            ['nosniff']
+        );
+    }
+
+    public function testDisabled():void
+    {
+        $middleware = new ContentTypeOptionsMiddleware(false);
+        self::assertResponseNotHasHeader(
+            $middleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            'X-Content-Type-Options'
         );
     }
 }
