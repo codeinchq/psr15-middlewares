@@ -46,6 +46,7 @@ class XXssProtectionMiddleware extends AbstractHeaderMiddleware
      */
     private $reportUri;
 
+
     /**
      * XXssProtectionMiddleware constructor.
      *
@@ -56,6 +57,7 @@ class XXssProtectionMiddleware extends AbstractHeaderMiddleware
         $this->enableProtection = $enableProtection;
         parent::__construct('X-Xss-Protection');
     }
+
 
     /**
      * Enables the report mode.
@@ -75,6 +77,7 @@ class XXssProtectionMiddleware extends AbstractHeaderMiddleware
         }
         $this->blockMode = true;
     }
+
 
     /**
      * Enables the report mode and sets the report URI.
@@ -96,11 +99,13 @@ class XXssProtectionMiddleware extends AbstractHeaderMiddleware
         $this->reportUri = $reportUri;
     }
 
+
     /**
-     * @inheritdoc
-     * @return array|null
+     * Returns the header value.
+     *
+     * @return string
      */
-    protected function getHeaderValues():?array
+    public function getHeaderValue():string
     {
         $value = $this->enableProtection ? '1' : '0';
         if ($this->blockMode) {
@@ -109,6 +114,16 @@ class XXssProtectionMiddleware extends AbstractHeaderMiddleware
         if ($this->reportUri) {
             $value .= '; report='.$this->reportUri;
         }
-        return [$value];
+        return $value;
+    }
+
+
+    /**
+     * @inheritdoc
+     * @return array|null
+     */
+    protected function getHeaderValues():?array
+    {
+        return [$this->getHeaderValue()];
     }
 }
