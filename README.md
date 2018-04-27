@@ -13,6 +13,7 @@ This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-1
 ### Security HTTP headers
 * [`ContentSecurityPolicyMiddleware`](src/HttpHeaders/Security/ContentSecurityPolicyMiddleware.php) Adds a [`Content-Security-Policy`](https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy) HTTP headers to the response
 * [`ContentTypeOptionsMiddleware`](src/HttpHeaders/Security/ContentTypeOptionsMiddleware.php) Adds a [`X-Content-Type-Options`](https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Content-Type-Options) HTTP headers to the response
+* [`ExpectCtMiddleware`](src/HttpHeaders/Security/ExpectCtMiddleware.php) Adds a [`Expect-CT`](https://developer.mozilla.org/docs/Web/HTTP/Headers/Expect-CT) HTTP headers to the response
 * [`FrameOptionsMiddleware`](src/HttpHeaders/Security/FrameOptionsMiddleware.php) Adds a [`X-Frame-Options`](https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Frame-Options) HTTP headers to the response
 * [`ReferrerPolicyMiddleware`](src/HttpHeaders/Security/ReferrerPolicyMiddleware.php) Adds a [`Referrer-Policy`](https://developer.mozilla.org/docs/Web/HTTP/Headers/Referrer-Policy) HTTP headers to the response
 * [`StrictTransportSecurityMiddleware`](src/HttpHeaders/Security/StrictTransportSecurityMiddleware.php) Adds a [`Strict-Transport-Security`](https://developer.mozilla.org/docs/Web/HTTP/Headers/Strict-Transport-Security) HTTP headers to the response

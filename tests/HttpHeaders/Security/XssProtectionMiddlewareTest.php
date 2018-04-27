@@ -35,7 +35,7 @@ use GuzzleHttp\Psr7\ServerRequest;
  * @package CodeInc\Psr15Middlewares\Tests
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XssProtectionMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
+final class XssProtectionMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
     private const FAKE_REPORT_URI = 'https://example.com/report-uri';
 

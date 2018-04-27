@@ -36,7 +36,7 @@ use PHPUnit\Framework\TestCase;
  * @package CodeInc\Psr15Middlewares\Tests
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ExceptionCaptureMiddlewareTest extends TestCase
+final class ExceptionCaptureMiddlewareTest extends TestCase
 {
     public function testWithoutException():void
     {

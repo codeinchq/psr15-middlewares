@@ -34,7 +34,7 @@ use GuzzleHttp\Psr7\ServerRequest;
  * @package CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class FrameOptionsMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
+final class FrameOptionsMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
     private const TEST_URL = 'https://www.example.org';
 

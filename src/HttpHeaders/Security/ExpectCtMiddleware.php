@@ -22,12 +22,14 @@
 declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\HttpHeaders\Security;
 use CodeInc\Psr15Middlewares\HttpHeaders\AbstractSingleValueHttpHeaderMiddleware;
+use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\ExpectCtMiddlewareTest;
 
 
 /**
  * Class ExpectCtMiddleware
  *
  * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Expect-CT
+ * @see ExpectCtMiddlewareTest
  * @package CodeInc\Psr15Middlewares\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
@@ -130,7 +132,7 @@ class ExpectCtMiddleware extends AbstractSingleValueHttpHeaderMiddleware
             $value .= 'report-uri="'.$this->reportUri.'"';
         }
         if ($this->enforce) {
-            $value .= (!empty($value) ? ', ' : '').'enfore';
+            $value .= (!empty($value) ? ', ' : '').'enforce';
         }
         if ($this->maxAge) {
             $value .= (!empty($value) ? ', ' : '').'max-age='.$this->maxAge;

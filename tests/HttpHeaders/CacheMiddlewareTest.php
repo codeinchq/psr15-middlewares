@@ -33,7 +33,7 @@ use GuzzleHttp\Psr7\ServerRequest;
  * @package CodeInc\Psr15Middlewares\Tests\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class CacheMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
+final class CacheMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
     private const TEST_LAST_MODIFIED = 'Thu, 26 Apr 2018 12:00:00 GMT';
     private const TEST_ETAG = 'fake_etag_5ae3078a61bcb';

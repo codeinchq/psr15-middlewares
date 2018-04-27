@@ -34,7 +34,7 @@ use GuzzleHttp\Psr7\ServerRequest;
  * @package CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ContentTypeOptionsMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
+final class ContentTypeOptionsMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
     public function testEnabled():void
     {

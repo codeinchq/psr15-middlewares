@@ -33,7 +33,7 @@ use GuzzleHttp\Psr7\ServerRequest;
  * @package CodeInc\Psr15Middlewares\Tests\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class NoCacheMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
+final class NoCacheMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
     public function testMiddleware():void
     {

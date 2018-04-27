@@ -41,7 +41,7 @@ if (!isset($_SESSION)) {
  * @package CodeInc\Psr15Middlewares\Tests
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class PhpSessionMiddlewareTest extends TestCase
+final class PhpSessionMiddlewareTest extends TestCase
 {
     /**
      * @throws \HansOtt\PSR7Cookies\InvalidArgumentException

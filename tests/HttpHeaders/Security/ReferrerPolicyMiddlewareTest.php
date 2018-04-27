@@ -36,7 +36,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  * @package CodeInc\Psr15Middlewares\Tests
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ReferrerPolicyMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
+final class ReferrerPolicyMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
     private const MIDDLEWARE_VALUES = ReferrerPolicyMiddleware::ALL_VALUES;
     private const MIDDLEWARE_METHODS = [
