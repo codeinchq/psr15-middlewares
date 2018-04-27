@@ -24,13 +24,13 @@ namespace CodeInc\Psr15Middlewares;
 
 
 /**
- * Class XContentTypeOptionsMiddleware
+ * Class ContentTypeOptionsMiddleware
  *
  * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Content-Type-Options
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class XContentTypeOptionsMiddleware extends AbstractHeaderMiddleware
+class ContentTypeOptionsMiddleware extends AbstractHeaderMiddleware
 {
     /**
      * @var bool
