@@ -30,7 +30,7 @@ use GuzzleHttp\Psr7\ServerRequest;
 /**
  * Class ContentSecurityPolicyMiddlewareTest
  *
- * @see ContentSecurityPolicyMiddleware
+ * @uses ContentSecurityPolicyMiddleware
  * @package CodeInc\Psr15Middlewares\Tests
  * @author Joan Fabrégat <joan@codeinc.fr>
  */

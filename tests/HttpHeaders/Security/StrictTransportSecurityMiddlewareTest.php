@@ -31,7 +31,7 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Class StrictTransportSecurityMiddlewareTest
  *
- * @see StrictTransportSecurityMiddleware
+ * @uses StrictTransportSecurityMiddleware
  * @package CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
  */

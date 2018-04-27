@@ -32,7 +32,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 /**
  * Class ReferrerPolicyMiddlewareTest
  *
- * @see ReferrerPolicyMiddleware
+ * @uses ReferrerPolicyMiddleware
  * @package CodeInc\Psr15Middlewares\Tests
  * @author Joan Fabrégat <joan@codeinc.fr>
  */

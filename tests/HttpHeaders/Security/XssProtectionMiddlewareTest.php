@@ -31,7 +31,7 @@ use GuzzleHttp\Psr7\ServerRequest;
 /**
  * Class XssProtectionMiddlewareTest
  *
- * @see XssProtectionMiddleware
+ * @uses XssProtectionMiddleware
  * @package CodeInc\Psr15Middlewares\Tests
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
