@@ -22,16 +22,18 @@
 declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\Tests;
 use CodeInc\Psr15Middlewares\ContentSecurityPolicyMiddleware;
-use PHPUnit\Framework\TestCase;
+use CodeInc\Psr15Middlewares\Tests\Assets\FakeRequestHandler;
+use GuzzleHttp\Psr7\ServerRequest;
 
 
 /**
  * Class ContentSecurityPolicyMiddlewareTest
  *
+ * @see ContentSecurityPolicyMiddleware
  * @package CodeInc\Psr15Middlewares\Tests
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class ContentSecurityPolicyMiddlewareTest extends TestCase
+class ContentSecurityPolicyMiddlewareTest extends AbstractHttpHeaderMiddlewareTestCase
 {
     private const URI_1 = 'https://example.com';
     private const URI_2 = 'https://example.org';
@@ -39,19 +41,42 @@ class ContentSecurityPolicyMiddlewareTest extends TestCase
     private const MEDIA_TYPE_1 = 'application/x-shockwave-flash';
     private const MEDIA_TYPE_2 = 'application/x-java-applet';
 
+    private const MIDDLEWARE_SOURCES = [
+        'default-src' => 'addDefaultSrc',
+        'base-uri' => 'addBaseUri',
+        'child-src' => 'addChildSrc',
+        'font-src' => 'addFontSrc',
+        'form-action' => 'addFormAction',
+        'frame-ancestors' => 'addFrameAncestors',
+        'frame-src' => 'addFrameSrc',
+        'img-src' => 'addImgSrc',
+        'manifest-src' => 'addManifestSrc',
+        'media-src' => 'addMediaSrc',
+        'object-src' => 'addObjectSrc',
+        'script-src' => 'addScriptSrc',
+        'style-src' => 'addStyleSrc',
+        'worker-src' => 'addWorkerSrc',
+        'report-uri' => 'addReportUri',
+    ];
+
 
     public function testEmptyCSP():void
     {
         $csp = new ContentSecurityPolicyMiddleware();
         self::assertNull($csp->getHeaderValue());
+        self::assertResponseNotHasHeader(
+            $csp->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            'Content-Security-Policy'
+        );
     }
 
 
     public function testUpgradeInsecureRequests():void
     {
+
         $csp = new ContentSecurityPolicyMiddleware();
         $csp->upgradeInsecureRequests();
-        self::assertEquals($csp->getHeaderValue(), 'upgrade-insecure-requests;');
+        self::assertCspValue($csp, 'upgrade-insecure-requests;');
     }
 
 
@@ -59,7 +84,7 @@ class ContentSecurityPolicyMiddlewareTest extends TestCase
     {
         $csp = new ContentSecurityPolicyMiddleware();
         $csp->blockAllMixedContent();
-        self::assertEquals($csp->getHeaderValue(), 'block-all-mixed-content;');
+        self::assertCspValue($csp, 'block-all-mixed-content;');
     }
 
 
@@ -71,7 +96,7 @@ class ContentSecurityPolicyMiddlewareTest extends TestCase
         $csp = new ContentSecurityPolicyMiddleware();
         foreach ($csp::SANDBOX_VALUES as $value) {
             $csp->setSandbox($value);;
-            self::assertEquals($csp->getHeaderValue(), 'sandbox '.$value.';');
+            self::assertCspValue($csp, 'sandbox '.$value.';');
         }
     }
 
@@ -84,7 +109,7 @@ class ContentSecurityPolicyMiddlewareTest extends TestCase
         $csp = new ContentSecurityPolicyMiddleware();
         foreach ($csp::REFERER_POLICY_VALUES as $value) {
             $csp->setRefererPolicy($value);;
-            self::assertEquals($csp->getHeaderValue(), 'referer '.$value.';');
+            self::assertCspValue($csp, 'referer '.$value.';');
         }
     }
 
@@ -93,15 +118,17 @@ class ContentSecurityPolicyMiddlewareTest extends TestCase
     {
         $csp = new ContentSecurityPolicyMiddleware();
         $csp->requireSriFor(true, true);
-        self::assertEquals($csp->getHeaderValue(), 'require-sri-for script style;');
+        self::assertCspValue($csp, 'require-sri-for script style;');
 
         $csp = new ContentSecurityPolicyMiddleware();
         $csp->requireSriFor(false, true);
-        self::assertEquals($csp->getHeaderValue(), 'require-sri-for style;');
+        self::assertCspValue($csp, 'require-sri-for style;');
+
+
 
         $csp = new ContentSecurityPolicyMiddleware();
         $csp->requireSriFor(true, false);
-        self::assertEquals($csp->getHeaderValue(), 'require-sri-for script;');
+        self::assertCspValue($csp, 'require-sri-for script;');
     }
 
 
@@ -112,18 +139,18 @@ class ContentSecurityPolicyMiddlewareTest extends TestCase
     {
         $csp = new ContentSecurityPolicyMiddleware();
         self::assertTrue($csp->addPluginType(self::MEDIA_TYPE_1));
-        self::assertEquals($csp->getHeaderValue(), 'plugin-types '.self::MEDIA_TYPE_1.';');
+        self::assertCspValue($csp, 'plugin-types '.self::MEDIA_TYPE_1.';');
 
         $csp = new ContentSecurityPolicyMiddleware();
         self::assertTrue($csp->addPluginType(self::MEDIA_TYPE_1));
         self::assertTrue($csp->addPluginType(self::MEDIA_TYPE_2));
-        self::assertEquals($csp->getHeaderValue(), 'plugin-types '.self::MEDIA_TYPE_1.' '.self::MEDIA_TYPE_2.';');
+        self::assertCspValue($csp, 'plugin-types '.self::MEDIA_TYPE_1.' '.self::MEDIA_TYPE_2.';');
 
         // duplicate
         $csp = new ContentSecurityPolicyMiddleware();
         self::assertTrue($csp->addPluginType(self::MEDIA_TYPE_1));
         self::assertFalse($csp->addPluginType(self::MEDIA_TYPE_1));
-        self::assertEquals($csp->getHeaderValue(), 'plugin-types '.self::MEDIA_TYPE_1.';');
+        self::assertCspValue($csp, 'plugin-types '.self::MEDIA_TYPE_1.';');
     }
 
 
@@ -132,41 +159,40 @@ class ContentSecurityPolicyMiddlewareTest extends TestCase
      */
     public function testSrc():void
     {
-        $sources = [
-            'default-src' => 'addDefaultSrc',
-            'base-uri' => 'addBaseUri',
-            'child-src' => 'addChildSrc',
-            'font-src' => 'addFontSrc',
-            'form-action' => 'addFormAction',
-            'frame-ancestors' => 'addFrameAncestors',
-            'frame-src' => 'addFrameSrc',
-            'img-src' => 'addImgSrc',
-            'manifest-src' => 'addManifestSrc',
-            'media-src' => 'addMediaSrc',
-            'object-src' => 'addObjectSrc',
-            'script-src' => 'addScriptSrc',
-            'style-src' => 'addStyleSrc',
-            'worker-src' => 'addWorkerSrc',
-            'report-uri' => 'addReportUri',
-        ];
         $reflexionClass = new \ReflectionClass(ContentSecurityPolicyMiddleware::class);
-        foreach ($sources as $tag => $method) {
+        foreach (self::MIDDLEWARE_SOURCES as $tag => $method) {
             // on entry
             $csp = new ContentSecurityPolicyMiddleware();
             self::assertTrue($reflexionClass->getMethod($method)->invoke($csp, self::URI_1));
-            self::assertEquals($csp->getHeaderValue(), $tag.' '.self::URI_1.';');
+            self::assertCspValue($csp, $tag.' '.self::URI_1.';');
 
             // two entries
             $csp = new ContentSecurityPolicyMiddleware();
             self::assertTrue($reflexionClass->getMethod($method)->invoke($csp, self::URI_1));
             self::assertTrue($reflexionClass->getMethod($method)->invoke($csp, self::URI_2));
-            self::assertEquals($csp->getHeaderValue(), $tag.' '.self::URI_1.' '.self::URI_2.';');
+            self::assertCspValue($csp, $tag.' '.self::URI_1.' '.self::URI_2.';');
 
             // duplicate
             $csp = new ContentSecurityPolicyMiddleware();
             self::assertTrue($reflexionClass->getMethod($method)->invoke($csp, self::URI_1));
             self::assertFalse($reflexionClass->getMethod($method)->invoke($csp, self::URI_1));
-            self::assertEquals($csp->getHeaderValue(), $tag.' '.self::URI_1.';');
+            self::assertCspValue($csp, $tag.' '.self::URI_1.';');
         }
+    }
+
+
+    /**
+     * @param ContentSecurityPolicyMiddleware $cspMiddleware
+     * @param string $expectedValue
+     */
+    private static function assertCspValue(ContentSecurityPolicyMiddleware $cspMiddleware, string $expectedValue):void
+    {
+        ;
+        self::assertEquals($cspMiddleware->getHeaderValue(), $expectedValue);
+        self::assertResponseHasHeaderValue(
+            $cspMiddleware->process(ServerRequest::fromGlobals(), new FakeRequestHandler()),
+            'Content-Security-Policy',
+            [$expectedValue]
+        );
     }
 }
