@@ -29,15 +29,50 @@ namespace CodeInc\Psr15Middlewares\HttpHeaders;
  * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
-class PoweredByMiddleware extends HttpHeaderMiddleware
+class PoweredByMiddleware extends AbstractSingleValueHttpHeaderMiddleware
 {
     /**
-     * XPoweredByMiddleware constructor.
-     *
-     * @param string $poweredBy
+     * @var string|null
      */
-	public function __construct(string $poweredBy)
+    private $poweredBy;
+
+
+    /**
+     * PoweredByMiddleware constructor.
+     *
+     * @param null|string $poweredBy
+     */
+	public function __construct(?string $poweredBy = null)
     {
-        parent::__construct('X-Powered-By', $poweredBy);
+
+        parent::__construct('X-Powered-By');
+    }
+
+
+    /**
+     * @param null|string $poweredBy
+     */
+    public function setPoweredBy(?string $poweredBy):void
+    {
+        $this->poweredBy = $poweredBy;
+    }
+
+
+    /**
+     * @return null|string
+     */
+    public function getPoweredBy():?string
+    {
+        return $this->poweredBy;
+    }
+
+
+    /**
+     * @inheritdoc
+     * @return null|string
+     */
+    public function getHeaderValue():?string
+    {
+        return $this->poweredBy;
     }
 }
