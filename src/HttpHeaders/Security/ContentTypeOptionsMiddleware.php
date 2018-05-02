@@ -28,10 +28,12 @@ use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\ContentTypeOptionsMiddle
 /**
  * Class ContentTypeOptionsMiddleware
  *
- * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Content-Type-Options
  * @see ContentTypeOptionsMiddlewareTest
  * @package CodeInc\Psr15Middlewares\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
+ * @license MIT <https://github.com/CodeIncHQ/Psr15Middlewares/blob/master/LICENSE>
+ * @link https://github.com/CodeIncHQ/Psr15Middlewares
+ * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Content-Type-Options
  */
 class ContentTypeOptionsMiddleware extends AbstractHttpHeaderMiddleware
 {

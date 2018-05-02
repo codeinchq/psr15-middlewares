@@ -29,10 +29,12 @@ use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\XssProtectionMiddlewareT
 /**
  * Class XssProtectionMiddleware
  *
- * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/X-XSS-Protection
  * @see XssProtectionMiddlewareTest
  * @package CodeInc\Psr15Middlewares\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
+ * @license MIT <https://github.com/CodeIncHQ/Psr15Middlewares/blob/master/LICENSE>
+ * @link https://github.com/CodeIncHQ/Psr15Middlewares
+ * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/X-XSS-Protection
  */
 class XssProtectionMiddleware extends AbstractHttpHeaderMiddleware
 {

@@ -28,11 +28,13 @@ use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\StrictTransportSecurityM
 /**
  * Class StrictTransportSecurityMiddleware
  *
- * @link https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security
- * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Strict-Transport-Security
  * @see StrictTransportSecurityMiddlewareTest
  * @package CodeInc\Psr15Middlewares\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
+ * @license MIT <https://github.com/CodeIncHQ/Psr15Middlewares/blob/master/LICENSE>
+ * @link https://github.com/CodeIncHQ/Psr15Middlewares
+ * @link https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security
+ * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Strict-Transport-Security
  */
 class StrictTransportSecurityMiddleware extends AbstractSecureHttpHeaderMiddleware
 {

@@ -38,6 +38,8 @@ use Psr\Http\Server\RequestHandlerInterface;
  * @see PhpSessionMiddlewareTest
  * @package CodeInc\Psr15Middlewares
  * @author Joan Fabrégat <joan@codeinc.fr>
+ * @license MIT <https://github.com/CodeIncHQ/Psr15Middlewares/blob/master/LICENSE>
+ * @link https://github.com/CodeIncHQ/Psr15Middlewares
  */
 class PhpSessionMiddleware implements MiddlewareInterface
 {

@@ -33,10 +33,11 @@ use Psr\Http\Server\RequestHandlerInterface;
 /**
  * Class RobotsTxtMiddleware
  *
- * @uses Robots
- * @link https://github.com/ARCANEDEV/Robots
+ * @uses Robots <https://github.com/ARCANEDEV/Robots>
  * @package CodeInc\Psr15Middlewares\CustomResponses
  * @author Joan Fabrégat <joan@codeinc.fr>
+ * @license MIT <https://github.com/CodeIncHQ/Psr15Middlewares/blob/master/LICENSE>
+ * @link https://github.com/CodeIncHQ/Psr15Middlewares
  */
 class RobotsTxtMiddleware extends Robots implements MiddlewareInterface
 {

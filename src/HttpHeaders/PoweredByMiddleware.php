@@ -30,6 +30,8 @@ use CodeInc\Psr15Middlewares\Tests\HttpHeaders\PoweredByMiddlewareTest;
  * @see PoweredByMiddlewareTest
  * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
+ * @license MIT <https://github.com/CodeIncHQ/Psr15Middlewares/blob/master/LICENSE>
+ * @link https://github.com/CodeIncHQ/Psr15Middlewares
  */
 class PoweredByMiddleware extends AbstractHttpHeaderMiddleware
 {

@@ -31,6 +31,8 @@ use Psr\Http\Server\RequestHandlerInterface;
  *
  * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
+ * @license MIT <https://github.com/CodeIncHQ/Psr15Middlewares/blob/master/LICENSE>
+ * @link https://github.com/CodeIncHQ/Psr15Middlewares
  */
 abstract class AbstractSecureHttpHeaderMiddleware extends AbstractHttpHeaderMiddleware
 {

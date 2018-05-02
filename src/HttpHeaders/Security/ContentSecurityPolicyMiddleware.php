@@ -29,10 +29,12 @@ use CodeInc\Psr15Middlewares\Tests\HttpHeaders\Security\ContentSecurityPolicyMid
 /**
  * Class ContentSecurityPolicyMiddleware
  *
- * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy
  * @see ContentSecurityPolicyMiddlewareTest
  * @package CodeInc\Psr15Middlewares\HttpHeaders\Security
  * @author Joan Fabrégat <joan@codeinc.fr>
+ * @license MIT <https://github.com/CodeIncHQ/Psr15Middlewares/blob/master/LICENSE>
+ * @link https://github.com/CodeIncHQ/Psr15Middlewares
+ * @link https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy
  */
 class ContentSecurityPolicyMiddleware extends AbstractHttpHeaderMiddleware
 {

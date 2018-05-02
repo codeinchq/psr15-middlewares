@@ -37,6 +37,8 @@ use Psr\Http\Server\RequestHandlerInterface;
  * @see CacheMiddlewareTest
  * @package CodeInc\Psr15Middlewares\HttpHeaders
  * @author Joan Fabrégat <joan@codeinc.fr>
+ * @license MIT <https://github.com/CodeIncHQ/Psr15Middlewares/blob/master/LICENSE>
+ * @link https://github.com/CodeIncHQ/Psr15Middlewares
  */
 class CacheMiddleware implements MiddlewareInterface
 {
