@@ -22,7 +22,7 @@ This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-1
 * [`StrictTransportSecurityMiddleware`](src/HttpHeaders/Security/StrictTransportSecurityMiddleware.php) Adds a [`Strict-Transport-Security`](https://developer.mozilla.org/docs/Web/HTTP/Headers/Strict-Transport-Security) HTTP headers to the response
 * [`XssProtectionMiddleware`](src/HttpHeaders/Security/XssProtectionMiddleware.php) Adds a [`X-Xss-Protection`](https://developer.mozilla.org/docs/Web/HTTP/Headers/X-XSS-Protection) HTTP headers to the response
 
-## Custom responses
+### Custom responses
 * [`RobotsTxtMiddleware`](src/CustomResponses/RobotsTxtMiddleware.php) Sends a response to `/robots.txt` requests using [arcanedev/robots](https://github.com/ARCANEDEV/Robots) to generate the response in the [`robots.txt` format](https://developers.google.com/search/reference/robots_txt)
 * [`SiteMapMiddleware`](src/CustomResponses/SiteMapMiddleware.php) Send a response to `/sitemap.xml` requests using [tackk/cartographer](https://github.com/tackk/cartographer) to generate the response in the [`sitemap.xml` format](https://www.sitemaps.org/protocol.html)
 
