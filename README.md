@@ -22,7 +22,8 @@ This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-1
 * [`XssProtectionMiddleware`](src/HttpHeaders/Security/XssProtectionMiddleware.php) Adds a [`X-Xss-Protection`](https://developer.mozilla.org/docs/Web/HTTP/Headers/X-XSS-Protection) HTTP headers to the response
 
 ## Custom responses
-* [`RobotsTxtMiddleware`](src/CustomResponses/RobotsTxtMiddleware.php) Sends a response to the `/robots.txt` requests using [arcanedev/robots](https://github.com/ARCANEDEV/Robots) to generate the response in the [`robots.txt` format](https://developers.google.com/search/reference/robots_txt)
+* [`RobotsTxtMiddleware`](src/CustomResponses/RobotsTxtMiddleware.php) Sends a response to `/robots.txt` requests using [arcanedev/robots](https://github.com/ARCANEDEV/Robots) to generate the response in the [`robots.txt` format](https://developers.google.com/search/reference/robots_txt)
+* [`SiteMapMiddleware`](src/CustomResponses/SiteMapMiddleware.php) Send a response to `/sitemap.xml` requests using [tackk/cartographer](https://github.com/tackk/cartographer) to generate the response in the [`sitemap.xml` format](https://www.sitemaps.org/protocol.html)
 
 ### Other middleware
 * [`BlockUnsecureRequestsMiddleware`](src/BlockUnsecureRequestsMiddleware.php) Blocks unsecure (other than `HTTPS`) requests responses
