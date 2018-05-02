@@ -41,7 +41,7 @@
     }
   },
   "suggest": {
-    "relay/relay": "A PSR-15 request handler",
+    "codeinc/middleware-dispatcher": "A PSR-15 middleware dispatcher",
     "codeinc/router": "A PSR-7 & PSR-15 router",
     "codeinc/psr7-response-sender": "A PSR-7 response sender"
   }
