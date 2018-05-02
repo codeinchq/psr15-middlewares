@@ -22,12 +22,15 @@
 declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\CustomResponses\Assets;
 use Arcanedev\Robots\Robots;
+use CodeInc\Psr15Middlewares\CustomResponses\RobotsTxtMiddleware;
 use CodeInc\Psr7Responses\TextResponse;
 
 
 /**
  * Class RobotsTxtResponse
  *
+ * @uses Robots
+ * @see RobotsTxtMiddleware
  * @package CodeInc\Psr15Middlewares\CustomResponses\Assets
  * @author Joan Fabrégat <joan@codeinc.fr>
  */
