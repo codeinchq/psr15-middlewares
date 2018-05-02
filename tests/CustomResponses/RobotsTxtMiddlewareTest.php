@@ -40,7 +40,7 @@ class RobotsTxtMiddlewareTest extends TestCase
 {
     public function testRegularRequest():void
     {
-        $middleware = new RobotsTxtMiddleware();
+        $middleware = $this->getMiddleware();
         $request = FakeServerRequest::getUnsecureServerRequestWithPath('/test');
         self::assertFalse($middleware->isRobotsTxtRequest($request));
         $response = $middleware->process(
@@ -51,19 +51,48 @@ class RobotsTxtMiddlewareTest extends TestCase
         self::assertInstanceOf(BlankResponse::class, $response);
     }
 
-
-    public function testRobotsTxt():void
+    public function testRobotsTxtRequest():void
     {
-        $middleware = new RobotsTxtMiddleware();
-        $middleware->addAllow('/test.html');
-        $middleware->addDisallow('/private');
-        $middleware->addSitemap('/sitemap.xml');
+        $middleware = $this->getMiddleware();
         $request = FakeServerRequest::getUnsecureServerRequestWithPath('/robots.txt');
         self::assertTrue($middleware->isRobotsTxtRequest($request));
         $response = $middleware->process(
             $request,
             new FakeRequestHandler()
         );
+        self::assertSiteMapResponse($response);
+    }
+
+    public function testCustomRobotsTxtRequest():void
+    {
+        $middleware = $this->getMiddleware();
+        $middleware->addRobotsTxtUriPath('/test/robots.txt');
+        $request = FakeServerRequest::getUnsecureServerRequestWithPath('/test/robots.txt');
+        self::assertTrue($middleware->isRobotsTxtRequest($request));
+        $response = $middleware->process(
+            $request,
+            new FakeRequestHandler()
+        );
+        self::assertSiteMapResponse($response);
+    }
+
+    /**
+     * @return RobotsTxtMiddleware
+     */
+    private function getMiddleware():RobotsTxtMiddleware
+    {
+        $middleware = new RobotsTxtMiddleware();
+        $middleware->addAllow('/test.html');
+        $middleware->addDisallow('/private');
+        $middleware->addSitemap('/sitemap.xml');
+        return $middleware;
+    }
+
+    /**
+     * @param ResponseInterface $response
+     */
+    private static function assertSiteMapResponse(ResponseInterface $response):void
+    {
         self::assertInstanceOf(ResponseInterface::class, $response);
         self::assertInstanceOf(RobotsTxtResponse::class, $response);
         $responseBody = $response->getBody()->__toString();
