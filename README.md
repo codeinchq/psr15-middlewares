@@ -21,6 +21,8 @@ This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-1
 * [`StrictTransportSecurityMiddleware`](src/HttpHeaders/Security/StrictTransportSecurityMiddleware.php) Adds a [`Strict-Transport-Security`](https://developer.mozilla.org/docs/Web/HTTP/Headers/Strict-Transport-Security) HTTP headers to the response
 * [`XssProtectionMiddleware`](src/HttpHeaders/Security/XssProtectionMiddleware.php) Adds a [`X-Xss-Protection`](https://developer.mozilla.org/docs/Web/HTTP/Headers/X-XSS-Protection) HTTP headers to the response
 
+## Custom responses
+* [`RobotsTxtMiddleware`](src/CustomResponses/RobotsTxtMiddleware.php) Sends a response respecting the [`robots.txt` format](https://developers.google.com/search/reference/robots_txt) for `/robots.txt` requests using [arcanedev/robots](https://github.com/ARCANEDEV/Robots) to generate the response
 
 ### Other middleware
 * [`BlockUnsecureRequestsMiddleware`](src/BlockUnsecureRequestsMiddleware.php) Blocks unsecure (other than `HTTPS`) requests responses
