@@ -24,6 +24,7 @@ namespace CodeInc\Psr15Middlewares\CustomResponses;
 use Arcanedev\Robots\Robots;
 use CodeInc\Psr15Middlewares\CustomResponses\Assets\RobotsTxtResponse;
 use CodeInc\Psr7Responses\TextResponse;
+use CodeInc\Psr15Middlewares\Tests\CustomResponses\RobotsTxtMiddlewareTest;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -34,6 +35,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  * Class RobotsTxtMiddleware
  *
  * @uses Robots <https://github.com/ARCANEDEV/Robots>
+ * @see RobotsTxtMiddlewareTest
  * @package CodeInc\Psr15Middlewares\CustomResponses
  * @author Joan Fabrégat <joan@codeinc.fr>
  * @license MIT <https://github.com/CodeIncHQ/Psr15Middlewares/blob/master/LICENSE>
