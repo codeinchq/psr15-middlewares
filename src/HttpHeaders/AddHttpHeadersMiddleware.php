@@ -22,7 +22,6 @@
 declare(strict_types = 1);
 namespace CodeInc\Psr15Middlewares\HttpHeaders;
 use CodeInc\Psr15Middlewares\Tests\HttpHeaders\AddHttpHeadersMiddlewareTest;
-use function GuzzleHttp\Psr7\str;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;

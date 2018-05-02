@@ -23,7 +23,6 @@ declare(strict_types=1);
 namespace CodeInc\Psr15Middlewares\CustomResponses;
 use Arcanedev\Robots\Robots;
 use CodeInc\Psr15Middlewares\CustomResponses\Assets\RobotsTxtResponse;
-use CodeInc\Psr7Responses\TextResponse;
 use CodeInc\Psr15Middlewares\Tests\CustomResponses\RobotsTxtMiddlewareTest;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
