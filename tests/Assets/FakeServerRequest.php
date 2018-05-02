@@ -38,7 +38,9 @@ class FakeServerRequest
      */
     public static function getSecureServerRequest():ServerRequestInterface
     {
-        return ServerRequest::fromGlobals()->withUri(ServerRequest::getUriFromGlobals()->withScheme('https'));
+        return ServerRequest::fromGlobals()->withUri(
+            ServerRequest::getUriFromGlobals()->withScheme('https')
+        );
     }
 
 
@@ -47,6 +49,36 @@ class FakeServerRequest
      */
     public static function getUnsecureServerRequest():ServerRequestInterface
     {
-        return ServerRequest::fromGlobals()->withUri(ServerRequest::getUriFromGlobals()->withScheme('http'));
+        return ServerRequest::fromGlobals()->withUri(
+            ServerRequest::getUriFromGlobals()->withScheme('http')
+        );
+    }
+
+
+    /**
+     * @param string $path
+     * @return ServerRequestInterface
+     */
+    public static function getSecureServerRequestWithPath(string $path):ServerRequestInterface
+    {
+        return ServerRequest::fromGlobals()->withUri(
+            ServerRequest::getUriFromGlobals()
+                ->withScheme('https')
+                ->withPath($path)
+        );
+    }
+
+
+    /**
+     * @param string $path
+     * @return ServerRequestInterface
+     */
+    public static function getUnsecureServerRequestWithPath(string $path):ServerRequestInterface
+    {
+        return ServerRequest::fromGlobals()->withUri(
+            ServerRequest::getUriFromGlobals()
+                ->withScheme('http')
+                ->withPath($path)
+        );
     }
 }
