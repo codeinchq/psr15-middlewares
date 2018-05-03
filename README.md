@@ -1,14 +1,12 @@
-# PSR-15 middlewares 
+# PSR-15 middleware 
 
-This library provides a collection of [PSR-15](https://www.php-fig.org/psr/psr-15/) middlewares. 
-
-## :warning: This library is deprecated
+**:warning: This library is deprecated and should not be used**
 
 It is replaced by sevral packages offering the same fonctonnalities in a more portable way
 
 ### [codeinc/http-headers-middleware](https://packagist.org/packages/codeinc/http-headers-middleware)
 
-**Provides the folowing middleware:**
+Provides the folowing middleware:
 * `AddHttpHeadersMiddleware` Adds HTTP headers to the response
 * `CacheMiddleware` Adds cache headers to the response
 * `NoCacheMiddleware` Adds cache prevention headers to the response
@@ -18,24 +16,24 @@ It is replaced by sevral packages offering the same fonctonnalities in a more po
 
 ### [codeinc/robots-txt-middleware](https://packagist.org/packages/codeinc/robots-txt-middleware)
 
-**Provides the folowing middleware:**
+Provides the folowing middleware:
 * `RobotsTxtMiddleware` Sends a response to `/robots.txt` requests using [arcanedev/robots](https://github.com/ARCANEDEV/Robots) to generate the response in the [`robots.txt` format](https://developers.google.com/search/reference/robots_txt)
 
 
 ### [codeinc/sitemap-middlware](https://packagist.org/packages/codeinc/sitemap-middlware)
 
-**Provides the folowing middleware:**
+Provides the folowing middleware:
 * `SiteMapMiddleware` Send a response to `/sitemap.xml` requests using [tackk/cartographer](https://github.com/tackk/cartographer) to generate the response in the [`sitemap.xml` format](https://www.sitemaps.org/protocol.html)
 
 ### [codeinc/compatibility-middleware](https://packagist.org/packages/codeinc/compatibility-middleware)
 
-**Provides the folowing middleware:**
+Provides the folowing middleware:
 * `PhpGpcVarsMiddleware` Extract PSR-7 request data to PHP GPC variables `$_GET`, `$_POST`, `$_COOKIE` and `$_SERVER`
 * `PhpSessionMiddleware` Read sesion cookie from PSR-7 requests and add session cookie to PSR-7 responses
 
 ### [codeinc/security-middleware](https://packagist.org/packages/codeinc/security-middleware)
 
-**Provides the folowing middleware:**
+Provides the folowing middleware:
 * `ContentSecurityPolicyMiddleware` Adds a [`Content-Security-Policy`](https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy) HTTP headers to the response
 * `ContentTypeOptionsMiddleware` Adds a [`X-Content-Type-Options`](https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Content-Type-Options) HTTP headers to the response
 * `ExpectCtMiddleware` Adds a [`Expect-CT`](https://developer.mozilla.org/docs/Web/HTTP/Headers/Expect-CT) HTTP headers to the response
@@ -48,18 +46,10 @@ It is replaced by sevral packages offering the same fonctonnalities in a more po
 
 ### Abandon middleware
 
-**The following middleware are abandon:**
-* [`CallableMiddleware`](src/CallableMiddleware.php) Uses a callable as a middleware 
-* [`ExceptionCaptureMiddleware`](src/ExceptionCaptureMiddleware.php) Captures exceptions thrown during the handling of the request 
+The following middleware are abandon:
+* `CallableMiddleware` Uses a callable as a middleware 
+* `ExceptionCaptureMiddleware` Captures exceptions thrown during the handling of the request 
 
-
-## Installation
-
-This library is available through [Packagist](https://packagist.org/packages/codeinc/psr15-middlewares) and can be installed using [Composer](https://getcomposer.org/): 
-
-```bash
-composer require codeinc/psr15-middlewares
-```
 
 ## License
 
