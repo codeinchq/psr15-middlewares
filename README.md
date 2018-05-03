@@ -44,9 +44,9 @@ Provides the folowing middleware:
 * `BlockUnsecureRequestsMiddleware` Blocks unsecure (other than `HTTPS`) requests responses
 
 
-## Abandon middleware
+## Abandoned middleware
 
-The following middleware are abandon:
+The following middleware are abandoned:
 * `CallableMiddleware` Uses a callable as a middleware 
 * `ExceptionCaptureMiddleware` Captures exceptions thrown during the handling of the request 
 
